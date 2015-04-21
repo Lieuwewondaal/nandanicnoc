@@ -1,0 +1,16 @@
+ls
+play
+eclipsify
+play eclipsify
+/?
+/
+help
+exit
+play debug
+debug
+-Dhttp.port=9999 -Dhttp.address=127.0.0.1
+debug -Dhttp.port=9999 -Dhttp.address=127.0.0.1
+debug help
+debug
+play
+exit
