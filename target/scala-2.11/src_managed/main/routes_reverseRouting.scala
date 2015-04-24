@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:b8cb4cf851248556ed9c189122564f4c24974750
-// @DATE:Tue Apr 21 13:50:53 CEST 2015
+// @HASH:3fd6f13ca7fbc6f196a0fb214b242ba2fd634de6
+// @DATE:Tue Apr 21 16:37:42 CEST 2015
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -54,49 +54,49 @@ class ReverseApplication {
 // @LINE:21
 def delete(id:Long): Call = {
    import ReverseRouteContext.empty
-   Call("POST", _prefix + { _defaultPrefix } + "computers/" + implicitly[PathBindable[Long]].unbind("id", id) + "/delete")
+   Call("POST", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id) + "/delete")
 }
                         
 
 // @LINE:14
 def upload(): Call = {
    import ReverseRouteContext.empty
-   Call("POST", _prefix + { _defaultPrefix } + "computers")
+   Call("POST", _prefix + { _defaultPrefix } + "diagnoses")
 }
                         
 
 // @LINE:12
 def create(): Call = {
    import ReverseRouteContext.empty
-   Call("GET", _prefix + { _defaultPrefix } + "computers/new")
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/new")
 }
                         
 
 // @LINE:17
 def edit(id:Long): Call = {
    import ReverseRouteContext.empty
-   Call("GET", _prefix + { _defaultPrefix } + "computers/" + implicitly[PathBindable[Long]].unbind("id", id))
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                         
 
 // @LINE:18
 def update(id:Long): Call = {
    import ReverseRouteContext.empty
-   Call("POST", _prefix + { _defaultPrefix } + "computers/" + implicitly[PathBindable[Long]].unbind("id", id))
+   Call("POST", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                         
 
 // @LINE:9
 def list(p:Int = 0, s:String = "name", o:String = "asc", f:String = ""): Call = {
    import ReverseRouteContext.empty
-   Call("GET", _prefix + { _defaultPrefix } + "computers" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "name") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "name") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
 }
                         
 
 // @LINE:13
 def save(): Call = {
    import ReverseRouteContext.empty
-   Call("GET", _prefix + { _defaultPrefix } + "computers/now")
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/now")
 }
                         
 
@@ -159,7 +159,7 @@ def delete : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.delete",
    """
       function(id) {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "computers/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id) + "/delete"})
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id) + "/delete"})
       }
    """
 )
@@ -170,7 +170,7 @@ def upload : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.upload",
    """
       function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "computers"})
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses"})
       }
    """
 )
@@ -181,7 +181,7 @@ def create : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.create",
    """
       function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "computers/new"})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/new"})
       }
    """
 )
@@ -192,7 +192,7 @@ def edit : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.edit",
    """
       function(id) {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "computers/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
       }
    """
 )
@@ -203,7 +203,7 @@ def update : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.update",
    """
       function(id) {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "computers/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
       }
    """
 )
@@ -214,7 +214,7 @@ def list : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.list",
    """
       function(p,s,o,f) {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "computers" + _qS([(p == null ? null : (""" + implicitly[QueryStringBindable[Int]].javascriptUnbind + """)("p", p)), (s == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("s", s)), (o == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("o", o)), (f == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("f", f))])})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses" + _qS([(p == null ? null : (""" + implicitly[QueryStringBindable[Int]].javascriptUnbind + """)("p", p)), (s == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("s", s)), (o == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("o", o)), (f == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("f", f))])})
       }
    """
 )
@@ -225,7 +225,7 @@ def save : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.save",
    """
       function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "computers/now"})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/now"})
       }
    """
 )
@@ -286,43 +286,43 @@ class ReverseApplication {
 
 // @LINE:21
 def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.delete(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "delete", Seq(classOf[Long]), "POST", """ Delete a computer""", _prefix + """computers/$id<[^/]+>/delete""")
+   controllers.Application.delete(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "delete", Seq(classOf[Long]), "POST", """ Delete a computer""", _prefix + """diagnoses/$id<[^/]+>/delete""")
 )
                       
 
 // @LINE:14
 def upload(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.upload(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "upload", Seq(), "POST", """""", _prefix + """computers""")
+   controllers.Application.upload(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "upload", Seq(), "POST", """""", _prefix + """diagnoses""")
 )
                       
 
 // @LINE:12
 def create(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.create(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "create", Seq(), "GET", """ Add computer""", _prefix + """computers/new""")
+   controllers.Application.create(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "create", Seq(), "GET", """ Add computer""", _prefix + """diagnoses/new""")
 )
                       
 
 // @LINE:17
 def edit(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.edit(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "edit", Seq(classOf[Long]), "GET", """ Edit existing computer""", _prefix + """computers/$id<[^/]+>""")
+   controllers.Application.edit(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "edit", Seq(classOf[Long]), "GET", """ Edit existing computer""", _prefix + """diagnoses/$id<[^/]+>""")
 )
                       
 
 // @LINE:18
 def update(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.update(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "update", Seq(classOf[Long]), "POST", """""", _prefix + """computers/$id<[^/]+>""")
+   controllers.Application.update(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "update", Seq(classOf[Long]), "POST", """""", _prefix + """diagnoses/$id<[^/]+>""")
 )
                       
 
 // @LINE:9
 def list(p:Int, s:String, o:String, f:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.list(p, s, o, f), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "list", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]), "GET", """ Computers list (look at the default values for pagination parameters)""", _prefix + """computers""")
+   controllers.Application.list(p, s, o, f), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "list", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]), "GET", """ Computers list (look at the default values for pagination parameters)""", _prefix + """diagnoses""")
 )
                       
 
 // @LINE:13
 def save(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.save(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "save", Seq(), "GET", """""", _prefix + """computers/now""")
+   controllers.Application.save(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "save", Seq(), "GET", """""", _prefix + """diagnoses/now""")
 )
                       
 

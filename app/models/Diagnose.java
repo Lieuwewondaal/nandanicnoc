@@ -10,7 +10,7 @@ import play.data.validation.*;
 import com.avaje.ebean.*;
 
 /**
- * Computer entity managed by Ebean
+ * Diagnose entity managed by Ebean
  */
 @Entity 
 public class Diagnose extends Model {
@@ -18,10 +18,23 @@ public class Diagnose extends Model {
     private static final long serialVersionUID = 1L;
 
 	@Id
-    public Long Diagnose_ID;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    public Long id;
+    
+    @Constraints.Required
+    public String name;
+    
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date introduced;
+    
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date discontinued;
+    
+    @ManyToOne
+    public Company company;
     
     /**
-     * Generic query helper for entity Computer with id Long
+     * Generic query helper for entity Diagnose with id Long
      */
     public static Finder<Long,Diagnose> find = new Finder<Long,Diagnose>(Long.class, Diagnose.class); 
     
@@ -30,7 +43,7 @@ public class Diagnose extends Model {
      *
      * @param page Page to display
      * @param pageSize Number of computers per page
-     * @param sortBy Computer property used for sorting
+     * @param sortBy Diagnose property used for sorting
      * @param order Sort order (either or asc or desc)
      * @param filter Filter applied on the name column
      */

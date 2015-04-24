@@ -7,8 +7,20 @@
 		revision="0.0.1-SNAPSHOT"
 		conf="compile"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool, fork-run"
-		date="20150420134828"/>
+		date="20150424132228"/>
 	<dependencies>
+		<module organisation="mysql" name="mysql-connector-java">
+			<revision name="5.1.35" status="release" pubdate="20150317052156" resolver="public" artresolver="public" homepage="http://dev.mysql.com/usingmysql/java/" downloaded="true" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="59">
+				<license name="The GNU General Public License, Version 2" url="http://www.gnu.org/licenses/gpl.txt"/>
+				<metadata-artifact status="successful" details="" size="1263" time="339" location="C:\Users\Vincent\.ivy2\cache\mysql\mysql-connector-java\ivy-5.1.35.xml" searched="true" original-local-location="C:\Users\Vincent\.ivy2\cache\mysql\mysql-connector-java\ivy-5.1.35.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom"/>
+				<caller organisation="computer-database-java" name="computer-database-java_2.11" conf="compile" rev="5.1.35" rev-constraint-default="5.1.35" rev-constraint-dynamic="5.1.35" callerrev="0.0.1-SNAPSHOT"/>
+				<artifacts>
+					<artifact name="mysql-connector-java" type="jar" ext="jar" status="successful" details="" size="968668" time="1730" location="C:\Users\Vincent\.ivy2\cache\mysql\mysql-connector-java\jars\mysql-connector-java-5.1.35.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
 		<module organisation="org.webjars" name="bootstrap">
 			<revision name="3.3.1" status="release" pubdate="20141112190850" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://webjars.org" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="58">
 				<license name="Apache License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0"/>

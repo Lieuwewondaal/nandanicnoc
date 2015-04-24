@@ -7,7 +7,7 @@
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.scala-lang#scala-library;2.11.4 [compile->default(compile)]
 [info] Resolving org.scala-lang#scala-library;2.11.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@751d2e74
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@9d5e15e
 [debug] sbt-chain: module revision found in cache: org.scala-lang#scala-library;2.11.4
 [debug] 	found org.scala-lang#scala-library;2.11.4 in sbt-chain
 [debug] 	[2.11.4] org.scala-lang#scala-library;2.11.4
@@ -872,6 +872,27 @@
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->runtime(*)]
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.webjars#bootstrap;3.3.1 [compile->master]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->default(compile)]
+[info] Resolving mysql#mysql-connector-java;5.1.35 ...
+[debug] sbt-chain: Checking cache for: dependency: mysql#mysql-connector-java;5.1.35 {compile=[default(compile)]}
+[info] Resolving mysql#mysql-connector-java;5.1.35 ...
+[debug] sbt-chain-delegate: Checking cache for: dependency: mysql#mysql-connector-java;5.1.35 {compile=[default(compile)]}
+[debug] 		tried C:\Users\Vincent\.ivy2\local\mysql\mysql-connector-java\5.1.35\ivys\ivy.xml
+[debug] 	local: no ivy file found for mysql#mysql-connector-java;5.1.35
+[debug] 		tried https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom
+[debug] 	public: found md file for mysql#mysql-connector-java;5.1.35
+[debug] 		=> https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom (5.1.35)
+[debug] downloading https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.pom
+[debug] 	[SUCCESSFUL ] mysql#mysql-connector-java;5.1.35!mysql-connector-java.pom(pom.original) (339ms)
+[debug] 		tried C:\Users\Vincent\.ivy2\local\mysql\mysql-connector-java\5.1.35\jars\mysql-connector-java.jar
+[debug] 		tried https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar
+[debug] 	found mysql#mysql-connector-java;5.1.35 in public
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->runtime]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->compile]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->master]
 [debug] resolving dependencies for configuration 'runtime'
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [runtime]
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [compile]
@@ -1409,6 +1430,10 @@
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->runtime(*)]
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.webjars#bootstrap;3.3.1 [compile->master]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->default(compile)]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->runtime]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->compile]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->master]
 [debug] resolving dependencies for configuration 'test'
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [test]
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [runtime]
@@ -1947,6 +1972,10 @@
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->runtime(*)]
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.webjars#bootstrap;3.3.1 [compile->master]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->default(compile)]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->runtime]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->compile]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->master]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->com.typesafe.play#play-test_2.11;2.3.8 [test->default(compile)]
 [info] Resolving com.typesafe.play#play-test_2.11;2.3.8 ...
 [debug] sbt-chain: Checking cache for: dependency: com.typesafe.play#play-test_2.11;2.3.8 {test=[default(compile)]}
@@ -3760,6 +3789,10 @@
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->runtime(*)]
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.webjars#bootstrap;3.3.1 [compile->master]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->default(compile)]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->runtime]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->compile]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->master]
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [optional]
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [provided]
 [debug] resolving dependencies for configuration 'runtime-internal'
@@ -4300,6 +4333,10 @@
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->runtime(*)]
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.webjars#bootstrap;3.3.1 [compile->master]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->default(compile)]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->runtime]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->compile]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->master]
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [optional]
 [debug] resolving dependencies for configuration 'test-internal'
 [debug] == resolving dependencies for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT [test-internal]
@@ -4840,6 +4877,10 @@
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->runtime(*)]
 [debug] == resolving dependencies org.webjars#bootstrap;3.3.1->org.webjars#jquery;2.1.1 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->org.webjars#bootstrap;3.3.1 [compile->master]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->default(compile)]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->runtime]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->compile]
+[debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->mysql#mysql-connector-java;5.1.35 [compile->master]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->com.typesafe.play#play-test_2.11;2.3.8 [test->default(compile)]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->com.typesafe.play#play-test_2.11;2.3.8 [test->runtime]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->com.typesafe.play#play-test_2.11;2.3.8 [test->compile]
@@ -6712,6 +6753,7 @@
 [debug] == resolving dependencies com.typesafe.play#fork-run_2.11;2.3.8->net.contentobjects.jnotify#jnotify;0.94 [runtime->runtime(*)]
 [debug] == resolving dependencies com.typesafe.play#fork-run_2.11;2.3.8->net.contentobjects.jnotify#jnotify;0.94 [runtime->compile]
 [debug] == resolving dependencies computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT->com.typesafe.play#fork-run_2.11;2.3.8 [fork-run->master]
+[debug] circular dependency found: org.scala-lang.modules#scala-xml_2.11;1.0.1->org.scala-lang#scala-compiler;2.11.0->...
 [debug] 	resolved ivy file produced in cache
 [debug] :: downloading artifacts ::
 [debug] 	[NOT REQUIRED] org.scala-lang#scala-library;2.11.4!scala-library.jar
@@ -6722,6 +6764,12 @@
 [debug] 	[NOT REQUIRED] com.typesafe.play#play-java-ebean_2.11;2.3.8!play-java-ebean_2.11.jar
 [debug] 	[NOT REQUIRED] org.webjars#jquery;2.1.1!jquery.jar
 [debug] 	[NOT REQUIRED] org.webjars#bootstrap;3.3.1!bootstrap.jar
+[debug] 		tried https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar
+[info] downloading https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar
+[debug] 	public: downloading https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.35/mysql-connector-java-5.1.35.jar
+[info] 	[SUCCESSFUL ] mysql#mysql-connector-java;5.1.35!mysql-connector-java.jar (1730ms)
 [debug] 	[NOT REQUIRED] org.scala-lang#scala-library;2.11.1!scala-library.jar
 [debug] 	[NOT REQUIRED] org.apache.commons#commons-lang3;3.1!commons-lang3.jar
 [debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.11;1.0.1!scala-xml_2.11.jar(bundle)
@@ -6868,7 +6916,7 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#control_2.11;0.13.8-M3!control_2.11.jar
 [debug] 	[NOT REQUIRED] com.typesafe.akka#akka-actor_2.11;2.3.8!akka-actor_2.11.jar
 [debug] 	[NOT REQUIRED] com.typesafe.akka#akka-testkit_2.11;2.3.8!akka-testkit_2.11.jar
-[debug] :: resolution report :: resolve 3587ms :: artifacts dl 141ms
+[debug] :: resolution report :: resolve 15126ms :: artifacts dl 1938ms
 [debug] 	report for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT compile produced in C:\Users\Vincent\workspace\verpleegkunde-app\target\resolution-cache\reports\computer-database-java-computer-database-java_2.11-compile.xml
 [debug] 	report for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT runtime produced in C:\Users\Vincent\workspace\verpleegkunde-app\target\resolution-cache\reports\computer-database-java-computer-database-java_2.11-runtime.xml
 [debug] 	report for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT test produced in C:\Users\Vincent\workspace\verpleegkunde-app\target\resolution-cache\reports\computer-database-java-computer-database-java_2.11-test.xml
@@ -6883,7 +6931,7 @@
 [debug] 	report for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT pom produced in C:\Users\Vincent\workspace\verpleegkunde-app\target\resolution-cache\reports\computer-database-java-computer-database-java_2.11-pom.xml
 [debug] 	report for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT scala-tool produced in C:\Users\Vincent\workspace\verpleegkunde-app\target\resolution-cache\reports\computer-database-java-computer-database-java_2.11-scala-tool.xml
 [debug] 	report for computer-database-java#computer-database-java_2.11;0.0.1-SNAPSHOT fork-run produced in C:\Users\Vincent\workspace\verpleegkunde-app\target\resolution-cache\reports\computer-database-java-computer-database-java_2.11-fork-run.xml
-[debug] 	resolve done (3587ms resolve - 141ms download)
+[debug] 	resolve done (15126ms resolve - 1938ms download)
 [info] Done updating.
 [warn] There may be incompatibilities among your library dependencies.
 [warn] Here are some of the libraries that were evicted:

@@ -20,10 +20,10 @@ import play.mvc.Http.Context.Implicit._
 import views.html._
 
 /**/
-object list extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template4[com.avaje.ebean.Page[Computer],String,String,String,play.twirl.api.HtmlFormat.Appendable] {
+object list extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template4[com.avaje.ebean.Page[Diagnose],String,String,String,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(currentPage: com.avaje.ebean.Page[Computer], currentSortBy: String, currentOrder: String, currentFilter: String):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(currentPage: com.avaje.ebean.Page[Diagnose], currentSortBy: String, currentOrder: String, currentFilter: String):play.twirl.api.HtmlFormat.Appendable = {
       _display_ {
 def /*32.2*/header/*32.8*/(key:String, title:String):play.twirl.api.HtmlFormat.Appendable = {_display_(
 
@@ -63,7 +63,7 @@ Seq[Any](format.raw/*1.115*/("""
 
 """),_display_(/*38.2*/main/*38.6*/ {_display_(Seq[Any](format.raw/*38.8*/("""
     
-    """),format.raw/*40.5*/("""<h1 id="homeTitle">"""),_display_(/*40.25*/Messages("computers.list.title", currentPage.getTotalRowCount)),format.raw/*40.87*/("""</h1>
+    """),format.raw/*40.5*/("""<h1 id="homeTitle">"""),_display_(/*40.25*/Messages("diagnose.list.title", currentPage.getTotalRowCount)),format.raw/*40.86*/("""</h1>
 
     """),_display_(/*42.6*/if(flash.containsKey("success"))/*42.38*/ {_display_(Seq[Any](format.raw/*42.40*/("""
         """),format.raw/*43.9*/("""<div class="alert-message warning">
@@ -74,11 +74,11 @@ Seq[Any](format.raw/*1.115*/("""
     """),format.raw/*48.5*/("""<div id="actions">
         
         <form action=""""),_display_(/*50.24*/link(0, "name")),format.raw/*50.39*/("""" method="GET">
-            <input type="search" id="searchbox" name="f" value=""""),_display_(/*51.66*/currentFilter),format.raw/*51.79*/("""" placeholder="Filter by computer name...">
-            <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
+            <input type="search" id="searchbox" name="f" value=""""),_display_(/*51.66*/currentFilter),format.raw/*51.79*/("""" placeholder="Diagnose naam">
+            <input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
         </form>
         
-        <a class="btn success" id="add" href=""""),_display_(/*55.48*/routes/*55.54*/.Application.create()),format.raw/*55.75*/("""">Add a new computer</a>
+        <a class="btn success" id="add" href=""""),_display_(/*55.48*/routes/*55.54*/.Application.create()),format.raw/*55.75*/("""">Nieuwe Diagnose</a>
         
     </div>
     
@@ -90,10 +90,10 @@ Seq[Any](format.raw/*1.115*/("""
         
     """)))}/*65.7*/else/*65.12*/{_display_(Seq[Any](format.raw/*65.13*/("""
         
-        """),format.raw/*67.9*/("""<table class="computers zebra-striped">
+        """),format.raw/*67.9*/("""<table class="diagnoses zebra-striped">
             <thead>
                 <tr>
-                    """),_display_(/*70.22*/header("name", "Computer name")),format.raw/*70.53*/("""
+                    """),_display_(/*70.22*/header("name", "Diagnose name")),format.raw/*70.53*/("""
                     """),_display_(/*71.22*/header("introduced", "Introduced")),format.raw/*71.56*/("""
                     """),_display_(/*72.22*/header("discontinued", "Discontinued")),format.raw/*72.60*/("""
                     """),_display_(/*73.22*/header("company.name", "Company")),format.raw/*73.55*/("""
@@ -101,28 +101,28 @@ Seq[Any](format.raw/*1.115*/("""
             </thead>
             <tbody>
 
-                """),_display_(/*78.18*/for(computer <- currentPage.getList) yield /*78.54*/ {_display_(Seq[Any](format.raw/*78.56*/("""
+                """),_display_(/*78.18*/for(diagnose <- currentPage.getList) yield /*78.54*/ {_display_(Seq[Any](format.raw/*78.56*/("""
                     """),format.raw/*79.21*/("""<tr>
-                        <td><a href=""""),_display_(/*80.39*/routes/*80.45*/.Application.edit(computer.id)),format.raw/*80.75*/("""">"""),_display_(/*80.78*/computer/*80.86*/.name),format.raw/*80.91*/("""</a></td>
+                        <td><a href=""""),_display_(/*80.39*/routes/*80.45*/.Application.edit(diagnose.id)),format.raw/*80.75*/("""">"""),_display_(/*80.78*/diagnose/*80.86*/.name),format.raw/*80.91*/("""</a></td>
                         <td>
-                            """),_display_(/*82.30*/if(computer.introduced == null)/*82.61*/ {_display_(Seq[Any](format.raw/*82.63*/("""
+                            """),_display_(/*82.30*/if(diagnose.introduced == null)/*82.61*/ {_display_(Seq[Any](format.raw/*82.63*/("""
                                 """),format.raw/*83.33*/("""<em>-</em>
                             """)))}/*84.31*/else/*84.36*/{_display_(Seq[Any](format.raw/*84.37*/("""
-                                """),_display_(/*85.34*/computer/*85.42*/.introduced.format("dd MMM yyyy")),format.raw/*85.75*/("""
+                                """),_display_(/*85.34*/diagnose/*85.42*/.introduced.format("dd MMM yyyy")),format.raw/*85.75*/("""
                             """)))}),format.raw/*86.30*/("""
                         """),format.raw/*87.25*/("""</td>
                         <td>
-                            """),_display_(/*89.30*/if(computer.discontinued == null)/*89.63*/ {_display_(Seq[Any](format.raw/*89.65*/("""
+                            """),_display_(/*89.30*/if(diagnose.discontinued == null)/*89.63*/ {_display_(Seq[Any](format.raw/*89.65*/("""
                                 """),format.raw/*90.33*/("""<em>-</em>
                             """)))}/*91.31*/else/*91.36*/{_display_(Seq[Any](format.raw/*91.37*/("""
-                                """),_display_(/*92.34*/computer/*92.42*/.discontinued.format("dd MMM yyyy")),format.raw/*92.77*/("""
+                                """),_display_(/*92.34*/diagnose/*92.42*/.discontinued.format("dd MMM yyyy")),format.raw/*92.77*/("""
                             """)))}),format.raw/*93.30*/("""
                         """),format.raw/*94.25*/("""</td>
                         <td>
-                            """),_display_(/*96.30*/if(computer.company == null)/*96.58*/ {_display_(Seq[Any](format.raw/*96.60*/("""
+                            """),_display_(/*96.30*/if(diagnose.company == null)/*96.58*/ {_display_(Seq[Any](format.raw/*96.60*/("""
                                 """),format.raw/*97.33*/("""<em>-</em>
                             """)))}/*98.31*/else/*98.36*/{_display_(Seq[Any](format.raw/*98.37*/("""
-                                """),_display_(/*99.34*/computer/*99.42*/.company.name),format.raw/*99.55*/("""
+                                """),_display_(/*99.34*/diagnose/*99.42*/.company.name),format.raw/*99.55*/("""
                             """)))}),format.raw/*100.30*/("""
                         """),format.raw/*101.25*/("""</td>
                     </tr>
@@ -164,19 +164,19 @@ Seq[Any](format.raw/*1.115*/("""
             """))}
   }
 
-  def render(currentPage:com.avaje.ebean.Page[Computer],currentSortBy:String,currentOrder:String,currentFilter:String): play.twirl.api.HtmlFormat.Appendable = apply(currentPage,currentSortBy,currentOrder,currentFilter)
+  def render(currentPage:com.avaje.ebean.Page[Diagnose],currentSortBy:String,currentOrder:String,currentFilter:String): play.twirl.api.HtmlFormat.Appendable = apply(currentPage,currentSortBy,currentOrder,currentFilter)
 
-  def f:((com.avaje.ebean.Page[Computer],String,String,String) => play.twirl.api.HtmlFormat.Appendable) = (currentPage,currentSortBy,currentOrder,currentFilter) => apply(currentPage,currentSortBy,currentOrder,currentFilter)
+  def f:((com.avaje.ebean.Page[Diagnose],String,String,String) => play.twirl.api.HtmlFormat.Appendable) = (currentPage,currentSortBy,currentOrder,currentFilter) => apply(currentPage,currentSortBy,currentOrder,currentFilter)
 
   def ref: this.type = this
 
 }
               /*
                   -- GENERATED --
-                  DATE: Mon Apr 20 08:49:45 CEST 2015
+                  DATE: Thu Apr 23 14:07:20 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/list.scala.html
-                  HASH: dbd8dd5bb33184466872023ba2c6e0343250f1a7
-                  MATRIX: 767->1|952->860|966->866|1073->896|1105->901|1144->913|1156->916|1194->933|1223->934|1258->942|1292->968|1379->1032|1427->1053|1460->1065|1490->1068|1516->1073|1554->243|1565->247|2097->114|2126->241|2154->748|2184->858|2212->1089|2241->1092|2253->1096|2292->1098|2329->1108|2376->1128|2459->1190|2497->1202|2538->1234|2578->1236|2614->1245|2713->1317|2727->1322|2763->1337|2799->1346|2841->1358|2875->1365|2953->1416|2989->1431|3097->1512|3131->1525|3369->1736|3384->1742|3426->1763|3507->1818|3553->1855|3593->1857|3638->1875|3744->1964|3757->1969|3796->1970|3841->1988|3970->2090|4022->2121|4071->2143|4126->2177|4175->2199|4234->2237|4283->2259|4337->2292|4382->2309|4474->2374|4526->2410|4566->2412|4615->2433|4685->2476|4700->2482|4751->2512|4781->2515|4798->2523|4824->2528|4919->2596|4959->2627|4999->2629|5060->2662|5119->2703|5132->2708|5171->2709|5232->2743|5249->2751|5303->2784|5364->2814|5417->2839|5508->2903|5550->2936|5590->2938|5651->2971|5710->3012|5723->3017|5762->3018|5823->3052|5840->3060|5896->3095|5957->3125|6010->3150|6101->3214|6138->3242|6178->3244|6239->3277|6298->3318|6311->3323|6350->3324|6411->3358|6428->3366|6462->3379|6524->3409|6578->3434|6659->3483|6702->3497|6840->3607|6873->3630|6914->3632|6964->3653|7044->3705|7106->3745|7191->3811|7205->3816|7245->3817|7295->3838|7444->3955|7490->3972|7574->4028|7595->4039|7650->4072|7722->4116|7755->4139|7796->4141|7846->4162|7926->4214|7988->4254|8069->4316|8083->4321|8123->4322|8173->4343|8318->4456|8360->4469|8426->4504|8468->4515
+                  HASH: 38afd20eaa1c1cd18dd61f69519c7dc5d67d2029
+                  MATRIX: 767->1|952->860|966->866|1073->896|1105->901|1144->913|1156->916|1194->933|1223->934|1258->942|1292->968|1379->1032|1427->1053|1460->1065|1490->1068|1516->1073|1554->243|1565->247|2097->114|2126->241|2154->748|2184->858|2212->1089|2241->1092|2253->1096|2292->1098|2329->1108|2376->1128|2458->1189|2496->1201|2537->1233|2577->1235|2613->1244|2712->1316|2726->1321|2762->1336|2798->1345|2840->1357|2874->1364|2952->1415|2988->1430|3096->1511|3130->1524|3347->1714|3362->1720|3404->1741|3482->1793|3528->1830|3568->1832|3613->1850|3719->1939|3732->1944|3771->1945|3816->1963|3945->2065|3997->2096|4046->2118|4101->2152|4150->2174|4209->2212|4258->2234|4312->2267|4357->2284|4449->2349|4501->2385|4541->2387|4590->2408|4660->2451|4675->2457|4726->2487|4756->2490|4773->2498|4799->2503|4894->2571|4934->2602|4974->2604|5035->2637|5094->2678|5107->2683|5146->2684|5207->2718|5224->2726|5278->2759|5339->2789|5392->2814|5483->2878|5525->2911|5565->2913|5626->2946|5685->2987|5698->2992|5737->2993|5798->3027|5815->3035|5871->3070|5932->3100|5985->3125|6076->3189|6113->3217|6153->3219|6214->3252|6273->3293|6286->3298|6325->3299|6386->3333|6403->3341|6437->3354|6499->3384|6553->3409|6634->3458|6677->3472|6815->3582|6848->3605|6889->3607|6939->3628|7019->3680|7081->3720|7166->3786|7180->3791|7220->3792|7270->3813|7419->3930|7465->3947|7549->4003|7570->4014|7625->4047|7697->4091|7730->4114|7771->4116|7821->4137|7901->4189|7963->4229|8044->4291|8058->4296|8098->4297|8148->4318|8293->4431|8335->4444|8401->4479|8443->4490
                   LINES: 26->1|28->32|28->32|30->32|31->33|31->33|31->33|31->33|31->33|31->33|31->33|31->33|32->34|32->34|32->34|32->34|34->6|34->6|56->1|58->5|59->27|61->31|62->36|64->38|64->38|64->38|66->40|66->40|66->40|68->42|68->42|68->42|69->43|70->44|70->44|70->44|71->45|72->46|74->48|76->50|76->50|77->51|77->51|81->55|81->55|81->55|85->59|85->59|85->59|87->61|91->65|91->65|91->65|93->67|96->70|96->70|97->71|97->71|98->72|98->72|99->73|99->73|100->74|104->78|104->78|104->78|105->79|106->80|106->80|106->80|106->80|106->80|106->80|108->82|108->82|108->82|109->83|110->84|110->84|110->84|111->85|111->85|111->85|112->86|113->87|115->89|115->89|115->89|116->90|117->91|117->91|117->91|118->92|118->92|118->92|119->93|120->94|122->96|122->96|122->96|123->97|124->98|124->98|124->98|125->99|125->99|125->99|126->100|127->101|129->103|131->105|136->110|136->110|136->110|137->111|138->112|138->112|140->114|140->114|140->114|141->115|144->118|145->119|146->120|146->120|146->120|148->122|148->122|148->122|149->123|150->124|150->124|152->126|152->126|152->126|153->127|156->130|157->131|160->134|162->136
                   -- GENERATED --
               */

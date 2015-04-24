@@ -20,10 +20,10 @@ import play.mvc.Http.Context.Implicit._
 import views.html._
 
 /**/
-object createForm extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[Form[Computer],play.twirl.api.HtmlFormat.Appendable] {
+object createForm extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[Form[Diagnose],play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(computerForm: Form[Computer]):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(diagnoseForm: Form[Diagnose]):play.twirl.api.HtmlFormat.Appendable = {
       _display_ {import helper._
 implicit def /*5.2*/implicitFieldConstructor/*5.26*/ = {{ FieldConstructor(twitterBootstrapInput.render) }};
 Seq[Any](format.raw/*1.32*/("""
@@ -33,7 +33,7 @@ Seq[Any](format.raw/*1.32*/("""
 
 """),_display_(/*7.2*/main/*7.6*/ {_display_(Seq[Any](format.raw/*7.8*/("""
     
-    """),format.raw/*9.5*/("""<h1>Add a computer</h1>
+    """),format.raw/*9.5*/("""<h1>Add a diagnose</h1>
 	
 	"""),_display_(/*11.3*/helper/*11.9*/.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data")/*11.87*/ {_display_(Seq[Any](format.raw/*11.89*/("""
 	"""),format.raw/*12.2*/("""<input type="file" name="picture">
@@ -47,12 +47,12 @@ Seq[Any](format.raw/*1.32*/("""
         
         """),format.raw/*21.9*/("""<fieldset>
         
-            """),_display_(/*23.14*/inputText(computerForm("name"), '_label -> "Computer name", '_help -> "")),format.raw/*23.87*/("""
-            """),_display_(/*24.14*/inputDate(computerForm("introduced"), '_label -> "Introduced date", '_help -> "")),format.raw/*24.95*/("""
-            """),_display_(/*25.14*/inputDate(computerForm("discontinued"), '_label -> "Discontinued date", '_help -> "")),format.raw/*25.99*/("""
+            """),_display_(/*23.14*/inputText(diagnoseForm("name"), '_label -> "Diagnose name", '_help -> "")),format.raw/*23.87*/("""
+            """),_display_(/*24.14*/inputDate(diagnoseForm("introduced"), '_label -> "Introduced date", '_help -> "")),format.raw/*24.95*/("""
+            """),_display_(/*25.14*/inputDate(diagnoseForm("discontinued"), '_label -> "Discontinued date", '_help -> "")),format.raw/*25.99*/("""
 
             """),_display_(/*27.14*/select(
-                computerForm("company.id"), 
+                diagnoseForm("company.id"), 
                 options(Company.options), 
                 '_label -> "Company", '_default -> "-- Choose a company --",
                 '_showConstraints -> false
@@ -62,7 +62,7 @@ Seq[Any](format.raw/*1.32*/("""
         """),format.raw/*35.9*/("""</fieldset>
         
         <div class="actions">
-            <input type="submit" value="Create this computer" class="btn primary"> or 
+            <input type="submit" value="Create this diagnose" class="btn primary"> or 
             <a href=""""),_display_(/*39.23*/routes/*39.29*/.Application.list()),format.raw/*39.48*/("""" class="btn">Cancel</a> 
         </div>
         
@@ -71,18 +71,18 @@ Seq[Any](format.raw/*1.32*/("""
 """)))}))}
   }
 
-  def render(computerForm:Form[Computer]): play.twirl.api.HtmlFormat.Appendable = apply(computerForm)
+  def render(diagnoseForm:Form[Diagnose]): play.twirl.api.HtmlFormat.Appendable = apply(diagnoseForm)
 
-  def f:((Form[Computer]) => play.twirl.api.HtmlFormat.Appendable) = (computerForm) => apply(computerForm)
+  def f:((Form[Diagnose]) => play.twirl.api.HtmlFormat.Appendable) = (diagnoseForm) => apply(diagnoseForm)
 
   def ref: this.type = this
 
 }
               /*
                   -- GENERATED --
-                  DATE: Tue Apr 21 13:41:36 CEST 2015
+                  DATE: Tue Apr 21 17:02:04 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/createForm.scala.html
-                  HASH: 0bde3281647f1d02192ac2c6e4818e87ab131a78
+                  HASH: 00f0939667f6a4f860ebe4eef9ebf99cbe28aca6
                   MATRIX: 736->1|861->52|893->76|977->31|1005->50|1033->130|1062->134|1073->138|1111->140|1147->150|1201->178|1215->184|1302->262|1342->264|1371->266|1482->347|1513->352|1553->383|1593->385|1638->403|1698->436|1792->509|1833->523|1935->604|1976->618|2082->703|2124->718|2374->947|2424->970|2611->1130|2626->1136|2666->1155|2751->1210
                   LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|36->9|38->11|38->11|38->11|38->11|39->12|44->17|46->19|46->19|46->19|48->21|50->23|50->23|51->24|51->24|52->25|52->25|54->27|59->32|62->35|66->39|66->39|66->39|69->42
                   -- GENERATED --

@@ -1,3 +1,3 @@
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:130:  error: method readExcelFile in class Application cannot be applied to given types;
-[error]     	    text = readExcelFile();
-[error]     	           ^
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:104:  error: cannot find symbol
+[error]         flash("success", "Diagnose " + diagnoseForm.get().Diagnose_ID + " has been created");
+[error]                                                          ^

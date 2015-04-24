@@ -3,46 +3,34 @@
 # --- !Ups
 
 create table company (
-  id                        bigint not null,
+  id                        bigint not null auto_increment,
   name                      varchar(255),
-  constraint pk_company primary key (id))
+  constraint pk_company primary key (id)
+  ) engine=innodb
 ;
 
-create table computer (
-  id                        bigint not null,
+create table diagnose (
+  id                        bigint not null auto_increment,
   name                      varchar(255),
-  introduced                timestamp,
-  discontinued              timestamp,
+  introduced                datetime,
+  discontinued              datetime,
   company_id                bigint,
-  constraint pk_computer primary key (id))
+  constraint pk_diagnose primary key (id)
+  ) engine=innodb
 ;
 
-create table Diagnose (
-  Diagnose_ID				bigint not null,
-  constraint pk_Diagnose primary key (Diagnose_ID))
-;
 
-create sequence company_seq start with 1000;
-
-create sequence computer_seq start with 1000;
-
-alter table computer add constraint fk_computer_company_1 foreign key (company_id) references company (id) on delete restrict on update restrict;
-create index ix_computer_company_1 on computer (company_id);
+alter table diagnose add constraint fk_diagnose_company_1 foreign key (company_id) references company (id) on delete restrict on update restrict;
+create index ix_diagnose_company_1 on diagnose (company_id);
 
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+SET FOREIGN_KEY_CHECKS = 0
 
 drop table if exists company;
 
-drop table if exists computer;
+drop table if exists diagnose;
 
-drop table if exists Diagnose;
-
-SET REFERENTIAL_INTEGRITY TRUE;
-
-drop sequence if exists company_seq;
-
-drop sequence if exists computer_seq;
+SET FOREIGN_KEY_CHECKS = 1
 

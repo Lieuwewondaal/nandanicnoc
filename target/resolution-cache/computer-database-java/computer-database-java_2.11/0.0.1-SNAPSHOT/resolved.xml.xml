@@ -4,7 +4,7 @@
 		module="computer-database-java_2.11"
 		revision="0.0.1-SNAPSHOT"
 		status="integration"
-		publication="20150420134828"
+		publication="20150424132228"
 	>
 		<description>
 		computer-database-java
@@ -45,5 +45,6 @@
 		<dependency org="com.typesafe.play" name="play-java-ebean_2.11" rev="2.3.8" conf="compile->default(compile)"/>
 		<dependency org="org.webjars" name="jquery" rev="2.1.1" conf="compile->default(compile)"/>
 		<dependency org="org.webjars" name="bootstrap" rev="3.3.1" conf="compile->default(compile)"/>
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.35" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

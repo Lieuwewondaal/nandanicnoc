@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:b8cb4cf851248556ed9c189122564f4c24974750
-// @DATE:Tue Apr 21 13:50:53 CEST 2015
+// @HASH:3fd6f13ca7fbc6f196a0fb214b242ba2fd634de6
+// @DATE:Tue Apr 21 16:37:42 CEST 2015
 
 
 import play.core._
@@ -40,52 +40,52 @@ HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "index",
         
 
 // @LINE:9
-private[this] lazy val controllers_Application_list1_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers"))))
+private[this] lazy val controllers_Application_list1_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses"))))
 private[this] lazy val controllers_Application_list1_invoker = createInvoker(
 controllers.Application.list(fakeValue[Int], fakeValue[String], fakeValue[String], fakeValue[String]),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "list", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]),"GET", """ Computers list (look at the default values for pagination parameters)""", Routes.prefix + """computers"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "list", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]),"GET", """ Computers list (look at the default values for pagination parameters)""", Routes.prefix + """diagnoses"""))
         
 
 // @LINE:12
-private[this] lazy val controllers_Application_create2_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers/new"))))
+private[this] lazy val controllers_Application_create2_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses/new"))))
 private[this] lazy val controllers_Application_create2_invoker = createInvoker(
 controllers.Application.create(),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "create", Nil,"GET", """ Add computer""", Routes.prefix + """computers/new"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "create", Nil,"GET", """ Add computer""", Routes.prefix + """diagnoses/new"""))
         
 
 // @LINE:13
-private[this] lazy val controllers_Application_save3_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers/now"))))
+private[this] lazy val controllers_Application_save3_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses/now"))))
 private[this] lazy val controllers_Application_save3_invoker = createInvoker(
 controllers.Application.save(),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "save", Nil,"GET", """""", Routes.prefix + """computers/now"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "save", Nil,"GET", """""", Routes.prefix + """diagnoses/now"""))
         
 
 // @LINE:14
-private[this] lazy val controllers_Application_upload4_route = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers"))))
+private[this] lazy val controllers_Application_upload4_route = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses"))))
 private[this] lazy val controllers_Application_upload4_invoker = createInvoker(
 controllers.Application.upload(),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "upload", Nil,"POST", """""", Routes.prefix + """computers"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "upload", Nil,"POST", """""", Routes.prefix + """diagnoses"""))
         
 
 // @LINE:17
-private[this] lazy val controllers_Application_edit5_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers/"),DynamicPart("id", """[^/]+""",true))))
+private[this] lazy val controllers_Application_edit5_route = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses/"),DynamicPart("id", """[^/]+""",true))))
 private[this] lazy val controllers_Application_edit5_invoker = createInvoker(
 controllers.Application.edit(fakeValue[Long]),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "edit", Seq(classOf[Long]),"GET", """ Edit existing computer""", Routes.prefix + """computers/$id<[^/]+>"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "edit", Seq(classOf[Long]),"GET", """ Edit existing computer""", Routes.prefix + """diagnoses/$id<[^/]+>"""))
         
 
 // @LINE:18
-private[this] lazy val controllers_Application_update6_route = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers/"),DynamicPart("id", """[^/]+""",true))))
+private[this] lazy val controllers_Application_update6_route = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses/"),DynamicPart("id", """[^/]+""",true))))
 private[this] lazy val controllers_Application_update6_invoker = createInvoker(
 controllers.Application.update(fakeValue[Long]),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "update", Seq(classOf[Long]),"POST", """""", Routes.prefix + """computers/$id<[^/]+>"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "update", Seq(classOf[Long]),"POST", """""", Routes.prefix + """diagnoses/$id<[^/]+>"""))
         
 
 // @LINE:21
-private[this] lazy val controllers_Application_delete7_route = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("computers/"),DynamicPart("id", """[^/]+""",true),StaticPart("/delete"))))
+private[this] lazy val controllers_Application_delete7_route = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("diagnoses/"),DynamicPart("id", """[^/]+""",true),StaticPart("/delete"))))
 private[this] lazy val controllers_Application_delete7_invoker = createInvoker(
 controllers.Application.delete(fakeValue[Long]),
-HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "delete", Seq(classOf[Long]),"POST", """ Delete a computer""", Routes.prefix + """computers/$id<[^/]+>/delete"""))
+HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "delete", Seq(classOf[Long]),"POST", """ Delete a computer""", Routes.prefix + """diagnoses/$id<[^/]+>/delete"""))
         
 
 // @LINE:24
@@ -94,7 +94,7 @@ private[this] lazy val controllers_Assets_at8_invoker = createInvoker(
 controllers.Assets.at(fakeValue[String], fakeValue[String]),
 HandlerDef(this.getClass.getClassLoader, "", "controllers.Assets", "at", Seq(classOf[String], classOf[String]),"GET", """ Map static resources from the /public folder to the /assets URL path""", Routes.prefix + """assets/$file<.+>"""))
         
-def documentation = List(("""GET""", prefix,"""controllers.Application.index()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers""","""controllers.Application.list(p:Int ?= 0, s:String ?= "name", o:String ?= "asc", f:String ?= "")"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers/new""","""controllers.Application.create()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers/now""","""controllers.Application.save()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers""","""controllers.Application.upload()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers/$id<[^/]+>""","""controllers.Application.edit(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers/$id<[^/]+>""","""controllers.Application.update(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """computers/$id<[^/]+>/delete""","""controllers.Application.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+def documentation = List(("""GET""", prefix,"""controllers.Application.index()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses""","""controllers.Application.list(p:Int ?= 0, s:String ?= "name", o:String ?= "asc", f:String ?= "")"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/new""","""controllers.Application.create()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/now""","""controllers.Application.save()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses""","""controllers.Application.upload()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>""","""controllers.Application.edit(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>""","""controllers.Application.update(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>/delete""","""controllers.Application.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]]
 }}

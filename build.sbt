@@ -8,7 +8,8 @@ libraryDependencies ++= Seq(
   jdbc,
   javaEbean,
   "org.webjars" % "jquery" % "2.1.1",
-  "org.webjars" % "bootstrap" % "3.3.1"
+  "org.webjars" % "bootstrap" % "3.3.1",
+  "mysql" % "mysql-connector-java" % "5.1.35"
 )     
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
