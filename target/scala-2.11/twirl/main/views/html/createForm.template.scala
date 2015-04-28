@@ -32,41 +32,68 @@ Seq[Any](format.raw/*1.32*/("""
 """),format.raw/*5.80*/(""" 
 
 """),_display_(/*7.2*/main/*7.6*/ {_display_(Seq[Any](format.raw/*7.8*/("""
-    
-    """),format.raw/*9.5*/("""<h1>Add a diagnose</h1>
+	"""),format.raw/*8.2*/("""<script>
+	  $( document ).ready(function() """),format.raw/*9.35*/("""{"""),format.raw/*9.36*/("""
+		"""),format.raw/*10.3*/("""console.log( "ready!" );
+		$( ".modal-body" ).load( "../" );
+	"""),format.raw/*12.2*/("""}"""),format.raw/*12.3*/(""");
+	</script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+		  </div>
+		  <div class="modal-body">
+			...
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+    <h1>Add a diagnose</h1>
 	
-	"""),_display_(/*11.3*/helper/*11.9*/.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data")/*11.87*/ {_display_(Seq[Any](format.raw/*11.89*/("""
-	"""),format.raw/*12.2*/("""<input type="file" name="picture">
+	"""),_display_(/*35.3*/helper/*35.9*/.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data")/*35.87*/ {_display_(Seq[Any](format.raw/*35.89*/("""
+	"""),format.raw/*36.2*/("""<input type="file" name="picture">
 	<p>
 	  <input type="submit">
     </p>
-    
-	""")))}),format.raw/*17.3*/("""
+	<!-- Button trigger modal -->
+	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+	  Launch demo modal
+	</button>
+	""")))}),format.raw/*44.3*/("""
 	
-	"""),_display_(/*19.3*/form(routes.Application.save())/*19.34*/ {_display_(Seq[Any](format.raw/*19.36*/("""
+	"""),_display_(/*46.3*/form(routes.Application.save())/*46.34*/ {_display_(Seq[Any](format.raw/*46.36*/("""
         
-        """),format.raw/*21.9*/("""<fieldset>
+        """),format.raw/*48.9*/("""<fieldset>
         
-            """),_display_(/*23.14*/inputText(diagnoseForm("name"), '_label -> "Diagnose name", '_help -> "")),format.raw/*23.87*/("""
-            """),_display_(/*24.14*/inputDate(diagnoseForm("introduced"), '_label -> "Introduced date", '_help -> "")),format.raw/*24.95*/("""
-            """),_display_(/*25.14*/inputDate(diagnoseForm("discontinued"), '_label -> "Discontinued date", '_help -> "")),format.raw/*25.99*/("""
+            """),_display_(/*50.14*/inputText(diagnoseForm("name"), '_label -> "Diagnose name", '_help -> "")),format.raw/*50.87*/("""
+            """),_display_(/*51.14*/inputDate(diagnoseForm("introduced"), '_label -> "Introduced date", '_help -> "")),format.raw/*51.95*/("""
+            """),_display_(/*52.14*/inputDate(diagnoseForm("discontinued"), '_label -> "Discontinued date", '_help -> "")),format.raw/*52.99*/("""
 
-            """),_display_(/*27.14*/select(
+            """),_display_(/*54.14*/select(
                 diagnoseForm("company.id"), 
                 options(Company.options), 
                 '_label -> "Company", '_default -> "-- Choose a company --",
                 '_showConstraints -> false
-            )),format.raw/*32.14*/("""
+            )),format.raw/*59.14*/("""
             
 
-        """),format.raw/*35.9*/("""</fieldset>
+        """),format.raw/*62.9*/("""</fieldset>
         
         <div class="actions">
             <input type="submit" value="Create this diagnose" class="btn primary"> or 
-            <a href=""""),_display_(/*39.23*/routes/*39.29*/.Application.list()),format.raw/*39.48*/("""" class="btn">Cancel</a> 
+            <a href=""""),_display_(/*66.23*/routes/*66.29*/.Application.list()),format.raw/*66.48*/("""" class="btn">Cancel</a> 
         </div>
         
-    """)))}),format.raw/*42.6*/("""
+    """)))}),format.raw/*69.6*/("""
     
 """)))}))}
   }
@@ -80,11 +107,11 @@ Seq[Any](format.raw/*1.32*/("""
 }
               /*
                   -- GENERATED --
-                  DATE: Tue Apr 21 17:02:04 CEST 2015
+                  DATE: Tue Apr 28 15:56:03 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/createForm.scala.html
-                  HASH: 00f0939667f6a4f860ebe4eef9ebf99cbe28aca6
-                  MATRIX: 736->1|861->52|893->76|977->31|1005->50|1033->130|1062->134|1073->138|1111->140|1147->150|1201->178|1215->184|1302->262|1342->264|1371->266|1482->347|1513->352|1553->383|1593->385|1638->403|1698->436|1792->509|1833->523|1935->604|1976->618|2082->703|2124->718|2374->947|2424->970|2611->1130|2626->1136|2666->1155|2751->1210
-                  LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|36->9|38->11|38->11|38->11|38->11|39->12|44->17|46->19|46->19|46->19|48->21|50->23|50->23|51->24|51->24|52->25|52->25|54->27|59->32|62->35|66->39|66->39|66->39|69->42
+                  HASH: bfd580f9e312fa0b613008091204b794fe2bd740
+                  MATRIX: 736->1|861->52|893->76|977->31|1005->50|1033->130|1062->134|1073->138|1111->140|1139->142|1209->185|1237->186|1267->189|1356->251|1384->252|2154->996|2168->1002|2255->1080|2295->1082|2324->1084|2591->1321|2622->1326|2662->1357|2702->1359|2747->1377|2807->1410|2901->1483|2942->1497|3044->1578|3085->1592|3191->1677|3233->1692|3483->1921|3533->1944|3720->2104|3735->2110|3775->2129|3860->2184
+                  LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|35->8|36->9|36->9|37->10|39->12|39->12|62->35|62->35|62->35|62->35|63->36|71->44|73->46|73->46|73->46|75->48|77->50|77->50|78->51|78->51|79->52|79->52|81->54|86->59|89->62|93->66|93->66|93->66|96->69
                   -- GENERATED --
               */
           
