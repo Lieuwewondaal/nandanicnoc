@@ -20,7 +20,7 @@ public class DiagnoseKlasse extends Model {
 	@Id
     public Long DiagnoseKlasse_ID;
     
-	public String DiagnoseKlasse_Naam;
+	public Long DiagnoseKlasse_Klasse;
 	
 	@ManyToOne
     public DiagnoseDomein DiagnoseDomein_ID;

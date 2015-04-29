@@ -29,9 +29,6 @@ public class DiagnoseOverzicht extends Model {
     public GezondheidsPatroon GezondheidsPatroon_ID;
     
     @ManyToOne
-    public DiagnoseDomein DiagnoseDomein_ID;
-    
-    @ManyToOne
     public DiagnoseKlasse DiagnoseKlasse_ID;
     
     public String DiagnoseOverzicht_Omschrijving;
@@ -43,13 +40,13 @@ public class DiagnoseOverzicht extends Model {
      */
     public static Model.Finder<Long,DiagnoseOverzicht> find = new Model.Finder<Long,DiagnoseOverzicht>(Long.class, DiagnoseOverzicht.class);
 
-    /*public static Map<String,String> options() {
+    public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
         for(DiagnoseOverzicht c: DiagnoseOverzicht.find.orderBy("name").findList()) {
-            options.put(c.id.toString(), c.name);
+            options.put(c.DiagnoseOverzicht_ID.toString(), c.DiagnoseOverzicht_Definitie);
         }
         return options;
-    }*/
+    }
 
 }
 

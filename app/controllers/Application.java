@@ -167,18 +167,34 @@ public class Application extends Controller {
 	                if(tmp > cols) cols = tmp;
 	            }
 	        }
-
+	        Company comp;
+	        int id = 0, name = 1;
 	        for(int r = 0; r < rows; r++) {
+	        	comp = new Company();
 	            row = sheet.getRow(r);
 	            if(row != null) {
 	            	text += r+" ";
-	                for(int c = 0; c < cols; c++) {
-	                    cell = row.getCell(c);
-	                    if(cell != null) {
-	                    	text += cell.toString()+" ";
-	                        
-	                    }
-	                }
+	            	if(r == 0){
+		                for(int c = 0; c < cols; c++) {
+		                    cell = row.getCell(c);
+		                    if(cell != null) {
+		                    	if(cell.toString().equals("id")){
+		                    		id = c;
+		                    	}
+		                    	if(cell.toString().equals("omschrijving")){
+		                    		name = c;
+		                    	}
+		                    	comp.name = cell.toString();
+		                    	text += cell.toString()+" ";
+		                        
+		                    }
+		                }
+	            	}
+	            	if(r != 0){
+		            	comp.id = Long.parseLong(row.getCell(id).toString());
+		            	comp.name = row.getCell(name).toString();
+		                comp.save();
+	            	}
 	                text += "\n";
 	            }
 	        }
