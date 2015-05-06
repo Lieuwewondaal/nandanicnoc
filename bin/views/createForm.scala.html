@@ -1,0 +1,71 @@
+@(diagnoseForm: Form[Diagnose])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+@main {
+	<script>
+	  $( document ).ready(function() {
+		console.log( "ready!" );
+		$( ".modal-body" ).load( "../" );
+	});
+	</script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+		  </div>
+		  <div class="modal-body">
+			...
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-primary">Save changes</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+    <h1>Add a diagnose</h1>
+	
+	@helper.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data") {
+	<input type="file" name="picture">
+	<p>
+	  <input type="submit">
+    </p>
+	<!-- Button trigger modal -->
+	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+	  Launch demo modal
+	</button>
+	}
+	
+	@form(routes.Application.save()) {
+        
+        <fieldset>
+        
+            @inputText(diagnoseForm("name"), '_label -> "Diagnose name", '_help -> "")
+            @inputDate(diagnoseForm("introduced"), '_label -> "Introduced date", '_help -> "")
+            @inputDate(diagnoseForm("discontinued"), '_label -> "Discontinued date", '_help -> "")
+
+            @select(
+                diagnoseForm("company.id"), 
+                options(Company.options), 
+                '_label -> "Company", '_default -> "-- Choose a company --",
+                '_showConstraints -> false
+            )
+            
+
+        </fieldset>
+        
+        <div class="actions">
+            <input type="submit" value="Create this diagnose" class="btn primary"> or 
+            <a href="@routes.Application.list()" class="btn">Cancel</a> 
+        </div>
+        
+    }
+    
+}

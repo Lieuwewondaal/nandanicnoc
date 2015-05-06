@@ -20,7 +20,7 @@ public class DiagnoseVersie_BepalendKenmerk extends Model {
 
     public BepalendKenmerk BepalendKenmerk_ID;
     
-    public DiagnoseVersie DiagnoseVersie_ID;
+    public Diagnoseversie DiagnoseVersie_ID;
     
     public String DiagnoseVersie_BepalendKenmerk_Omschrijving;
     

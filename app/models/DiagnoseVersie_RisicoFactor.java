@@ -20,7 +20,7 @@ public class DiagnoseVersie_RisicoFactor extends Model {
 
     public RisicoFactor RisicoFactor_ID;
     
-    public DiagnoseVersie DiagnoseVersie_ID;
+    public Diagnoseversie DiagnoseVersie_ID;
     
     public String DiagnoseVersie_RisicoFactor_Omschrijving;
     

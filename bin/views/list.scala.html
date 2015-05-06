@@ -77,7 +77,7 @@
 
                 @for(diagnose <- currentPage.getList) {
                     <tr>
-                        <td><a href="@routes.Application.edit(diagnose.diagnose_id)">@diagnose.name</a></td>
+                        <td><a href="@routes.Application.edit(diagnose.id)">@diagnose.name</a></td>
                         <td>
                             @if(diagnose.introduced == null) {
                                 <em>-</em>

@@ -16163,7 +16163,7 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.8-M5!apply-macro.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 19983ms :: artifacts dl 372ms
+[debug] :: resolution report :: resolve 20237ms :: artifacts dl 912ms
 [debug] 	report for default#verpleegkunde-app-build;0.1-SNAPSHOT compile produced in C:\Users\Vincent\workspace\verpleegkunde-app\project\target\resolution-cache\reports\default-verpleegkunde-app-build-compile.xml
 [debug] 	report for default#verpleegkunde-app-build;0.1-SNAPSHOT runtime produced in C:\Users\Vincent\workspace\verpleegkunde-app\project\target\resolution-cache\reports\default-verpleegkunde-app-build-runtime.xml
 [debug] 	report for default#verpleegkunde-app-build;0.1-SNAPSHOT test produced in C:\Users\Vincent\workspace\verpleegkunde-app\project\target\resolution-cache\reports\default-verpleegkunde-app-build-test.xml
@@ -16177,5 +16177,5 @@
 [debug] 	report for default#verpleegkunde-app-build;0.1-SNAPSHOT docs produced in C:\Users\Vincent\workspace\verpleegkunde-app\project\target\resolution-cache\reports\default-verpleegkunde-app-build-docs.xml
 [debug] 	report for default#verpleegkunde-app-build;0.1-SNAPSHOT pom produced in C:\Users\Vincent\workspace\verpleegkunde-app\project\target\resolution-cache\reports\default-verpleegkunde-app-build-pom.xml
 [debug] 	report for default#verpleegkunde-app-build;0.1-SNAPSHOT scala-tool produced in C:\Users\Vincent\workspace\verpleegkunde-app\project\target\resolution-cache\reports\default-verpleegkunde-app-build-scala-tool.xml
-[debug] 	resolve done (19983ms resolve - 372ms download)
+[debug] 	resolve done (20237ms resolve - 912ms download)
 [info] Done updating.

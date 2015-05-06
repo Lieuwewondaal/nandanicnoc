@@ -2,14 +2,24 @@
 [debug] Initial source changes: 
 [debug] 	removed:Set()
 [debug] 	added: Set()
-[debug] 	modified: Set()
+[debug] 	modified: Set(C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java)
 [debug] Removed products: Set()
 [debug] External API changes: API Changes: Set()
 [debug] Modified binary dependencies: Set()
-[debug] Initial directly invalidated sources: Set()
+[debug] Initial directly invalidated sources: Set(C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java)
 [debug] 
 [debug] Sources indirectly invalidated by:
 [debug] 	product: Set()
 [debug] 	binary dep: Set()
 [debug] 	external source: Set()
-[debug] All initially invalidated sources: Set()
+[debug] All initially invalidated sources: Set(C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java)
+[info] Compiling 1 Java source to C:\Users\Vincent\workspace\verpleegkunde-app\target\scala-2.11\classes...
+[debug] Java compilation took 1.820786541 s
+[debug] Java analysis took 0.112644012 s
+[debug] Java compile + analysis took 1.943178066 s
+[debug] New invalidations:
+[debug] 	Set()
+[debug] Initial set of included nodes: Set()
+[debug] Previously invalidated, but (transitively) depend on new invalidations:
+[debug] 	Set()
+[debug] All newly invalidated sources after taking into account (previously) recompiled sources:Set()

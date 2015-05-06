@@ -2,6 +2,11 @@ package controllers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import javax.persistence.PersistenceException;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -101,7 +106,7 @@ public class Application extends Controller {
             return badRequest(createForm.render(diagnoseForm));
         }
         diagnoseForm.get().save();
-        flash("success", "Diagnose " + diagnoseForm.get().id + " has been created");
+        flash("success", "Diagnose " + diagnoseForm.get().diagnose_id + " has been created");
         return GO_HOME;
     }
     
@@ -121,15 +126,15 @@ public class Application extends Controller {
     public static Result upload() {
     	String text = "";
     	  MultipartFormData body = request().body().asMultipartFormData();
-    	  FilePart picture = body.getFile("picture");
-    	  if (picture != null) {
-    	    String fileName = picture.getFilename();
-    	    String contentType = picture.getContentType(); 
-    	    File file = picture.getFile();
-    	    
+    	  FilePart excelFile = body.getFile("picture");
+    	  if (excelFile != null) {
+    	    String fileName = excelFile.getFilename();
+    	    String contentType = excelFile.getContentType(); 
+    	    File file = excelFile.getFile();
+    	    System.out.println(fileName);
     	    // Read Excel file
-    	    text = readExcelFile(file);
-    	    System.out.println(text);
+    	    text = readExcelFile(file, fileName);
+    	    //System.out.println(text);
     	    flash("success", "File has been uploaded");
     	    return GO_HOME;
     	  } else {
@@ -141,17 +146,18 @@ public class Application extends Controller {
     
     /**
      * Read an Excel file and return the values of the first worksheet
+     * Used to import Excel files to SQL
+     * Must be a Microsoft Excel 1997 - 2003 file
      * @param file
      * @return contents of first worksheet
      */
-    private static String readExcelFile(File file){
+    private static String readExcelFile(File file, String fileName){
     	String text = "";
 	    try {
 	        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
 	        HSSFWorkbook wb = new HSSFWorkbook(fs);
 	        HSSFSheet sheet = wb.getSheetAt(0);
 	        HSSFRow row;
-	        HSSFCell cell;
 
 	        int rows; // No of rows
 	        rows = sheet.getPhysicalNumberOfRows();
@@ -167,14 +173,12 @@ public class Application extends Controller {
 	                if(tmp > cols) cols = tmp;
 	            }
 	        }
-	        Company comp;
-	        int id = 0, name = 1;
+	   
 	        for(int r = 0; r < rows; r++) {
-	        	comp = new Company();
 	            row = sheet.getRow(r);
 	            if(row != null) {
 	            	text += r+" ";
-	            	if(r == 0){
+	            	/*if(r == 0){
 		                for(int c = 0; c < cols; c++) {
 		                    cell = row.getCell(c);
 		                    if(cell != null) {
@@ -189,11 +193,108 @@ public class Application extends Controller {
 		                        
 		                    }
 		                }
-	            	}
+	            	}*/
+	            	// Do not get first row of data
 	            	if(r != 0){
-		            	comp.id = Long.parseLong(row.getCell(id).toString());
-		            	comp.name = row.getCell(name).toString();
-		                comp.save();
+	            		switch(fileName){
+	        	        case "ref_patroon.xls":
+	        	        	Gezondheidspatroon gezondheidspatroon = new Gezondheidspatroon();
+	        	        	int GezondheidsPatroon_ID = 0,
+	        	        		GezondheidsPatroon_omschrijving = 1;
+	        	        	gezondheidspatroon.gezondheidspatroon_id = (long)row.getCell(GezondheidsPatroon_ID).getNumericCellValue();
+	        	        	gezondheidspatroon.gezondheidspatroon_omschrijving = row.getCell(GezondheidsPatroon_omschrijving).toString();
+	        	        	try{
+	        	        		gezondheidspatroon.save();
+	    	    		    }
+	    	    		    catch (PersistenceException e){
+	    	    		  	    System.out.println("Gezondheidspatroon already exists");
+	    	    		    }
+	        	        	
+	        	        case "ref_diagnose.xls":
+	    	    		  Diagnose diagnose = new Diagnose();
+	    	    		  Diagnoseversie diagnoseversie = new Diagnoseversie();
+	    	    		  Diagnoseoverzicht diagnoseoverzicht = new Diagnoseoverzicht();
+	    	    		  Diagnosedomein diagnosedomein = new Diagnosedomein();
+	    	    		  Diagnoseklasse diagnoseklasse = new Diagnoseklasse();
+	    	    		  Diagnoseversie_Releasestatus diagnoseversie_releasestatus = new Diagnoseversie_Releasestatus();
+	    	    		  
+	    	    		  // Diagnose excel file row numbers
+	    	    		  int Diagnose_ID = 0, 
+	    					  Diagnose_Code = 1, 
+	    					  Diagnose_Omschrijving = 2, 
+	    					  Diagnose_Definitie = 3,
+	    					  Diagnose_Domein = 5,
+	    					  Diagnose_Klasse = 6,
+	    					  Diagnose_Patroon = 7;
+	    	    		  
+	    	    		  // Diagnosedomein table
+	    	    			  diagnosedomein.diagnosedomein_id = (long)row.getCell(Diagnose_Domein).getNumericCellValue();
+	    	    		  	  diagnosedomein.diagnosedomein_domein = (long)row.getCell(Diagnose_Domein).getNumericCellValue();
+    	    		  	  try{
+	    	    		  	  diagnosedomein.save();
+	    	    		  }
+	    	    		  catch (PersistenceException e){
+	    	    			  System.out.println("Domein already exists");
+	    	    		  }
+	    	    		  
+	    	    		  // Diagnoseklasse table
+	    	    			  diagnoseklasse.diagnoseklasse_klasse = (long)row.getCell(Diagnose_Klasse).getNumericCellValue();
+	    	    			  diagnoseklasse.diagnosedomein = diagnosedomein;
+    	    			  try{
+	    	    			  diagnoseklasse.save();
+	    	    		  }
+	    	    		  catch (PersistenceException e){
+	    	    			  System.out.println("Klasse already exists");
+	    	    		  }
+	    	    		  // Diagnose table
+	    	    		  diagnose.diagnose_id = (long)Long.parseLong(row.getCell(Diagnose_ID).toString().substring(1));
+	    	    		  System.out.println(diagnose.diagnose_id);
+	    	    		  try{
+	    	    		  	diagnose.save();
+	    	    		  }
+	    	    		  catch (PersistenceException e){
+	    	    		     System.out.println("Diagnose already exists");
+	    	    		  }
+	    	    		  // Diagnoseversie table
+	    	    		  Calendar cal = Calendar.getInstance();
+	    	    		  diagnoseversie.diagnoseversie_begindatum = cal.getTime();
+	    	    		  diagnoseversie.diagnoseversie_einddatum = cal.getTime();
+	    	    		  try{
+	    	    			  diagnoseversie.save();
+	    	    		  }
+	    	    		  catch (PersistenceException e){
+	    	    		     System.out.println("Diagnoseversie already exists");
+	    	    		  }
+	    	    		  
+	    	    		  // Diagnoseversie_releasestatus table
+	    	    		  diagnoseversie_releasestatus.diagnoseversie = diagnoseversie;
+	    	    		  diagnoseversie_releasestatus.diagnoseversie_releasestatus_datum = cal.getTime();
+	    	    		  diagnoseversie_releasestatus.diagnoseversie_releasestatus_omschrijving = row.getCell(Diagnose_Definitie).toString();
+	    	    		  try{
+	    	    			  diagnoseversie_releasestatus.save();
+	    	    		  }
+	    	    		  catch (PersistenceException e){
+	    	    		     System.out.println("Diagnose already exists");
+	    	    		  }
+	    	    		  
+	    	    		  // Diagnoseoverzicht table
+	    	    		  Gezondheidspatroon gezondheidspatroon_id = Gezondheidspatroon.find.byId((long)Long.parseLong(row.getCell(Diagnose_Patroon).toString().substring(1)));
+	    	    		  diagnoseoverzicht.diagnose = diagnose;
+	    	    		  diagnoseoverzicht.diagnoseversie = diagnoseversie;
+	    	    		  diagnoseoverzicht.diagnose_code = (int)row.getCell(Diagnose_Code).getNumericCellValue();
+	    	    		  diagnoseoverzicht.gezondheidspatroon = gezondheidspatroon_id;
+	    	    		  diagnoseoverzicht.diagnoseklasse = diagnoseklasse;
+	    	    		  diagnoseoverzicht.diagnoseoverzicht_definitie = row.getCell(Diagnose_Definitie).toString();
+	    	    		  diagnoseoverzicht.diagnoseoverzicht_omschrijving = row.getCell(Diagnose_Omschrijving).toString();
+	    	    		  try{
+	    	    			  diagnoseoverzicht.save();
+	    	    		  }
+	    	    		  catch (PersistenceException e){
+	    	    		     System.out.println("Diagnose already exists");
+	    	    		  }
+	    	    		  
+	    	    		  break;
+	            		}
 	            	}
 	                text += "\n";
 	            }

@@ -19,7 +19,7 @@ public class Diagnose extends Model {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-    public Long id;
+    public Long diagnose_id;
     
     @Constraints.Required
     public String name;
