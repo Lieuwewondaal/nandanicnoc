@@ -6,7 +6,7 @@
 GET     /                           controllers.Application.index()
 
 # Computers list (look at the default values for pagination parameters)
-GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "name", o ?= "asc", f ?= "")
+GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
 
 # Add computer
 GET     /diagnoses/new              controllers.Application.create()

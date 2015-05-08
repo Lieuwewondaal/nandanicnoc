@@ -1,4 +1,4 @@
-@(diagnoseForm: Form[Diagnose])
+@(diagnoseForm: Form[Diagnoseoverzicht])
 
 @import helper._
 
@@ -8,7 +8,7 @@
 	<script>
 	  $( document ).ready(function() {
 		console.log( "ready!" );
-		$( ".modal-body" ).load( "../" );
+		//$( ".modal-body" ).load( "../" );
 	});
 	</script>
 
@@ -47,14 +47,12 @@
         
         <fieldset>
         
-            @inputText(diagnoseForm("name"), '_label -> "Diagnose name", '_help -> "")
-            @inputDate(diagnoseForm("introduced"), '_label -> "Introduced date", '_help -> "")
-            @inputDate(diagnoseForm("discontinued"), '_label -> "Discontinued date", '_help -> "")
+            @inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose name", '_help -> "")
 
             @select(
-                diagnoseForm("company.id"), 
-                options(Company.options), 
-                '_label -> "Company", '_default -> "-- Choose a company --",
+                diagnoseForm("gezondheidspatroon.id"), 
+                options(Gezondheidspatroon.options), 
+                '_label -> "Patroon", '_default -> "-- Kies een patroon --",
                 '_showConstraints -> false
             )
             

@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:3fd6f13ca7fbc6f196a0fb214b242ba2fd634de6
-// @DATE:Tue Apr 21 16:37:42 CEST 2015
+// @HASH:6a5930e7c15344fa1c6540c36619230d75764df4
+// @DATE:Fri May 08 13:38:39 CEST 2015
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -87,9 +87,9 @@ def update(id:Long): Call = {
                         
 
 // @LINE:9
-def list(p:Int = 0, s:String = "name", o:String = "asc", f:String = ""): Call = {
+def list(p:Int = 0, s:String = "diagnoseoverzicht_omschrijving", o:String = "asc", f:String = ""): Call = {
    import ReverseRouteContext.empty
-   Call("GET", _prefix + { _defaultPrefix } + "diagnoses" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "name") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "diagnoseoverzicht_omschrijving") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
 }
                         
 

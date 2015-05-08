@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Diagnose], currentSortBy: String, currentOrder: String, currentFilter: String)
+@(currentPage: com.avaje.ebean.Page[Diagnoseoverzicht], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -67,37 +67,34 @@
         <table class="diagnoses zebra-striped">
             <thead>
                 <tr>
-                    @header("name", "Diagnose name")
-                    @header("introduced", "Introduced")
-                    @header("discontinued", "Discontinued")
-                    @header("company.name", "Company")
+                    @header("diagnoseoverzicht_omschrijving", "Diagnose name")
+                    @header("diagnose_code", "Code")
+                    @header("gezondheidspatroon.gezondheidspatroon_omschrijving", "Patroon")
+                    @header("diagnose.diagnose_id", "DiagnoseID")
                 </tr>
             </thead>
             <tbody>
 
-                @for(diagnose <- currentPage.getList) {
+                @for(diagnoseoverzicht <- currentPage.getList) {
                     <tr>
-                        <td><a href="@routes.Application.edit(diagnose.diagnose_id)">@diagnose.name</a></td>
+                        <td><a href="@routes.Application.edit(diagnoseoverzicht.diagnose.diagnose_id )">@diagnoseoverzicht.diagnoseoverzicht_omschrijving</a></td>
                         <td>
-                            @if(diagnose.introduced == null) {
+                            @if(diagnoseoverzicht.diagnose_code == null) {
+                                <em>-</em>
+                            } else{
+								@diagnoseoverzicht.diagnose_code
+							}
+							
+                        </td>
+                        <td>
+                            @if(diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving == null) {
                                 <em>-</em>
                             } else {
-                                @diagnose.introduced.format("dd MMM yyyy")
+                                @diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving
                             }
                         </td>
                         <td>
-                            @if(diagnose.discontinued == null) {
-                                <em>-</em>
-                            } else {
-                                @diagnose.discontinued.format("dd MMM yyyy")
-                            }
-                        </td>
-                        <td>
-                            @if(diagnose.company == null) {
-                                <em>-</em>
-                            } else {
-                                @diagnose.company.name
-                            }
+                                @diagnoseoverzicht.diagnose.diagnose_id
                         </td>
                     </tr>
                 }

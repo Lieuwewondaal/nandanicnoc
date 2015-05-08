@@ -1,9 +1,3 @@
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:369:  error: illegal start of expression
-[error] 		    	    		  diagnoseversie_risicofactor.save();*/
-[error] 		    	    		                                     ^
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:369:  error: illegal start of expression
-[error] 		    	    		  diagnoseversie_risicofactor.save();*/
-[error] 		    	    		                                      ^
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:370:  error: illegal start of expression
-[error] 	        	        	break;
-[error] 	        	        	^
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:116:  error: cannot find symbol
+[error]         d.diagnosedomein_domein = Long.parseLong(domein.get("diagnosedomein.diagnosedomein_domein"));
+[error]         ^

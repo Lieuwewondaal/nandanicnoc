@@ -20,13 +20,13 @@ import play.mvc.Http.Context.Implicit._
 import views.html._
 
 /**/
-object createForm extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[Form[Diagnose],play.twirl.api.HtmlFormat.Appendable] {
+object createForm extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[Form[Diagnoseoverzicht],play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(diagnoseForm: Form[Diagnose]):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(diagnoseForm: Form[Diagnoseoverzicht]):play.twirl.api.HtmlFormat.Appendable = {
       _display_ {import helper._
 implicit def /*5.2*/implicitFieldConstructor/*5.26*/ = {{ FieldConstructor(twitterBootstrapInput.render) }};
-Seq[Any](format.raw/*1.32*/("""
+Seq[Any](format.raw/*1.41*/("""
 
 """),format.raw/*4.1*/("""
 """),format.raw/*5.80*/(""" 
@@ -35,7 +35,7 @@ Seq[Any](format.raw/*1.32*/("""
 	"""),format.raw/*8.2*/("""<script>
 	  $( document ).ready(function() """),format.raw/*9.35*/("""{"""),format.raw/*9.36*/("""
 		"""),format.raw/*10.3*/("""console.log( "ready!" );
-		$( ".modal-body" ).load( "../" );
+		//$( ".modal-body" ).load( "../" );
 	"""),format.raw/*12.2*/("""}"""),format.raw/*12.3*/(""");
 	</script>
 
@@ -74,44 +74,46 @@ Seq[Any](format.raw/*1.32*/("""
         
         """),format.raw/*48.9*/("""<fieldset>
         
-            """),_display_(/*50.14*/inputText(diagnoseForm("name"), '_label -> "Diagnose name", '_help -> "")),format.raw/*50.87*/("""
-            """),_display_(/*51.14*/inputDate(diagnoseForm("introduced"), '_label -> "Introduced date", '_help -> "")),format.raw/*51.95*/("""
-            """),_display_(/*52.14*/inputDate(diagnoseForm("discontinued"), '_label -> "Discontinued date", '_help -> "")),format.raw/*52.99*/("""
-
-            """),_display_(/*54.14*/select(
-                diagnoseForm("company.id"), 
-                options(Company.options), 
-                '_label -> "Company", '_default -> "-- Choose a company --",
+            """),_display_(/*50.14*/inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose naam", '_help -> "")),format.raw/*50.113*/("""
+			"""),_display_(/*51.5*/inputText(diagnoseForm("diagnoseoverzicht_definitie"), '_label -> "Diagnose omschrijving", '_help -> "")),format.raw/*51.109*/("""
+			"""),_display_(/*52.5*/inputText(diagnoseForm("diagnose_code"), '_label -> "Diagnose code", '_help -> "")),format.raw/*52.87*/("""
+			"""),_display_(/*53.5*/inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_klasse"), '_label -> "Diagnose klasse", '_help -> "")),format.raw/*53.112*/("""
+			"""),_display_(/*54.5*/inputText(diagnoseForm("diagnosedomein.diagnosedomein_domein"), '_label -> "Diagnose domein", '_help -> "")),format.raw/*54.112*/("""
+			
+            """),_display_(/*56.14*/select(
+                diagnoseForm("gezondheidspatroon.gezondheidspatroon_id"), 
+                options(Gezondheidspatroon.options), 
+                '_label -> "Patroon", '_default -> "-- Kies een patroon --",
                 '_showConstraints -> false
-            )),format.raw/*59.14*/("""
+            )),format.raw/*61.14*/("""
             
 
-        """),format.raw/*62.9*/("""</fieldset>
+        """),format.raw/*64.9*/("""</fieldset>
         
         <div class="actions">
             <input type="submit" value="Create this diagnose" class="btn primary"> or 
-            <a href=""""),_display_(/*66.23*/routes/*66.29*/.Application.list()),format.raw/*66.48*/("""" class="btn">Cancel</a> 
+            <a href=""""),_display_(/*68.23*/routes/*68.29*/.Application.list()),format.raw/*68.48*/("""" class="btn">Cancel</a> 
         </div>
         
-    """)))}),format.raw/*69.6*/("""
+    """)))}),format.raw/*71.6*/("""
     
 """)))}))}
   }
 
-  def render(diagnoseForm:Form[Diagnose]): play.twirl.api.HtmlFormat.Appendable = apply(diagnoseForm)
+  def render(diagnoseForm:Form[Diagnoseoverzicht]): play.twirl.api.HtmlFormat.Appendable = apply(diagnoseForm)
 
-  def f:((Form[Diagnose]) => play.twirl.api.HtmlFormat.Appendable) = (diagnoseForm) => apply(diagnoseForm)
+  def f:((Form[Diagnoseoverzicht]) => play.twirl.api.HtmlFormat.Appendable) = (diagnoseForm) => apply(diagnoseForm)
 
   def ref: this.type = this
 
 }
               /*
                   -- GENERATED --
-                  DATE: Tue Apr 28 15:56:03 CEST 2015
+                  DATE: Fri May 08 17:03:02 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/createForm.scala.html
-                  HASH: bfd580f9e312fa0b613008091204b794fe2bd740
-                  MATRIX: 736->1|861->52|893->76|977->31|1005->50|1033->130|1062->134|1073->138|1111->140|1139->142|1209->185|1237->186|1267->189|1356->251|1384->252|2154->996|2168->1002|2255->1080|2295->1082|2324->1084|2591->1321|2622->1326|2662->1357|2702->1359|2747->1377|2807->1410|2901->1483|2942->1497|3044->1578|3085->1592|3191->1677|3233->1692|3483->1921|3533->1944|3720->2104|3735->2110|3775->2129|3860->2184
-                  LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|35->8|36->9|36->9|37->10|39->12|39->12|62->35|62->35|62->35|62->35|63->36|71->44|73->46|73->46|73->46|75->48|77->50|77->50|78->51|78->51|79->52|79->52|81->54|86->59|89->62|93->66|93->66|93->66|96->69
+                  HASH: b40ae0488b01845b941dc293f2354d51a9fd5424
+                  MATRIX: 745->1|879->61|911->85|995->40|1023->59|1051->139|1080->143|1091->147|1129->149|1157->151|1227->194|1255->195|1285->198|1376->262|1404->263|2174->1007|2188->1013|2275->1091|2315->1093|2344->1095|2611->1332|2642->1337|2682->1368|2722->1370|2767->1388|2827->1421|2948->1520|2979->1525|3105->1629|3136->1634|3239->1716|3270->1721|3399->1828|3430->1833|3559->1940|3604->1958|3895->2228|3945->2251|4132->2411|4147->2417|4187->2436|4272->2491
+                  LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|35->8|36->9|36->9|37->10|39->12|39->12|62->35|62->35|62->35|62->35|63->36|71->44|73->46|73->46|73->46|75->48|77->50|77->50|78->51|78->51|79->52|79->52|80->53|80->53|81->54|81->54|83->56|88->61|91->64|95->68|95->68|95->68|98->71
                   -- GENERATED --
               */
           

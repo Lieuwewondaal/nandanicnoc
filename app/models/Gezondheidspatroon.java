@@ -30,7 +30,7 @@ public class Gezondheidspatroon extends Model {
 
     public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
-        for(Gezondheidspatroon c: Gezondheidspatroon.find.orderBy("name").findList()) {
+        for(Gezondheidspatroon c: Gezondheidspatroon.find.orderBy("gezondheidspatroon_omschrijving").findList()) {
             options.put(c.gezondheidspatroon_id.toString(), c.gezondheidspatroon_omschrijving);
         }
         return options;

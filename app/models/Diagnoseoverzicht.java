@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.avaje.ebean.Page;
+
 import play.db.ebean.*;
 import play.data.validation.*;
 
@@ -50,6 +52,26 @@ public class Diagnoseoverzicht extends Model {
             options.put(c.diagnose.toString(), c.diagnoseoverzicht_definitie);
         }
         return options;
+    }
+    
+    /**
+     * Return a page of computer
+     *
+     * @param page Page to display
+     * @param pageSize Number of computers per page
+     * @param sortBy Diagnose property used for sorting
+     * @param order Sort order (either or asc or desc)
+     * @param filter Filter applied on the name column
+     */
+    public static Page<Diagnoseoverzicht> page(int page, int pageSize, String sortBy, String order, String filter) {
+        return 
+            find.where()
+                .ilike("diagnoseoverzicht_omschrijving", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .fetch("diagnose")
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
     }
 
 }

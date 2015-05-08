@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:3fd6f13ca7fbc6f196a0fb214b242ba2fd634de6
-// @DATE:Tue Apr 21 16:37:42 CEST 2015
+// @HASH:6a5930e7c15344fa1c6540c36619230d75764df4
+// @DATE:Fri May 08 13:38:39 CEST 2015
 
 
 import play.core._
@@ -94,7 +94,7 @@ private[this] lazy val controllers_Assets_at8_invoker = createInvoker(
 controllers.Assets.at(fakeValue[String], fakeValue[String]),
 HandlerDef(this.getClass.getClassLoader, "", "controllers.Assets", "at", Seq(classOf[String], classOf[String]),"GET", """ Map static resources from the /public folder to the /assets URL path""", Routes.prefix + """assets/$file<.+>"""))
         
-def documentation = List(("""GET""", prefix,"""controllers.Application.index()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses""","""controllers.Application.list(p:Int ?= 0, s:String ?= "name", o:String ?= "asc", f:String ?= "")"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/new""","""controllers.Application.create()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/now""","""controllers.Application.save()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses""","""controllers.Application.upload()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>""","""controllers.Application.edit(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>""","""controllers.Application.update(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>/delete""","""controllers.Application.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+def documentation = List(("""GET""", prefix,"""controllers.Application.index()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses""","""controllers.Application.list(p:Int ?= 0, s:String ?= "diagnoseoverzicht_omschrijving", o:String ?= "asc", f:String ?= "")"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/new""","""controllers.Application.create()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/now""","""controllers.Application.save()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses""","""controllers.Application.upload()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>""","""controllers.Application.edit(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>""","""controllers.Application.update(id:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """diagnoses/$id<[^/]+>/delete""","""controllers.Application.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]]
 }}
@@ -112,7 +112,7 @@ case controllers_Application_index0_route(params) => {
 
 // @LINE:9
 case controllers_Application_list1_route(params) => {
-   call(params.fromQuery[Int]("p", Some(0)), params.fromQuery[String]("s", Some("name")), params.fromQuery[String]("o", Some("asc")), params.fromQuery[String]("f", Some(""))) { (p, s, o, f) =>
+   call(params.fromQuery[Int]("p", Some(0)), params.fromQuery[String]("s", Some("diagnoseoverzicht_omschrijving")), params.fromQuery[String]("o", Some("asc")), params.fromQuery[String]("f", Some(""))) { (p, s, o, f) =>
         controllers_Application_list1_invoker.call(controllers.Application.list(p, s, o, f))
    }
 }

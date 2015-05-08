@@ -20,10 +20,10 @@ import play.mvc.Http.Context.Implicit._
 import views.html._
 
 /**/
-object list extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template4[com.avaje.ebean.Page[Diagnose],String,String,String,play.twirl.api.HtmlFormat.Appendable] {
+object list extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template4[com.avaje.ebean.Page[Diagnoseoverzicht],String,String,String,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(currentPage: com.avaje.ebean.Page[Diagnose], currentSortBy: String, currentOrder: String, currentFilter: String):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(currentPage: com.avaje.ebean.Page[Diagnoseoverzicht], currentSortBy: String, currentOrder: String, currentFilter: String):play.twirl.api.HtmlFormat.Appendable = {
       _display_ {
 def /*32.2*/header/*32.8*/(key:String, title:String):play.twirl.api.HtmlFormat.Appendable = {_display_(
 
@@ -53,7 +53,7 @@ Seq[Any](format.raw/*32.38*/("""
     routes.Application.list(newPage, sortBy, order, currentFilter)
     
 }};
-Seq[Any](format.raw/*1.115*/("""
+Seq[Any](format.raw/*1.124*/("""
 
 """),format.raw/*5.42*/("""
 """),format.raw/*27.2*/("""
@@ -93,91 +93,88 @@ Seq[Any](format.raw/*1.115*/("""
         """),format.raw/*67.9*/("""<table class="diagnoses zebra-striped">
             <thead>
                 <tr>
-                    """),_display_(/*70.22*/header("name", "Diagnose name")),format.raw/*70.53*/("""
-                    """),_display_(/*71.22*/header("introduced", "Introduced")),format.raw/*71.56*/("""
-                    """),_display_(/*72.22*/header("discontinued", "Discontinued")),format.raw/*72.60*/("""
-                    """),_display_(/*73.22*/header("company.name", "Company")),format.raw/*73.55*/("""
+                    """),_display_(/*70.22*/header("diagnoseoverzicht_omschrijving", "Diagnose name")),format.raw/*70.79*/("""
+                    """),_display_(/*71.22*/header("diagnose_code", "Code")),format.raw/*71.53*/("""
+                    """),_display_(/*72.22*/header("gezondheidspatroon.gezondheidspatroon_omschrijving", "Patroon")),format.raw/*72.93*/("""
+                    """),_display_(/*73.22*/header("diagnose.diagnose_id", "DiagnoseID")),format.raw/*73.66*/("""
                 """),format.raw/*74.17*/("""</tr>
             </thead>
             <tbody>
 
-                """),_display_(/*78.18*/for(diagnose <- currentPage.getList) yield /*78.54*/ {_display_(Seq[Any](format.raw/*78.56*/("""
+                """),_display_(/*78.18*/for(diagnoseoverzicht <- currentPage.getList) yield /*78.63*/ {_display_(Seq[Any](format.raw/*78.65*/("""
                     """),format.raw/*79.21*/("""<tr>
-                        <td><a href=""""),_display_(/*80.39*/routes/*80.45*/.Application.edit(diagnose.diagnose_id)),format.raw/*80.84*/("""">"""),_display_(/*80.87*/diagnose/*80.95*/.name),format.raw/*80.100*/("""</a></td>
+                        <td><a href=""""),_display_(/*80.39*/routes/*80.45*/.Application.edit(diagnoseoverzicht.diagnose.diagnose_id )),format.raw/*80.103*/("""">"""),_display_(/*80.106*/diagnoseoverzicht/*80.123*/.diagnoseoverzicht_omschrijving),format.raw/*80.154*/("""</a></td>
                         <td>
-                            """),_display_(/*82.30*/if(diagnose.introduced == null)/*82.61*/ {_display_(Seq[Any](format.raw/*82.63*/("""
+                            """),_display_(/*82.30*/if(diagnoseoverzicht.diagnose_code == null)/*82.73*/ {_display_(Seq[Any](format.raw/*82.75*/("""
                                 """),format.raw/*83.33*/("""<em>-</em>
-                            """)))}/*84.31*/else/*84.36*/{_display_(Seq[Any](format.raw/*84.37*/("""
-                                """),_display_(/*85.34*/diagnose/*85.42*/.introduced.format("dd MMM yyyy")),format.raw/*85.75*/("""
-                            """)))}),format.raw/*86.30*/("""
-                        """),format.raw/*87.25*/("""</td>
+                            """)))}/*84.31*/else/*84.35*/{_display_(Seq[Any](format.raw/*84.36*/("""
+								"""),_display_(/*85.10*/diagnoseoverzicht/*85.27*/.diagnose_code),format.raw/*85.41*/("""
+							""")))}),format.raw/*86.9*/("""
+							
+                        """),format.raw/*88.25*/("""</td>
                         <td>
-                            """),_display_(/*89.30*/if(diagnose.discontinued == null)/*89.63*/ {_display_(Seq[Any](format.raw/*89.65*/("""
-                                """),format.raw/*90.33*/("""<em>-</em>
-                            """)))}/*91.31*/else/*91.36*/{_display_(Seq[Any](format.raw/*91.37*/("""
-                                """),_display_(/*92.34*/diagnose/*92.42*/.discontinued.format("dd MMM yyyy")),format.raw/*92.77*/("""
-                            """)))}),format.raw/*93.30*/("""
-                        """),format.raw/*94.25*/("""</td>
+                            """),_display_(/*90.30*/if(diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving == null)/*90.110*/ {_display_(Seq[Any](format.raw/*90.112*/("""
+                                """),format.raw/*91.33*/("""<em>-</em>
+                            """)))}/*92.31*/else/*92.36*/{_display_(Seq[Any](format.raw/*92.37*/("""
+                                """),_display_(/*93.34*/diagnoseoverzicht/*93.51*/.gezondheidspatroon.gezondheidspatroon_omschrijving),format.raw/*93.102*/("""
+                            """)))}),format.raw/*94.30*/("""
+                        """),format.raw/*95.25*/("""</td>
                         <td>
-                            """),_display_(/*96.30*/if(diagnose.company == null)/*96.58*/ {_display_(Seq[Any](format.raw/*96.60*/("""
-                                """),format.raw/*97.33*/("""<em>-</em>
-                            """)))}/*98.31*/else/*98.36*/{_display_(Seq[Any](format.raw/*98.37*/("""
-                                """),_display_(/*99.34*/diagnose/*99.42*/.company.name),format.raw/*99.55*/("""
-                            """)))}),format.raw/*100.30*/("""
-                        """),format.raw/*101.25*/("""</td>
+                                """),_display_(/*97.34*/diagnoseoverzicht/*97.51*/.diagnose.diagnose_id),format.raw/*97.72*/("""
+                        """),format.raw/*98.25*/("""</td>
                     </tr>
-                """)))}),format.raw/*103.18*/("""
+                """)))}),format.raw/*100.18*/("""
 
-            """),format.raw/*105.13*/("""</tbody>
+            """),format.raw/*102.13*/("""</tbody>
         </table>
 
         <div id="pagination" class="pagination">
             <ul>
-                """),_display_(/*110.18*/if(currentPage.hasPrev)/*110.41*/ {_display_(Seq[Any](format.raw/*110.43*/("""
-                    """),format.raw/*111.21*/("""<li class="prev">
-                        <a href=""""),_display_(/*112.35*/link(currentPage.getPageIndex - 1, null)),format.raw/*112.75*/("""">&larr; Previous</a>
+                """),_display_(/*107.18*/if(currentPage.hasPrev)/*107.41*/ {_display_(Seq[Any](format.raw/*107.43*/("""
+                    """),format.raw/*108.21*/("""<li class="prev">
+                        <a href=""""),_display_(/*109.35*/link(currentPage.getPageIndex - 1, null)),format.raw/*109.75*/("""">&larr; Previous</a>
                     </li>
-                """)))}/*114.19*/else/*114.24*/{_display_(Seq[Any](format.raw/*114.25*/("""
-                    """),format.raw/*115.21*/("""<li class="prev disabled">
+                """)))}/*111.19*/else/*111.24*/{_display_(Seq[Any](format.raw/*111.25*/("""
+                    """),format.raw/*112.21*/("""<li class="prev disabled">
                         <a>&larr; Previous</a>
                     </li>
-                """)))}),format.raw/*118.18*/("""
-                """),format.raw/*119.17*/("""<li class="current">
-                    <a>Displaying """),_display_(/*120.36*/currentPage/*120.47*/.getDisplayXtoYofZ(" to "," of ")),format.raw/*120.80*/("""</a>
+                """)))}),format.raw/*115.18*/("""
+                """),format.raw/*116.17*/("""<li class="current">
+                    <a>Displaying """),_display_(/*117.36*/currentPage/*117.47*/.getDisplayXtoYofZ(" to "," of ")),format.raw/*117.80*/("""</a>
                 </li>
-                """),_display_(/*122.18*/if(currentPage.hasNext)/*122.41*/ {_display_(Seq[Any](format.raw/*122.43*/("""
-                    """),format.raw/*123.21*/("""<li class="next">
-                        <a href=""""),_display_(/*124.35*/link(currentPage.getPageIndex + 1, null)),format.raw/*124.75*/("""">Next &rarr;</a>
+                """),_display_(/*119.18*/if(currentPage.hasNext)/*119.41*/ {_display_(Seq[Any](format.raw/*119.43*/("""
+                    """),format.raw/*120.21*/("""<li class="next">
+                        <a href=""""),_display_(/*121.35*/link(currentPage.getPageIndex + 1, null)),format.raw/*121.75*/("""">Next &rarr;</a>
                     </li>
-                """)))}/*126.19*/else/*126.24*/{_display_(Seq[Any](format.raw/*126.25*/("""
-                    """),format.raw/*127.21*/("""<li class="next disabled">
+                """)))}/*123.19*/else/*123.24*/{_display_(Seq[Any](format.raw/*123.25*/("""
+                    """),format.raw/*124.21*/("""<li class="next disabled">
                         <a>Next &rarr;</a>
                     </li>
-                """)))}),format.raw/*130.18*/("""
-            """),format.raw/*131.13*/("""</ul>
+                """)))}),format.raw/*127.18*/("""
+            """),format.raw/*128.13*/("""</ul>
         </div>
         
-    """)))}),format.raw/*134.6*/("""
+    """)))}),format.raw/*131.6*/("""
         
-""")))}),format.raw/*136.2*/("""
+""")))}),format.raw/*133.2*/("""
 
             """))}
   }
 
-  def render(currentPage:com.avaje.ebean.Page[Diagnose],currentSortBy:String,currentOrder:String,currentFilter:String): play.twirl.api.HtmlFormat.Appendable = apply(currentPage,currentSortBy,currentOrder,currentFilter)
+  def render(currentPage:com.avaje.ebean.Page[Diagnoseoverzicht],currentSortBy:String,currentOrder:String,currentFilter:String): play.twirl.api.HtmlFormat.Appendable = apply(currentPage,currentSortBy,currentOrder,currentFilter)
 
-  def f:((com.avaje.ebean.Page[Diagnose],String,String,String) => play.twirl.api.HtmlFormat.Appendable) = (currentPage,currentSortBy,currentOrder,currentFilter) => apply(currentPage,currentSortBy,currentOrder,currentFilter)
+  def f:((com.avaje.ebean.Page[Diagnoseoverzicht],String,String,String) => play.twirl.api.HtmlFormat.Appendable) = (currentPage,currentSortBy,currentOrder,currentFilter) => apply(currentPage,currentSortBy,currentOrder,currentFilter)
 
   def ref: this.type = this
 
 }
               /*
                   -- GENERATED --
-                  DATE: Mon May 04 12:43:01 CEST 2015
+                  DATE: Fri May 08 15:39:25 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/list.scala.html
-                  HASH: 1291e1b2ea23e4663e608395416eec9e67586b2d
-                  MATRIX: 767->1|952->860|966->866|1073->896|1105->901|1144->913|1156->916|1194->933|1223->934|1258->942|1292->968|1379->1032|1427->1053|1460->1065|1490->1068|1516->1073|1554->243|1565->247|2097->114|2126->241|2154->748|2184->858|2212->1089|2241->1092|2253->1096|2292->1098|2329->1108|2376->1128|2458->1189|2496->1201|2537->1233|2577->1235|2613->1244|2712->1316|2726->1321|2762->1336|2798->1345|2840->1357|2874->1364|2952->1415|2988->1430|3096->1511|3130->1524|3347->1714|3362->1720|3404->1741|3482->1793|3528->1830|3568->1832|3613->1850|3719->1939|3732->1944|3771->1945|3816->1963|3945->2065|3997->2096|4046->2118|4101->2152|4150->2174|4209->2212|4258->2234|4312->2267|4357->2284|4449->2349|4501->2385|4541->2387|4590->2408|4660->2451|4675->2457|4735->2496|4765->2499|4782->2507|4809->2512|4904->2580|4944->2611|4984->2613|5045->2646|5104->2687|5117->2692|5156->2693|5217->2727|5234->2735|5288->2768|5349->2798|5402->2823|5493->2887|5535->2920|5575->2922|5636->2955|5695->2996|5708->3001|5747->3002|5808->3036|5825->3044|5881->3079|5942->3109|5995->3134|6086->3198|6123->3226|6163->3228|6224->3261|6283->3302|6296->3307|6335->3308|6396->3342|6413->3350|6447->3363|6509->3393|6563->3418|6644->3467|6687->3481|6825->3591|6858->3614|6899->3616|6949->3637|7029->3689|7091->3729|7176->3795|7190->3800|7230->3801|7280->3822|7429->3939|7475->3956|7559->4012|7580->4023|7635->4056|7707->4100|7740->4123|7781->4125|7831->4146|7911->4198|7973->4238|8054->4300|8068->4305|8108->4306|8158->4327|8303->4440|8345->4453|8411->4488|8453->4499
-                  LINES: 26->1|28->32|28->32|30->32|31->33|31->33|31->33|31->33|31->33|31->33|31->33|31->33|32->34|32->34|32->34|32->34|34->6|34->6|56->1|58->5|59->27|61->31|62->36|64->38|64->38|64->38|66->40|66->40|66->40|68->42|68->42|68->42|69->43|70->44|70->44|70->44|71->45|72->46|74->48|76->50|76->50|77->51|77->51|81->55|81->55|81->55|85->59|85->59|85->59|87->61|91->65|91->65|91->65|93->67|96->70|96->70|97->71|97->71|98->72|98->72|99->73|99->73|100->74|104->78|104->78|104->78|105->79|106->80|106->80|106->80|106->80|106->80|106->80|108->82|108->82|108->82|109->83|110->84|110->84|110->84|111->85|111->85|111->85|112->86|113->87|115->89|115->89|115->89|116->90|117->91|117->91|117->91|118->92|118->92|118->92|119->93|120->94|122->96|122->96|122->96|123->97|124->98|124->98|124->98|125->99|125->99|125->99|126->100|127->101|129->103|131->105|136->110|136->110|136->110|137->111|138->112|138->112|140->114|140->114|140->114|141->115|144->118|145->119|146->120|146->120|146->120|148->122|148->122|148->122|149->123|150->124|150->124|152->126|152->126|152->126|153->127|156->130|157->131|160->134|162->136
+                  HASH: 00dcd99b175c75cad9605c4b47ea1211b8a160db
+                  MATRIX: 776->1|970->869|984->875|1091->905|1123->910|1162->922|1174->925|1212->942|1241->943|1276->951|1310->977|1397->1041|1445->1062|1478->1074|1508->1077|1534->1082|1572->252|1583->256|2115->123|2144->250|2172->757|2202->867|2230->1098|2259->1101|2271->1105|2310->1107|2347->1117|2394->1137|2476->1198|2514->1210|2555->1242|2595->1244|2631->1253|2730->1325|2744->1330|2780->1345|2816->1354|2858->1366|2892->1373|2970->1424|3006->1439|3114->1520|3148->1533|3365->1723|3380->1729|3422->1750|3500->1802|3546->1839|3586->1841|3631->1859|3737->1948|3750->1953|3789->1954|3834->1972|3963->2074|4041->2131|4090->2153|4142->2184|4191->2206|4283->2277|4332->2299|4397->2343|4442->2360|4534->2425|4595->2470|4635->2472|4684->2493|4754->2536|4769->2542|4849->2600|4880->2603|4907->2620|4960->2651|5055->2719|5107->2762|5147->2764|5208->2797|5267->2838|5280->2842|5319->2843|5356->2853|5382->2870|5417->2884|5456->2893|5517->2926|5608->2990|5698->3070|5739->3072|5800->3105|5859->3146|5872->3151|5911->3152|5972->3186|5998->3203|6071->3254|6132->3284|6185->3309|6280->3377|6306->3394|6348->3415|6401->3440|6482->3489|6525->3503|6663->3613|6696->3636|6737->3638|6787->3659|6867->3711|6929->3751|7014->3817|7028->3822|7068->3823|7118->3844|7267->3961|7313->3978|7397->4034|7418->4045|7473->4078|7545->4122|7578->4145|7619->4147|7669->4168|7749->4220|7811->4260|7892->4322|7906->4327|7946->4328|7996->4349|8141->4462|8183->4475|8249->4510|8291->4521
+                  LINES: 26->1|28->32|28->32|30->32|31->33|31->33|31->33|31->33|31->33|31->33|31->33|31->33|32->34|32->34|32->34|32->34|34->6|34->6|56->1|58->5|59->27|61->31|62->36|64->38|64->38|64->38|66->40|66->40|66->40|68->42|68->42|68->42|69->43|70->44|70->44|70->44|71->45|72->46|74->48|76->50|76->50|77->51|77->51|81->55|81->55|81->55|85->59|85->59|85->59|87->61|91->65|91->65|91->65|93->67|96->70|96->70|97->71|97->71|98->72|98->72|99->73|99->73|100->74|104->78|104->78|104->78|105->79|106->80|106->80|106->80|106->80|106->80|106->80|108->82|108->82|108->82|109->83|110->84|110->84|110->84|111->85|111->85|111->85|112->86|114->88|116->90|116->90|116->90|117->91|118->92|118->92|118->92|119->93|119->93|119->93|120->94|121->95|123->97|123->97|123->97|124->98|126->100|128->102|133->107|133->107|133->107|134->108|135->109|135->109|137->111|137->111|137->111|138->112|141->115|142->116|143->117|143->117|143->117|145->119|145->119|145->119|146->120|147->121|147->121|149->123|149->123|149->123|150->124|153->127|154->128|157->131|159->133
                   -- GENERATED --
               */
           

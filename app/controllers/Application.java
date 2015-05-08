@@ -53,7 +53,7 @@ public class Application extends Controller {
     public static Result list(int page, String sortBy, String order, String filter) {
         return ok(
             list.render(
-                Diagnose.page(page, 10, sortBy, order, filter),
+                Diagnoseoverzicht.page(page, 10, sortBy, order, filter),
                 sortBy, order, filter
             )
         );
@@ -92,7 +92,7 @@ public class Application extends Controller {
      * Display the 'new diagnose form'.
      */
     public static Result create() {
-        Form<Diagnose> diagnoseForm = form(Diagnose.class);
+        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class);
         return ok(
             createForm.render(diagnoseForm)
         );
@@ -102,12 +102,23 @@ public class Application extends Controller {
      * Handle the 'new diagnose form' submission 
      */
     public static Result save() {
-        Form<Diagnose> diagnoseForm = form(Diagnose.class).bindFromRequest();
+        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
+        DynamicForm domein = Form.form().bindFromRequest();
+        
         if(diagnoseForm.hasErrors()) {
             return badRequest(createForm.render(diagnoseForm));
         }
+        
+        Diagnose diagnose = new Diagnose();
+        diagnose.save();
+        Diagnosedomein diagnosedomein = new Diagnosedomein();
+        diagnosedomein.diagnosedomein_domein = Long.parseLong(domein.get("diagnosedomein.diagnosedomein_domein"));
+        Diagnoseversie diagnoseversie = createDiagnoseVersie(diagnoseForm.get().diagnoseoverzicht_omschrijving);
+        diagnoseForm.get().diagnoseklasse = getDiagnoseKlasse(diagnoseForm.get().diagnoseklasse, diagnosedomein);
+        diagnoseForm.get().diagnose = diagnose;
+        diagnoseForm.get().diagnoseversie = diagnoseversie;
         diagnoseForm.get().save();
-        flash("success", "Diagnose " + diagnoseForm.get().diagnose_id + " has been created");
+        flash("success", "Diagnose " + diagnoseForm.get().diagnose + " has been created");
         return GO_HOME;
     }
     
@@ -203,11 +214,10 @@ public class Application extends Controller {
 	        	        // Diagnose access table
 	        	        case "ref_diagnose.xls":
 	    	    		  Diagnose diagnose = new Diagnose();
-	    	    		  Diagnoseversie diagnoseversie = new Diagnoseversie();
+	    	    		  Diagnoseversie diagnoseversie;
 	    	    		  Diagnoseoverzicht diagnoseoverzicht = new Diagnoseoverzicht();
 	    	    		  Diagnosedomein diagnosedomein = new Diagnosedomein();
 	    	    		  Diagnoseklasse diagnoseklasse = new Diagnoseklasse();
-	    	    		  Diagnoseversie_Releasestatus diagnoseversie_releasestatus = new Diagnoseversie_Releasestatus();
 	    	    		  
 	    	    		  // Diagnose excel file row numbers
 	    	    		  int Diagnose_ID = 0, 
@@ -246,27 +256,9 @@ public class Application extends Controller {
 	    	    		  catch (PersistenceException e){
 	    	    		     System.out.println("Diagnose already exists");
 	    	    		  }
-	    	    		  // Diagnoseversie table
-	    	    		  Calendar cal = Calendar.getInstance();
-	    	    		  diagnoseversie.diagnoseversie_begindatum = cal.getTime();
-	    	    		  diagnoseversie.diagnoseversie_einddatum = cal.getTime();
-	    	    		  try{
-	    	    			  diagnoseversie.save();
-	    	    		  }
-	    	    		  catch (PersistenceException e){
-	    	    		     System.out.println("Diagnoseversie already exists");
-	    	    		  }
-	    	    		  
-	    	    		  // Diagnoseversie_releasestatus table
-	    	    		  diagnoseversie_releasestatus.diagnoseversie = diagnoseversie;
-	    	    		  diagnoseversie_releasestatus.diagnoseversie_releasestatus_datum = cal.getTime();
-	    	    		  diagnoseversie_releasestatus.diagnoseversie_releasestatus_omschrijving = row.getCell(Diagnose_Definitie).toString();
-	    	    		  try{
-	    	    			  diagnoseversie_releasestatus.save();
-	    	    		  }
-	    	    		  catch (PersistenceException e){
-	    	    		     System.out.println("Diagnose already exists");
-	    	    		  }
+    	    		  	  
+	    	    		  // Diagnoseversie
+	    	    		  diagnoseversie = createDiagnoseVersie(row.getCell(Diagnose_Definitie).toString());
 	    	    		  
 	    	    		  // Diagnoseoverzicht table
 	    	    		  Gezondheidspatroon gezondheidspatroon_id = Gezondheidspatroon.find.byId((long)Long.parseLong(row.getCell(Diagnose_Patroon).toString()));
@@ -417,6 +409,45 @@ public class Application extends Controller {
 	        ioe.printStackTrace();
 	    }	
 	    return text;
+    }
+    
+    private static Diagnoseversie createDiagnoseVersie(String omschrijving){
+		  // Diagnoseversie table
+		  Diagnoseversie diagnoseversie = new Diagnoseversie();
+		  Diagnoseversie_Releasestatus diagnoseversie_releasestatus = new Diagnoseversie_Releasestatus();
+		  Calendar cal = Calendar.getInstance();
+		  diagnoseversie.diagnoseversie_begindatum = cal.getTime();
+		  diagnoseversie.diagnoseversie_einddatum = cal.getTime();
+		  try{
+			  diagnoseversie.save();
+		  }
+		  catch (PersistenceException e){
+		     System.out.println("Diagnoseversie already exists");
+		  }
+		  
+		  // Diagnoseversie_releasestatus table
+		  diagnoseversie_releasestatus.diagnoseversie = diagnoseversie;
+		  diagnoseversie_releasestatus.diagnoseversie_releasestatus_datum = cal.getTime();
+		  diagnoseversie_releasestatus.diagnoseversie_releasestatus_omschrijving = omschrijving;
+		  try{
+			  diagnoseversie_releasestatus.save();
+		  }
+		  catch (PersistenceException e){
+		     System.out.println("Diagnose already exists");
+		  }
+		return diagnoseversie;
+    }
+    
+    private static Diagnoseklasse getDiagnoseKlasse(Diagnoseklasse klasse, Diagnosedomein domein){
+   	
+		Diagnoseklasse diagnoseklasse = Diagnoseklasse.find.where()
+				    .ilike("diagnosedomein.diagnosedomein_domein", domein.diagnosedomein_domein.toString())
+				    .where()
+				    .ilike("diagnoseklasse_klasse", klasse.diagnoseklasse_klasse.toString())
+				    .findList()
+				    .get(0);
+		  
+		  return diagnoseklasse;
     }
 }
             
