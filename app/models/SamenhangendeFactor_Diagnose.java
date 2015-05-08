@@ -18,7 +18,7 @@ public class SamenhangendeFactor_Diagnose extends Model {
 
     private static final long serialVersionUID = 1L;
 
-    public SamenhangendeFactor SamenhangendeFactor_ID;
+    public Samenhangendefactor SamenhangendeFactor_ID;
     
     public Diagnose Diagnose_ID;
     

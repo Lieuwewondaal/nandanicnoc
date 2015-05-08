@@ -14,20 +14,19 @@ import play.data.validation.*;
  * Company entity managed by Ebean
  */
 @Entity 
-public class DiagnoseVersie_SamenhangendeFactor extends Model {
+public class Bepalendkenmerk extends Model {
 
     private static final long serialVersionUID = 1L;
 
-    public SamenhangendeFactor SamenhangendeFactr_ID;
+    @Id
+    public Long bepalendkenmerk_id;
     
-    public Diagnoseversie DiagnoseVersie_ID;
-    
-    public String DiagnoseVersie_SamenhangendeFactor_Omschrijving;
+    public String bepalendkenmerk_omschrijving;
     
     /**
      * Generic query helper for entity Company with id Long
      */
-    public static Model.Finder<Long,DiagnoseVersie_SamenhangendeFactor> find = new Model.Finder<Long,DiagnoseVersie_SamenhangendeFactor>(Long.class, DiagnoseVersie_SamenhangendeFactor.class);
+    public static Model.Finder<Long,Bepalendkenmerk> find = new Model.Finder<Long,Bepalendkenmerk>(Long.class, Bepalendkenmerk.class);
 
     /*public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();

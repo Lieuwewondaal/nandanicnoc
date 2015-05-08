@@ -18,7 +18,7 @@ public class Diagnose_SamenhangendeFactor_Specialisme extends Model {
 
     private static final long serialVersionUID = 1L;
 
-    public RisicoFactor RisicoFactor_ID;
+    public Risicofactor RisicoFactor_ID;
     
     public Diagnose Diagnose_ID;
     

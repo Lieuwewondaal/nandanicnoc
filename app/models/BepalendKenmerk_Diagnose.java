@@ -18,7 +18,7 @@ public class BepalendKenmerk_Diagnose extends Model {
 
     private static final long serialVersionUID = 1L;
 
-    public BepalendKenmerk BepalendKenmerk_ID;
+    public Bepalendkenmerk BepalendKenmerk_ID;
     
     public Diagnose Diagnose_ID;
     

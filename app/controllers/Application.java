@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.PersistenceException;
 
@@ -178,30 +179,17 @@ public class Application extends Controller {
 	            row = sheet.getRow(r);
 	            if(row != null) {
 	            	text += r+" ";
-	            	/*if(r == 0){
-		                for(int c = 0; c < cols; c++) {
-		                    cell = row.getCell(c);
-		                    if(cell != null) {
-		                    	if(cell.toString().equals("id")){
-		                    		id = c;
-		                    	}
-		                    	if(cell.toString().equals("omschrijving")){
-		                    		name = c;
-		                    	}
-		                    	comp.name = cell.toString();
-		                    	text += cell.toString()+" ";
-		                        
-		                    }
-		                }
-	            	}*/
+	            	
 	            	// Do not get first row of data
 	            	if(r != 0){
 	            		switch(fileName){
+	            		
+	            		// Gezondheidspatroon access table
 	        	        case "ref_patroon.xls":
 	        	        	Gezondheidspatroon gezondheidspatroon = new Gezondheidspatroon();
 	        	        	int GezondheidsPatroon_ID = 0,
 	        	        		GezondheidsPatroon_omschrijving = 1;
-	        	        	gezondheidspatroon.gezondheidspatroon_id = (long)row.getCell(GezondheidsPatroon_ID).getNumericCellValue();
+	        	        	gezondheidspatroon.gezondheidspatroon_id = (long)Long.parseLong(row.getCell(GezondheidsPatroon_ID).toString());
 	        	        	gezondheidspatroon.gezondheidspatroon_omschrijving = row.getCell(GezondheidsPatroon_omschrijving).toString();
 	        	        	try{
 	        	        		gezondheidspatroon.save();
@@ -210,6 +198,9 @@ public class Application extends Controller {
 	    	    		  	    System.out.println("Gezondheidspatroon already exists");
 	    	    		    }
 	        	        	
+        	        	break;
+        	        	
+	        	        // Diagnose access table
 	        	        case "ref_diagnose.xls":
 	    	    		  Diagnose diagnose = new Diagnose();
 	    	    		  Diagnoseversie diagnoseversie = new Diagnoseversie();
@@ -247,7 +238,7 @@ public class Application extends Controller {
 	    	    			  System.out.println("Klasse already exists");
 	    	    		  }
 	    	    		  // Diagnose table
-	    	    		  diagnose.diagnose_id = (long)Long.parseLong(row.getCell(Diagnose_ID).toString().substring(1));
+	    	    		  diagnose.diagnose_id = (long)Long.parseLong(row.getCell(Diagnose_ID).toString());
 	    	    		  System.out.println(diagnose.diagnose_id);
 	    	    		  try{
 	    	    		  	diagnose.save();
@@ -278,7 +269,7 @@ public class Application extends Controller {
 	    	    		  }
 	    	    		  
 	    	    		  // Diagnoseoverzicht table
-	    	    		  Gezondheidspatroon gezondheidspatroon_id = Gezondheidspatroon.find.byId((long)Long.parseLong(row.getCell(Diagnose_Patroon).toString().substring(1)));
+	    	    		  Gezondheidspatroon gezondheidspatroon_id = Gezondheidspatroon.find.byId((long)Long.parseLong(row.getCell(Diagnose_Patroon).toString()));
 	    	    		  diagnoseoverzicht.diagnose = diagnose;
 	    	    		  diagnoseoverzicht.diagnoseversie = diagnoseversie;
 	    	    		  diagnoseoverzicht.diagnose_code = (int)row.getCell(Diagnose_Code).getNumericCellValue();
@@ -294,6 +285,129 @@ public class Application extends Controller {
 	    	    		  }
 	    	    		  
 	    	    		  break;
+	    	    		  
+		            		// Bepalendkenmerk access table
+	        	        case "ref_bepalend_kenmerk.xls":
+		    	    		  int Bepalendkenmerk_ID = 0, 
+		    					  Bepalendkenmerk_omschrijving = 2; 
+		    	    		  
+		    	    		  Bepalendkenmerk bepalendkenmerk = new Bepalendkenmerk();
+		    	    		  bepalendkenmerk.bepalendkenmerk_id = (long)Long.parseLong(row.getCell(Bepalendkenmerk_ID).toString());
+		    	    		  bepalendkenmerk.bepalendkenmerk_omschrijving = row.getCell(Bepalendkenmerk_omschrijving).toString();
+		    	    		  try{
+		    	    			  bepalendkenmerk.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Bepalend kenmerk already exists");
+		    	    		  }
+
+	    	    		  break;
+	    	    		  
+	    	    		  // Risicofactor access table
+	        	        case "ref_risico_factor.xls":
+		    	    		  int Risicofactor_ID = 0, 
+	    	    				  Risicofactor_omschrijving = 2; 
+		    	    		  
+		    	    		  Risicofactor risicofactor = new Risicofactor();
+		    	    		  risicofactor.risicofactor_id = (long)Long.parseLong(row.getCell(Risicofactor_ID).toString());
+		    	    		  risicofactor.risicofactor_omschrijving = row.getCell(Risicofactor_omschrijving).toString();
+		    	    		  try{
+		    	    			  risicofactor.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Risicofactor already exists");
+		    	    		  }
+	        	        	break;
+	        	        	
+	        	        	// Samenhangende factor access table
+	        	        case "ref_samenhangende_factor.xls":
+		    	    		  int Samenhangendefactor_ID = 0, 
+	    	    				  Samenhangendefactor_omschrijving = 2; 
+		    	    		  
+		    	    		  Samenhangendefactor samenhangendefactor = new Samenhangendefactor();
+		    	    		  samenhangendefactor.samenhangendefactor_id = (long)Long.parseLong(row.getCell(Samenhangendefactor_ID).toString());
+		    	    		  samenhangendefactor.samenhangendefactor_omschrijving = row.getCell(Samenhangendefactor_omschrijving).toString();
+		    	    		  try{
+		    	    			  samenhangendefactor.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }
+	        	        	break;
+	        	        	
+	        	        	// koppeltabel
+	        	        case "koppel_diagnose_bepalend_kenmerk.xls":
+		    	    		  int Bepalendkenmerk_DiagnoseID = 1, 
+	    				  		  Bepalendkenmerk_BepalendkenmerkID = 2; 
+		    	    		  
+		    	    		  Diagnoseoverzicht bepalendkenmerkdiagnose = Diagnoseoverzicht.find.where()
+		    	    				    .ilike("diagnose_id", row.getCell(Bepalendkenmerk_DiagnoseID).toString())
+		    	    				    .findList()
+		    	    				    .get(0);
+		    	    		  Bepalendkenmerk bepalendkenmerkdiagnoseversie = Bepalendkenmerk.find.byId((long)Long.parseLong(row.getCell(Bepalendkenmerk_BepalendkenmerkID).toString()));
+		    	    		  
+		    	    		  Diagnoseversie_Bepalendkenmerk diagnoseversie_bepalendkenmerk = new Diagnoseversie_Bepalendkenmerk();
+		    	    		  
+		    	    		  diagnoseversie_bepalendkenmerk.bepalendkenmerk_id = bepalendkenmerkdiagnoseversie;
+		    	    		  diagnoseversie_bepalendkenmerk.diagnoseversie_id = bepalendkenmerkdiagnose.diagnoseversie;
+		    	    		  
+		    	    		  try{
+		    	    			  diagnoseversie_bepalendkenmerk.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }
+	        	        	break;
+	        	        	
+	        	        	// koppeltabel
+	        	        case "koppel_diagnose_risico_factor.xls":
+		    	    		  int Risicofactor_DiagnoseID = 1, 
+    	    				      Risicofactor_RisicofactorID = 2; 
+		    	    		  
+		    	    		  Diagnoseoverzicht risicofactordiagnose = Diagnoseoverzicht.find.where()
+		    	    				    .ilike("diagnose_id", row.getCell(Risicofactor_DiagnoseID).toString())
+		    	    				    .findList()
+		    	    				    .get(0);
+
+		    	    		  Risicofactor risicofactordiagnoseversie = Risicofactor.find.byId((long)Long.parseLong(row.getCell(Risicofactor_RisicofactorID).toString()));
+		    	    		  Diagnoseversie_Risicofactor diagnoseversie_risicofactor = new Diagnoseversie_Risicofactor();
+		    	    		  
+		    	    		  diagnoseversie_risicofactor.risicofactor_id= risicofactordiagnoseversie;
+		    	    		  diagnoseversie_risicofactor.diagnoseversie_id = risicofactordiagnose.diagnoseversie;
+		    	    		  
+		    	    		  try{
+		    	    			  diagnoseversie_risicofactor.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }
+		    	    		  
+	        	        	break;
+	        	        	
+	        	        	// koppeltabel
+	        	        case "koppel_diagnose_samenhangende_factor.xls":
+		    	    		  int Samenhangendefactor_DiagnoseID = 1, 
+    	    				      Samenhangendefactor_SamenhangendefactorID = 2; 
+		    	    		  
+		    	    		  Diagnoseoverzicht samenhangendefactordiagnose = Diagnoseoverzicht.find.where()
+		    	    				    .ilike("diagnose_id", row.getCell(Samenhangendefactor_DiagnoseID).toString())
+		    	    				    .findList()
+		    	    				    .get(0);
+		    	    		  Samenhangendefactor samenhangendefactordiagnoseversie = Samenhangendefactor.find.byId((long)Long.parseLong(row.getCell(Samenhangendefactor_SamenhangendefactorID).toString()));
+		    	    		  
+		    	    		  Diagnoseversie_Samenhangendefactor diagnoseversie_samenhangendefactor = new Diagnoseversie_Samenhangendefactor();
+		    	    		  
+		    	    		  diagnoseversie_samenhangendefactor.samenhangendefactor_id = samenhangendefactordiagnoseversie;
+		    	    		  diagnoseversie_samenhangendefactor.diagnoseversie_id = samenhangendefactordiagnose.diagnoseversie;
+		    	    		  
+		    	    		  try{
+		    	    			  diagnoseversie_samenhangendefactor.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }
+		    	    		  
+	        	        	break;
 	            		}
 	            	}
 	                text += "\n";
