@@ -14,7 +14,7 @@ import play.data.validation.*;
  * Company entity managed by Ebean
  */
 @Entity 
-public class Diagnose_BepalendKenmerk_Specialisme extends Model {
+public class Diagnose_Bepalendkenmerk_Specialisme extends Model {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class Diagnose_BepalendKenmerk_Specialisme extends Model {
     /**
      * Generic query helper for entity Company with id Long
      */
-    public static Model.Finder<Long,Diagnose_BepalendKenmerk_Specialisme> find = new Model.Finder<Long,Diagnose_BepalendKenmerk_Specialisme>(Long.class, Diagnose_BepalendKenmerk_Specialisme.class);
+    public static Model.Finder<Long,Diagnose_Bepalendkenmerk_Specialisme> find = new Model.Finder<Long,Diagnose_Bepalendkenmerk_Specialisme>(Long.class, Diagnose_Bepalendkenmerk_Specialisme.class);
 
     /*public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();

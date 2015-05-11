@@ -15,7 +15,7 @@ public class ModelTest {
         return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
-    @Test
+    /*@Test
     public void findById() {
         running(fakeApplication(), new Runnable() {
            public void run() {
@@ -35,6 +35,6 @@ public class ModelTest {
                assertThat(computers.getList().size()).isEqualTo(20);
            }
         });
-    }
+    }*/
     
 }

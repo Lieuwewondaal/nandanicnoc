@@ -31,7 +31,7 @@ Seq[Any](format.raw/*1.17*/("""
 """),format.raw/*3.1*/("""<!DOCTYPE html>
 <html>
     <head>
-        <title>Verpleegkunde applicatie</title>
+        <title>NANDA/NIC/NOC</title>
         
         <link rel='stylesheet' href='"""),_display_(/*8.39*/routes/*8.45*/.Assets.at("stylesheets/bootstrap.min.css")),format.raw/*8.88*/("""'>
         """),format.raw/*11.47*/("""
@@ -46,7 +46,7 @@ Seq[Any](format.raw/*1.17*/("""
         <header class="topbar">
             <h1 class="fill">
                 <a href=""""),_display_(/*24.27*/routes/*24.33*/.Application.index()),format.raw/*24.53*/("""">
-                    Verpleegkunde applicatie
+                    NANDA/NIC/NOC
                 </a>
             </h1>
         </header>
@@ -68,10 +68,10 @@ Seq[Any](format.raw/*1.17*/("""
 }
               /*
                   -- GENERATED --
-                  DATE: Tue Apr 28 15:50:52 CEST 2015
+                  DATE: Mon May 11 10:29:38 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/main.scala.html
-                  HASH: a129a8d28f06a9d013d4406459e0f518e4c75c24
-                  MATRIX: 720->1|823->16|851->18|1006->147|1020->153|1083->196|1122->388|1158->397|1199->411|1214->417|1269->451|1353->508|1368->514|1436->561|1501->804|1537->813|1609->858|1624->864|1679->898|1894->1086|1909->1092|1950->1112|2113->1249|2141->1256|2171->1259
+                  HASH: a957ddb6bd032563879a802893f6c769b33c9a6b
+                  MATRIX: 720->1|823->16|851->18|995->136|1009->142|1072->185|1111->377|1147->386|1188->400|1203->406|1258->440|1342->497|1357->503|1425->550|1490->793|1526->802|1598->847|1613->853|1668->887|1883->1075|1898->1081|1939->1101|2091->1227|2119->1234|2149->1237
                   LINES: 26->1|29->1|31->3|36->8|36->8|36->8|37->11|38->12|38->12|38->12|38->12|39->13|39->13|39->13|40->16|41->17|41->17|41->17|41->17|48->24|48->24|48->24|55->31|55->31|56->32
                   -- GENERATED --
               */

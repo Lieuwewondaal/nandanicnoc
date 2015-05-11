@@ -32,7 +32,7 @@ public class Application extends Controller {
      * This result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
-        routes.Application.list(0, "name", "asc", "")
+        routes.Application.list(0, "diagnoseoverzicht_omschrijving", "asc", "")
     );
     
     /**
@@ -65,8 +65,11 @@ public class Application extends Controller {
      * @param id Id of the diagnose to edit
      */
     public static Result edit(Long id) {
-        Form<Diagnose> diagnoseForm = form(Diagnose.class).fill(
-            Diagnose.find.byId(id)
+        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
+        		Diagnoseoverzicht.find.where()
+			    .ilike("diagnose_id", id.toString())
+			    .findList()
+			    .get(0)
         );
         return ok(
             editForm.render(id, diagnoseForm)
@@ -78,13 +81,13 @@ public class Application extends Controller {
      *
      * @param id Id of the diagnose to edit
      */
-    public static Result update(Long id) {
-        Form<Diagnose> diagnoseForm = form(Diagnose.class).bindFromRequest();
+    public static Result update(Long diagnose_id) {
+        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
         if(diagnoseForm.hasErrors()) {
-            return badRequest(editForm.render(id, diagnoseForm));
+            return badRequest(editForm.render(diagnose_id, diagnoseForm));
         }
-        diagnoseForm.get().update(id);
-        flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
+        diagnoseForm.get().update(diagnose_id);
+        //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
         return GO_HOME;
     }
     
@@ -400,6 +403,26 @@ public class Application extends Controller {
 		    	    		  }
 		    	    		  
 	        	        	break;
+	        	        	
+	        	        	case "ref_indicator.xls":
+	        	        		
+        	        		break;
+        	        		
+	        	        	case "ref_score_schaal.xls":
+	        	        		
+        	        		break;
+        	        		
+	        	        	case "ref_score_values.xls":
+	        	        		
+        	        		break;
+        	        		
+	        	        	case "ref_zorgresultaat.xls":
+	        	        		
+        	        		break;
+        	        		
+	        	        	case "koppel_diagnose_zorgresultaat_indicator.xls":
+	        	        		
+        	        		break;
 	            		}
 	            	}
 	                text += "\n";
@@ -411,6 +434,11 @@ public class Application extends Controller {
 	    return text;
     }
     
+    /**
+     * Function for adding various Diagnoseversie rows
+     * @param omschrijving
+     * @return diagnoseversie object
+     */
     private static Diagnoseversie createDiagnoseVersie(String omschrijving){
 		  // Diagnoseversie table
 		  Diagnoseversie diagnoseversie = new Diagnoseversie();
@@ -438,6 +466,12 @@ public class Application extends Controller {
 		return diagnoseversie;
     }
     
+    /**
+     * Function for finding the right id using Diagnoseklasse/domein combination
+     * @param klasse
+     * @param domein
+     * @return
+     */
     private static Diagnoseklasse getDiagnoseKlasse(Diagnoseklasse klasse, Diagnosedomein domein){
    	
 		Diagnoseklasse diagnoseklasse = Diagnoseklasse.find.where()

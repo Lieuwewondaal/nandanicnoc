@@ -14,20 +14,23 @@ import play.data.validation.*;
  * Company entity managed by Ebean
  */
 @Entity 
-public class Diagnose_SamenhangendeFactor_Specialisme extends Model {
+public class Nocversie extends Model {
 
     private static final long serialVersionUID = 1L;
 
-    public Risicofactor RisicoFactor_ID;
+	@Id
+    public Long nocversie_id;
     
-    public Diagnose Diagnose_ID;
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date nocversie_begindatum;
     
-    public Specialisme Specialisme_ID;
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date nocversie_einddatum;
     
     /**
      * Generic query helper for entity Company with id Long
      */
-    public static Model.Finder<Long,Diagnose_SamenhangendeFactor_Specialisme> find = new Model.Finder<Long,Diagnose_SamenhangendeFactor_Specialisme>(Long.class, Diagnose_SamenhangendeFactor_Specialisme.class);
+    public static Model.Finder<Long,Nocversie> find = new Model.Finder<Long,Nocversie>(Long.class, Nocversie.class);
 
     /*public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();

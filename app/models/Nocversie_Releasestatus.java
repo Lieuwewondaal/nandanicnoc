@@ -14,22 +14,27 @@ import play.data.validation.*;
  * Company entity managed by Ebean
  */
 @Entity 
-public class SamenhangendeFactor_Diagnose extends Model {
+public class Nocversie_Releasestatus extends Model {
 
     private static final long serialVersionUID = 1L;
 
-    public Samenhangendefactor SamenhangendeFactor_ID;
+    @ManyToOne
+    @JoinColumn(name="nocversie_id")
+    public Nocversie nocversie;
     
-    public Diagnose Diagnose_ID;
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date nocversie_releasestatus_datum;
+    
+    public String nocversie_releasestatus_omschrijving;
     
     /**
      * Generic query helper for entity Company with id Long
      */
-    public static Model.Finder<Long,SamenhangendeFactor_Diagnose> find = new Model.Finder<Long,SamenhangendeFactor_Diagnose>(Long.class, SamenhangendeFactor_Diagnose.class);
+    public static Model.Finder<Long,Nocversie_Releasestatus> find = new Model.Finder<Long,Nocversie_Releasestatus>(Long.class, Nocversie_Releasestatus.class);
 
     /*public static Map<String,String> options() {
         LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
-        for(DiagnoseVersie c: DiagnoseVersie.find.orderBy("name").findList()) {
+        for(DiagnoseVersie_ReleaseStatus c: DiagnoseVersie_ReleaseStatus.find.orderBy("name").findList()) {
             options.put(c.id.toString(), c.name);
         }
         return options;

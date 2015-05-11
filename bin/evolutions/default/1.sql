@@ -2,19 +2,9 @@
 
 # --- !Ups
 
-create table Company (
-  id                        bigint not null auto_increment,
-  name                      varchar(255),
-  constraint pk_company primary key (id)
-  ) engine=innodb
-;
-
 create table diagnose (
   diagnose_id                        bigint not null auto_increment,
-  name                      varchar(255),
-  introduced                datetime,
-  discontinued              datetime,
-  company_id                bigint,
+
   constraint pk_diagnose primary key (diagnose_id)
   ) engine=innodb
 ;
@@ -127,7 +117,6 @@ create table diagnoseversie_samenhangendefactor (
   ) engine=innodb
 ;
 
-alter table diagnose add constraint fk_diagnose_company_1 foreign key (company_id) references company (id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_diagnose_1 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_diagnoseversie_1 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_gezondheidspatroon_1 foreign key (gezondheidspatroon_id) references gezondheidspatroon (gezondheidspatroon_id) on delete restrict on update restrict;
@@ -140,7 +129,6 @@ alter table diagnoseversie_risicofactor add constraint fk_diagnoseversie_risicof
 alter table diagnoseversie_risicofactor add constraint fk_diagnoseversie_risicofactor_2 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
 alter table diagnoseversie_samenhangendefactor add constraint fk_diagnoseversie_samenhangendefactor_1 foreign key (samenhangendefactor_id) references samenhangendefactor (samenhangendefactor_id) on delete restrict on update restrict;
 alter table diagnoseversie_samenhangendefactor add constraint fk_diagnoseversie_samenhangendefactor_2 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
-create index ix_diagnose_company_1 on diagnose (company_id);
 
 
 # --- !Downs

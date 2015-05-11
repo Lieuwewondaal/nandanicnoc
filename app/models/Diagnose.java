@@ -21,18 +21,6 @@ public class Diagnose extends Model {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long diagnose_id;
     
-    @Constraints.Required
-    public String name;
-    
-    @Formats.DateTime(pattern="yyyy-MM-dd")
-    public Date introduced;
-    
-    @Formats.DateTime(pattern="yyyy-MM-dd")
-    public Date discontinued;
-    
-    @ManyToOne
-    public Company company;
-    
     /**
      * Generic query helper for entity Diagnose with id Long
      */
