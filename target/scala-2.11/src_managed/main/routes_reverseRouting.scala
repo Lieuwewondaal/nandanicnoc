@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:6a5930e7c15344fa1c6540c36619230d75764df4
-// @DATE:Fri May 08 13:38:39 CEST 2015
+// @HASH:6c4c0439ad626009e2a69e8050edbe6974beffef
+// @DATE:Sun May 17 22:44:41 CEST 2015
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -15,8 +15,11 @@ import _root_.play.libs.F
 import Router.queryString
 
 
-// @LINE:24
-// @LINE:21
+// @LINE:29
+// @LINE:26
+// @LINE:23
+// @LINE:22
+// @LINE:19
 // @LINE:18
 // @LINE:17
 // @LINE:14
@@ -26,11 +29,11 @@ import Router.queryString
 // @LINE:6
 package controllers {
 
-// @LINE:24
+// @LINE:29
 class ReverseAssets {
 
 
-// @LINE:24
+// @LINE:29
 def at(file:String): Call = {
    implicit val _rrc = new ReverseRouteContext(Map(("path", "/public")))
    Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
@@ -40,7 +43,10 @@ def at(file:String): Call = {
 }
                           
 
-// @LINE:21
+// @LINE:26
+// @LINE:23
+// @LINE:22
+// @LINE:19
 // @LINE:18
 // @LINE:17
 // @LINE:14
@@ -51,14 +57,14 @@ def at(file:String): Call = {
 class ReverseApplication {
 
 
-// @LINE:21
+// @LINE:26
 def delete(id:Long): Call = {
    import ReverseRouteContext.empty
    Call("POST", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id) + "/delete")
 }
                         
 
-// @LINE:14
+// @LINE:19
 def upload(): Call = {
    import ReverseRouteContext.empty
    Call("POST", _prefix + { _defaultPrefix } + "diagnoses")
@@ -66,20 +72,27 @@ def upload(): Call = {
                         
 
 // @LINE:12
+def getBepalendkenmerk(p:Int = 0, s:String = "", o:String = "asc", f:String = ""): Call = {
+   import ReverseRouteContext.empty
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/bepalendkenmerk" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
+}
+                        
+
+// @LINE:17
 def create(): Call = {
    import ReverseRouteContext.empty
    Call("GET", _prefix + { _defaultPrefix } + "diagnoses/new")
 }
                         
 
-// @LINE:17
+// @LINE:22
 def edit(id:Long): Call = {
    import ReverseRouteContext.empty
    Call("GET", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                         
 
-// @LINE:18
+// @LINE:23
 def update(id:Long): Call = {
    import ReverseRouteContext.empty
    Call("POST", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id))
@@ -94,6 +107,20 @@ def list(p:Int = 0, s:String = "diagnoseoverzicht_omschrijving", o:String = "asc
                         
 
 // @LINE:13
+def getRisicofactor(p:Int = 0, s:String = "", o:String = "asc", f:String = ""): Call = {
+   import ReverseRouteContext.empty
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/risicofactor" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
+}
+                        
+
+// @LINE:14
+def getSamenhangendefactor(p:Int = 0, s:String = "", o:String = "asc", f:String = ""): Call = {
+   import ReverseRouteContext.empty
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/samenhangendefactor" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
+}
+                        
+
+// @LINE:18
 def save(): Call = {
    import ReverseRouteContext.empty
    Call("GET", _prefix + { _defaultPrefix } + "diagnoses/now")
@@ -113,8 +140,11 @@ def index(): Call = {
                   
 
 
-// @LINE:24
-// @LINE:21
+// @LINE:29
+// @LINE:26
+// @LINE:23
+// @LINE:22
+// @LINE:19
 // @LINE:18
 // @LINE:17
 // @LINE:14
@@ -125,11 +155,11 @@ def index(): Call = {
 package controllers.javascript {
 import ReverseRouteContext.empty
 
-// @LINE:24
+// @LINE:29
 class ReverseAssets {
 
 
-// @LINE:24
+// @LINE:29
 def at : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Assets.at",
    """
@@ -143,7 +173,10 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:21
+// @LINE:26
+// @LINE:23
+// @LINE:22
+// @LINE:19
 // @LINE:18
 // @LINE:17
 // @LINE:14
@@ -154,7 +187,7 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
 class ReverseApplication {
 
 
-// @LINE:21
+// @LINE:26
 def delete : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.delete",
    """
@@ -165,7 +198,7 @@ def delete : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:14
+// @LINE:19
 def upload : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.upload",
    """
@@ -177,6 +210,17 @@ def upload : JavascriptReverseRoute = JavascriptReverseRoute(
                         
 
 // @LINE:12
+def getBepalendkenmerk : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Application.getBepalendkenmerk",
+   """
+      function(p,s,o,f) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/bepalendkenmerk" + _qS([(p == null ? null : (""" + implicitly[QueryStringBindable[Int]].javascriptUnbind + """)("p", p)), (s == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("s", s)), (o == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("o", o)), (f == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("f", f))])})
+      }
+   """
+)
+                        
+
+// @LINE:17
 def create : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.create",
    """
@@ -187,7 +231,7 @@ def create : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:17
+// @LINE:22
 def edit : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.edit",
    """
@@ -198,7 +242,7 @@ def edit : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:18
+// @LINE:23
 def update : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.update",
    """
@@ -221,6 +265,28 @@ def list : JavascriptReverseRoute = JavascriptReverseRoute(
                         
 
 // @LINE:13
+def getRisicofactor : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Application.getRisicofactor",
+   """
+      function(p,s,o,f) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/risicofactor" + _qS([(p == null ? null : (""" + implicitly[QueryStringBindable[Int]].javascriptUnbind + """)("p", p)), (s == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("s", s)), (o == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("o", o)), (f == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("f", f))])})
+      }
+   """
+)
+                        
+
+// @LINE:14
+def getSamenhangendefactor : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Application.getSamenhangendefactor",
+   """
+      function(p,s,o,f) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/samenhangendefactor" + _qS([(p == null ? null : (""" + implicitly[QueryStringBindable[Int]].javascriptUnbind + """)("p", p)), (s == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("s", s)), (o == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("o", o)), (f == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("f", f))])})
+      }
+   """
+)
+                        
+
+// @LINE:18
 def save : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.save",
    """
@@ -248,8 +314,11 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
-// @LINE:24
-// @LINE:21
+// @LINE:29
+// @LINE:26
+// @LINE:23
+// @LINE:22
+// @LINE:19
 // @LINE:18
 // @LINE:17
 // @LINE:14
@@ -260,11 +329,11 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
 package controllers.ref {
 
 
-// @LINE:24
+// @LINE:29
 class ReverseAssets {
 
 
-// @LINE:24
+// @LINE:29
 def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Assets.at(path, file), HandlerDef(this.getClass.getClassLoader, "", "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
 )
@@ -273,7 +342,10 @@ def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.
 }
                           
 
-// @LINE:21
+// @LINE:26
+// @LINE:23
+// @LINE:22
+// @LINE:19
 // @LINE:18
 // @LINE:17
 // @LINE:14
@@ -284,31 +356,37 @@ def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.
 class ReverseApplication {
 
 
-// @LINE:21
+// @LINE:26
 def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.delete(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "delete", Seq(classOf[Long]), "POST", """ Delete a computer""", _prefix + """diagnoses/$id<[^/]+>/delete""")
 )
                       
 
-// @LINE:14
+// @LINE:19
 def upload(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.upload(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "upload", Seq(), "POST", """""", _prefix + """diagnoses""")
 )
                       
 
 // @LINE:12
+def getBepalendkenmerk(p:Int, s:String, o:String, f:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Application.getBepalendkenmerk(p, s, o, f), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "getBepalendkenmerk", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]), "GET", """ Get diagnoseoverzicht information""", _prefix + """diagnoses/bepalendkenmerk""")
+)
+                      
+
+// @LINE:17
 def create(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.create(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "create", Seq(), "GET", """ Add computer""", _prefix + """diagnoses/new""")
 )
                       
 
-// @LINE:17
+// @LINE:22
 def edit(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.edit(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "edit", Seq(classOf[Long]), "GET", """ Edit existing computer""", _prefix + """diagnoses/$id<[^/]+>""")
 )
                       
 
-// @LINE:18
+// @LINE:23
 def update(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.update(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "update", Seq(classOf[Long]), "POST", """""", _prefix + """diagnoses/$id<[^/]+>""")
 )
@@ -321,6 +399,18 @@ def list(p:Int, s:String, o:String, f:String): play.api.mvc.HandlerRef[_] = new 
                       
 
 // @LINE:13
+def getRisicofactor(p:Int, s:String, o:String, f:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Application.getRisicofactor(p, s, o, f), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "getRisicofactor", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]), "GET", """""", _prefix + """diagnoses/risicofactor""")
+)
+                      
+
+// @LINE:14
+def getSamenhangendefactor(p:Int, s:String, o:String, f:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Application.getSamenhangendefactor(p, s, o, f), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "getSamenhangendefactor", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]), "GET", """""", _prefix + """diagnoses/samenhangendefactor""")
+)
+                      
+
+// @LINE:18
 def save(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.save(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "save", Seq(), "GET", """""", _prefix + """diagnoses/now""")
 )

@@ -71,10 +71,41 @@ public class Application extends Controller {
 			    .findList()
 			    .get(0)
         );
+
         return ok(
             editForm.render(id, diagnoseForm)
         );
     }
+    
+    public static Result getBepalendkenmerk(int page, String sortBy, String order, String filter) {
+        return ok(
+        		bepalendkenmerk.render(
+                    Bepalendkenmerk_Diagnose.page(page, 10, sortBy, order, filter),
+                    sortBy, order, filter
+                )
+            );
+    }
+    
+    public static Result getRisicofactor(int page, String sortBy, String order, String filter) {
+        return ok(
+        		risicofactor.render(
+    				Risicofactor_Diagnose.page(page, 10, sortBy, order, filter),
+                    sortBy, order, filter
+                )
+            );
+    }
+    
+    public static Result getSamenhangendefactor(int page, String sortBy, String order, String filter) {
+        return ok(
+        		samenhangendefactor.render(
+    				Samenhangendefactor_Diagnose.page(page, 10, sortBy, order, filter),
+                    sortBy, order, filter
+                )
+            );
+    }
+    
+    
+   
     
     /**
      * Handle the 'edit form' submission 
@@ -115,7 +146,7 @@ public class Application extends Controller {
         Diagnose diagnose = new Diagnose();
         diagnose.save();
         Diagnosedomein diagnosedomein = new Diagnosedomein();
-        diagnosedomein.diagnosedomein_domein = Long.parseLong(domein.get("diagnosedomein.diagnosedomein_domein"));
+        diagnosedomein.diagnosedomein_code = Long.parseLong(domein.get("diagnosedomein.diagnosedomein_domein"));
         Diagnoseversie diagnoseversie = createDiagnoseVersie(diagnoseForm.get().diagnoseoverzicht_omschrijving);
         diagnoseForm.get().diagnoseklasse = getDiagnoseKlasse(diagnoseForm.get().diagnoseklasse, diagnosedomein);
         diagnoseForm.get().diagnose = diagnose;
@@ -222,7 +253,7 @@ public class Application extends Controller {
 	    	    		  Diagnosedomein diagnosedomein = new Diagnosedomein();
 	    	    		  Diagnoseklasse diagnoseklasse = new Diagnoseklasse();
 	    	    		  
-	    	    		  // Diagnose excel file row numbers
+	    	    		  // Diagnose excel file column numbers
 	    	    		  int Diagnose_ID = 0, 
 	    					  Diagnose_Code = 1, 
 	    					  Diagnose_Omschrijving = 2, 
@@ -233,51 +264,54 @@ public class Application extends Controller {
 	    	    		  
 	    	    		  // Diagnosedomein table
 	    	    			  diagnosedomein.diagnosedomein_id = (long)row.getCell(Diagnose_Domein).getNumericCellValue();
-	    	    		  	  diagnosedomein.diagnosedomein_domein = (long)row.getCell(Diagnose_Domein).getNumericCellValue();
-    	    		  	  try{
-	    	    		  	  diagnosedomein.save();
-	    	    		  }
-	    	    		  catch (PersistenceException e){
-	    	    			  System.out.println("Domein already exists");
-	    	    		  }
+	    	    		  	  diagnosedomein.diagnosedomein_code = (long)row.getCell(Diagnose_Domein).getNumericCellValue();
+		    	    		  	  try{
+			    	    		  	  diagnosedomein.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    			  System.out.println("Domein already exists");
+			    	    		  }
 	    	    		  
 	    	    		  // Diagnoseklasse table
-	    	    			  diagnoseklasse.diagnoseklasse_klasse = (long)row.getCell(Diagnose_Klasse).getNumericCellValue();
+	    	    			  diagnoseklasse.diagnoseklasse_code = (long)row.getCell(Diagnose_Klasse).getNumericCellValue();
 	    	    			  diagnoseklasse.diagnosedomein = diagnosedomein;
-    	    			  try{
-	    	    			  diagnoseklasse.save();
-	    	    		  }
-	    	    		  catch (PersistenceException e){
-	    	    			  System.out.println("Klasse already exists");
-	    	    		  }
-	    	    		  // Diagnose table
-	    	    		  diagnose.diagnose_id = (long)Long.parseLong(row.getCell(Diagnose_ID).toString());
-	    	    		  System.out.println(diagnose.diagnose_id);
-	    	    		  try{
-	    	    		  	diagnose.save();
-	    	    		  }
-	    	    		  catch (PersistenceException e){
-	    	    		     System.out.println("Diagnose already exists");
-	    	    		  }
+	    	    			  Diagnoseklasse klasse = getDiagnoseKlasse(diagnoseklasse, diagnosedomein);
+	    	    			  if(klasse.diagnoseklasse_code == null){
+		    	    			  try{
+			    	    			  diagnoseklasse.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    			  System.out.println("Klasse already exists");
+			    	    		  }
+	    	    			  }
+		    	    		  // Diagnose table
+		    	    		  diagnose.diagnose_id = (long)Long.parseLong(row.getCell(Diagnose_ID).toString());
+		    	    		  System.out.println(diagnose.diagnose_id);
+		    	    		  try{
+		    	    		  	diagnose.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Diagnose already exists");
+		    	    		  }
     	    		  	  
-	    	    		  // Diagnoseversie
-	    	    		  diagnoseversie = createDiagnoseVersie(row.getCell(Diagnose_Definitie).toString());
-	    	    		  
-	    	    		  // Diagnoseoverzicht table
-	    	    		  Gezondheidspatroon gezondheidspatroon_id = Gezondheidspatroon.find.byId((long)Long.parseLong(row.getCell(Diagnose_Patroon).toString()));
-	    	    		  diagnoseoverzicht.diagnose = diagnose;
-	    	    		  diagnoseoverzicht.diagnoseversie = diagnoseversie;
-	    	    		  diagnoseoverzicht.diagnose_code = (int)row.getCell(Diagnose_Code).getNumericCellValue();
-	    	    		  diagnoseoverzicht.gezondheidspatroon = gezondheidspatroon_id;
-	    	    		  diagnoseoverzicht.diagnoseklasse = diagnoseklasse;
-	    	    		  diagnoseoverzicht.diagnoseoverzicht_definitie = row.getCell(Diagnose_Definitie).toString();
-	    	    		  diagnoseoverzicht.diagnoseoverzicht_omschrijving = row.getCell(Diagnose_Omschrijving).toString();
-	    	    		  try{
-	    	    			  diagnoseoverzicht.save();
-	    	    		  }
-	    	    		  catch (PersistenceException e){
-	    	    		     System.out.println("Diagnose already exists");
-	    	    		  }
+		    	    		  // Diagnoseversie
+		    	    		  diagnoseversie = createDiagnoseVersie(row.getCell(Diagnose_Definitie).toString());
+		    	    		  
+		    	    		  // Diagnoseoverzicht table
+		    	    		  Gezondheidspatroon gezondheidspatroon_id = Gezondheidspatroon.find.byId((long)Long.parseLong(row.getCell(Diagnose_Patroon).toString()));
+		    	    		  diagnoseoverzicht.diagnose = diagnose;
+		    	    		  diagnoseoverzicht.diagnoseversie = diagnoseversie;
+		    	    		  diagnoseoverzicht.diagnose_code = (int)row.getCell(Diagnose_Code).getNumericCellValue();
+		    	    		  diagnoseoverzicht.gezondheidspatroon = gezondheidspatroon_id;
+		    	    		  diagnoseoverzicht.diagnoseklasse = diagnoseklasse;
+		    	    		  diagnoseoverzicht.diagnoseoverzicht_definitie = row.getCell(Diagnose_Definitie).toString();
+		    	    		  diagnoseoverzicht.diagnoseoverzicht_omschrijving = row.getCell(Diagnose_Omschrijving).toString();
+		    	    		  try{
+		    	    			  diagnoseoverzicht.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Diagnose already exists");
+		    	    		  }
 	    	    		  
 	    	    		  break;
 	    	    		  
@@ -293,7 +327,7 @@ public class Application extends Controller {
 		    	    			  bepalendkenmerk.save();
 		    	    		  }
 		    	    		  catch (PersistenceException e){
-		    	    		     System.out.println("Bepalend kenmerk already exists");
+		    	    		     System.out.println("Bepalend kenmerk already exists, adding definition to diagnoseversie_bepalendkenmerk");
 		    	    		  }
 
 	    	    		  break;
@@ -340,14 +374,31 @@ public class Application extends Controller {
 		    	    				    .findList()
 		    	    				    .get(0);
 		    	    		  Bepalendkenmerk bepalendkenmerkdiagnoseversie = Bepalendkenmerk.find.byId((long)Long.parseLong(row.getCell(Bepalendkenmerk_BepalendkenmerkID).toString()));
-		    	    		  
+
 		    	    		  Diagnoseversie_Bepalendkenmerk diagnoseversie_bepalendkenmerk = new Diagnoseversie_Bepalendkenmerk();
 		    	    		  
-		    	    		  diagnoseversie_bepalendkenmerk.bepalendkenmerk_id = bepalendkenmerkdiagnoseversie;
-		    	    		  diagnoseversie_bepalendkenmerk.diagnoseversie_id = bepalendkenmerkdiagnose.diagnoseversie;
+		    	    		  diagnoseversie_bepalendkenmerk.bepalendkenmerk = bepalendkenmerkdiagnoseversie;
+		    	    		  diagnoseversie_bepalendkenmerk.diagnoseversie = bepalendkenmerkdiagnose.diagnoseversie;
+
+		    	    		  Diagnose bepalendkenmerk_diagnose_d = new Diagnose();
+		    	    		  bepalendkenmerk_diagnose_d.diagnose_id = (long)Long.parseLong(row.getCell(Bepalendkenmerk_DiagnoseID).toString());
+		    	    		  
+		    	    		  Bepalendkenmerk_Diagnose bepalendkenmerk_diagnose = new Bepalendkenmerk_Diagnose();
+		    	    		  bepalendkenmerk_diagnose.diagnose_bepalendkenmerk_releasestatus_datum = Calendar.getInstance().getTime();
+		    	    		  bepalendkenmerk_diagnose.bepalendkenmerk = bepalendkenmerkdiagnoseversie;
+		    	    		  bepalendkenmerk_diagnose.diagnose = bepalendkenmerk_diagnose_d;
+		    	    		  
+		    	    		  
 		    	    		  
 		    	    		  try{
 		    	    			  diagnoseversie_bepalendkenmerk.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }
+		    	    		  
+		    	    		  try{
+			    	    		  bepalendkenmerk_diagnose.save();
 		    	    		  }
 		    	    		  catch (PersistenceException e){
 		    	    		     System.out.println("Samenhangendefactor already exists");
@@ -367,11 +418,26 @@ public class Application extends Controller {
 		    	    		  Risicofactor risicofactordiagnoseversie = Risicofactor.find.byId((long)Long.parseLong(row.getCell(Risicofactor_RisicofactorID).toString()));
 		    	    		  Diagnoseversie_Risicofactor diagnoseversie_risicofactor = new Diagnoseversie_Risicofactor();
 		    	    		  
-		    	    		  diagnoseversie_risicofactor.risicofactor_id= risicofactordiagnoseversie;
-		    	    		  diagnoseversie_risicofactor.diagnoseversie_id = risicofactordiagnose.diagnoseversie;
+		    	    		  diagnoseversie_risicofactor.risicofactor= risicofactordiagnoseversie;
+		    	    		  diagnoseversie_risicofactor.diagnoseversie = risicofactordiagnose.diagnoseversie;
+		    
+		    	    		  Diagnose risicofactor_diagnose_d = new Diagnose();
+		    	    		  risicofactor_diagnose_d.diagnose_id = (long)Long.parseLong(row.getCell(Risicofactor_DiagnoseID).toString());
+		    	    		  
+		    	    		  Risicofactor_Diagnose risicofactor_diagnose = new Risicofactor_Diagnose();
+		    	    		  risicofactor_diagnose.diagnose_risicofactor_releasestatus_datum = Calendar.getInstance().getTime();
+		    	    		  risicofactor_diagnose.risicofactor = risicofactordiagnoseversie;
+		    	    		  risicofactor_diagnose.diagnose = risicofactor_diagnose_d;
 		    	    		  
 		    	    		  try{
 		    	    			  diagnoseversie_risicofactor.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }
+		    	    		  
+		    	    		  try{
+		    	    			  risicofactor_diagnose.save();
 		    	    		  }
 		    	    		  catch (PersistenceException e){
 		    	    		     System.out.println("Samenhangendefactor already exists");
@@ -392,8 +458,16 @@ public class Application extends Controller {
 		    	    		  
 		    	    		  Diagnoseversie_Samenhangendefactor diagnoseversie_samenhangendefactor = new Diagnoseversie_Samenhangendefactor();
 		    	    		  
-		    	    		  diagnoseversie_samenhangendefactor.samenhangendefactor_id = samenhangendefactordiagnoseversie;
-		    	    		  diagnoseversie_samenhangendefactor.diagnoseversie_id = samenhangendefactordiagnose.diagnoseversie;
+		    	    		  diagnoseversie_samenhangendefactor.samenhangendefactor = samenhangendefactordiagnoseversie;
+		    	    		  diagnoseversie_samenhangendefactor.diagnoseversie = samenhangendefactordiagnose.diagnoseversie;
+		    	    		  
+		    	    		  Diagnose samenhangendefactor_diagnose_d = new Diagnose();
+		    	    		  samenhangendefactor_diagnose_d.diagnose_id = (long)Long.parseLong(row.getCell(Samenhangendefactor_DiagnoseID).toString());
+		    	    		  
+		    	    		  Samenhangendefactor_Diagnose samenhangendefactor_diagnose = new Samenhangendefactor_Diagnose();
+		    	    		  samenhangendefactor_diagnose.diagnose_samenhangendefactor_releasestatus_datum = Calendar.getInstance().getTime();
+		    	    		  samenhangendefactor_diagnose.samenhangendefactor = samenhangendefactordiagnoseversie;
+		    	    		  samenhangendefactor_diagnose.diagnose = samenhangendefactor_diagnose_d;
 		    	    		  
 		    	    		  try{
 		    	    			  diagnoseversie_samenhangendefactor.save();
@@ -402,26 +476,129 @@ public class Application extends Controller {
 		    	    		     System.out.println("Samenhangendefactor already exists");
 		    	    		  }
 		    	    		  
+		    	    		  try{
+		    	    			  samenhangendefactor_diagnose.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Samenhangendefactor already exists");
+		    	    		  }		    	    		  
+		    	    		  
 	        	        	break;
 	        	        	
 	        	        	case "ref_indicator.xls":
-	        	        		
-        	        		break;
-        	        		
-	        	        	case "ref_score_schaal.xls":
-	        	        		
+		        	        	Indicator indicator = new Indicator();
+		        	        	int Indicator_ID = 0,
+		        	        		Indicator_Omschrijving = 2;
+		        	        	indicator.indicator_id = (long)Long.parseLong(row.getCell(Indicator_ID).toString());
+		        	        	indicator.indicator_omschrijving = row.getCell(Indicator_Omschrijving).toString();
+		        	        	try{
+		        	        		indicator.save();
+		    	    		    }
+		    	    		    catch (PersistenceException e){
+		    	    		  	    System.out.println("Gezondheidspatroon already exists");
+		    	    		    }
+		        	        	
         	        		break;
         	        		
 	        	        	case "ref_score_values.xls":
-	        	        		
+		        	        	Waarde waarde = new Waarde();
+		        	        	
+		        	        	int Waarde_ID = 0,
+	        	        			Waarde_Omschrijving = 1,
+		        	        		Waarde_Score_ID = 2;
+		        	        	waarde.waarde_id = (long)Long.parseLong(row.getCell(Waarde_ID).toString());
+		        	        	waarde.waarde_omschrijving = row.getCell(Waarde_Omschrijving).toString();
+		        	        	try{
+		        	        		waarde.save();
+		    	    		    }
+		    	    		    catch (PersistenceException e){
+		    	    		  	    System.out.println("Gezondheidspatroon already exists");
+		    	    		    }
+        	        		break;
+        	        		
+	        	        	case "ref_score_schaal.xls":
+	        	        		/*
+	        	        		 * NOC -> NOC_Waarde -> Waarde Kan niet geïmporteerd worden. 
+	        	        		 * Waarde en NOC kunnen geïmporteerd worden, 
+	        	        		 * maar zijn momenteel niet aan elkaar gekoppeld in 
+	        	        		 * de Access database
+	        	        		 * 
+	        	        		 */
         	        		break;
         	        		
 	        	        	case "ref_zorgresultaat.xls":
-	        	        		
+        	        			/*
+        	        			 * 
+        	        			 * Zie schaal
+        	        			 */
         	        		break;
         	        		
 	        	        	case "koppel_diagnose_zorgresultaat_indicator.xls":
 	        	        		
+        	        		break;
+        	        		
+	        	        	case "ref_activiteit.xls":
+		    	    		  int Activiteit_ID = 0, 
+	    	    				  Activiteit_omschrijving = 2; 
+		    	    		  
+		    	    		  Nicactiviteit nicactiviteit = new Nicactiviteit();
+		    	    		  nicactiviteit.nicactiviteit_id = (long)Long.parseLong(row.getCell(Activiteit_ID).toString());
+		    	    		  nicactiviteit.nicactiviteit_omschrijving = row.getCell(Activiteit_omschrijving).toString();
+		    	    		  try{
+		    	    			  nicactiviteit.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Nicactiviteit already exists");
+		    	    		  }
+        	        		break;
+        	        		
+	        	        	case "ref_interventie.xls":
+	  	    	    		  Nic nic = new Nic();
+		    	    		  Nicversie nicversie;
+		    	    		  Nicoverzicht nicoverzicht = new Nicoverzicht();
+		    	    		  
+		    	    		  // Diagnose excel file column numbers
+		    	    		  int Nic_ID = 0, 
+	    						  Nic_Omschrijving = 2,
+								  Nic_Code = 3, 
+								  Nic_Definitie = 4;
+		    	    		  
+			    	    		  // Diagnose table
+		    	    		  nic.nic_id = (long)Long.parseLong(row.getCell(Nic_ID).toString());
+		    	    		  System.out.println(nic.nic_id);
+		    	    		  try{
+		    	    			  nic.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Diagnose already exists");
+		    	    		  }
+	    	    		  	  
+		    	    		  // Diagnoseversie
+		    	    		  nicversie = createNicVersie(row.getCell(Nic_Definitie).toString());
+		    	    		  
+		    	    		  // Diagnoseoverzicht table
+		    	    		  nicoverzicht.nic = nic;
+		    	    		  nicoverzicht.nicversie = nicversie;
+		    	    		  nicoverzicht.nicoverzicht_code = (long)Long.parseLong(row.getCell(Nic_Code).toString());
+		    	    		  nicoverzicht.nicoverzicht_definitie = row.getCell(Nic_Definitie).toString();
+		    	    		  nicoverzicht.nicoverzicht_omschrijving = row.getCell(Nic_Omschrijving).toString();
+		    	    		  try{
+		    	    			  nicoverzicht.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("Nicoverzicht already exists");
+		    	    		  }
+        	        		break;
+        	        		
+	        	        	case "koppel_diagnose_interventie_activiteit.xls":
+		  	    	    		  Nic nic_koppel = new Nic();
+		  	    	    		  Diagnose diagnose_koppel = new Diagnose();
+		  	    	    		  Nicactiviteit activiteit_koppel = new Nicactiviteit(); 
+		  	    	    		  Nic_Nicactiviteit nic_nicactiviteit = new Nic_Nicactiviteit();
+		  	    	    		  Nic_Diagnose nic_diagnose = new Nic_Diagnose();
+		  	    	    		  int Diagnose_ID_Koppel = 1, 
+		  	    	    			  Nic_ID_Koppel = 2,
+									  Activiteit_ID_Koppel = 3;
         	        		break;
 	            		}
 	            	}
@@ -473,15 +650,52 @@ public class Application extends Controller {
      * @return
      */
     private static Diagnoseklasse getDiagnoseKlasse(Diagnoseklasse klasse, Diagnosedomein domein){
-   	
-		Diagnoseklasse diagnoseklasse = Diagnoseklasse.find.where()
-				    .ilike("diagnosedomein.diagnosedomein_domein", domein.diagnosedomein_domein.toString())
+   	Diagnoseklasse diagnoseklasse;
+	try{
+		diagnoseklasse = Diagnoseklasse.find.where()
+				    .ilike("diagnosedomein.diagnosedomein_code", domein.diagnosedomein_code.toString())
 				    .where()
-				    .ilike("diagnoseklasse_klasse", klasse.diagnoseklasse_klasse.toString())
+				    .ilike("diagnoseklasse_code", klasse.diagnoseklasse_code.toString())
 				    .findList()
 				    .get(0);
+   	}
+   	catch(IndexOutOfBoundsException e){
+   		diagnoseklasse = new Diagnoseklasse();
+   	}
 		  
 		  return diagnoseklasse;
+    }
+    
+    /**
+     * Function for adding various Diagnoseversie rows
+     * @param omschrijving
+     * @return diagnoseversie object
+     */
+    private static Nicversie createNicVersie(String omschrijving){
+		  // Diagnoseversie table
+		  Nicversie nicversie = new Nicversie();
+		  Nicversie_Releasestatus nicversie_releasestatus = new Nicversie_Releasestatus();
+		  Calendar cal = Calendar.getInstance();
+		  nicversie.nicversie_begindatum = cal.getTime();
+		  nicversie.nicversie_einddatum = cal.getTime();
+		  try{
+			  nicversie.save();
+		  }
+		  catch (PersistenceException e){
+		     System.out.println("Diagnoseversie already exists");
+		  }
+		  
+		  // Diagnoseversie_releasestatus table
+		  nicversie_releasestatus.nicversie = nicversie;
+		  nicversie_releasestatus.nicversie_releasestatus_datum = cal.getTime();
+		  nicversie_releasestatus.nicversie_releasestatus_omschrijving = omschrijving;
+		  try{
+			  nicversie_releasestatus.save();
+		  }
+		  catch (PersistenceException e){
+		     System.out.println("Diagnose already exists");
+		  }
+		return nicversie;
     }
 }
             

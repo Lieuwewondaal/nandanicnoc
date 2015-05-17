@@ -25,8 +25,6 @@ public class Nocversie_Indicator extends Model {
 	@JoinColumn(name="indicator_id")
 	public Indicator indicator;
     
-    public String indicator_omschrijving;
-    
     /**
      * Generic query helper for entity Company with id Long
      */

@@ -20,7 +20,7 @@ public class Diagnosedomein extends Model {
 	@Id
     public Long diagnosedomein_id;
     
-    public Long diagnosedomein_domein;
+    public Long diagnosedomein_code;
     
     public String diagnosedomein_omschrijving;
     

@@ -20,11 +20,11 @@ public class Diagnoseversie_Risicofactor extends Model {
 
     @ManyToOne
     @JoinColumn(name="risicofactor_id")
-    public Risicofactor risicofactor_id;
+    public Risicofactor risicofactor;
     
     @ManyToOne
     @JoinColumn(name="diagnoseversie_id")
-    public Diagnoseversie diagnoseversie_id;
+    public Diagnoseversie diagnoseversie;
     
     /**
      * Generic query helper for entity Company with id Long

@@ -20,11 +20,11 @@ public class Diagnoseversie_Bepalendkenmerk extends Model {
 
     @ManyToOne
     @JoinColumn(name="bepalendkenmerk_id")
-    public Bepalendkenmerk bepalendkenmerk_id;
+    public Bepalendkenmerk bepalendkenmerk;
     
     @ManyToOne
     @JoinColumn(name="diagnoseversie_id")
-    public Diagnoseversie diagnoseversie_id;
+    public Diagnoseversie diagnoseversie;
     
     /**
      * Generic query helper for entity Company with id Long

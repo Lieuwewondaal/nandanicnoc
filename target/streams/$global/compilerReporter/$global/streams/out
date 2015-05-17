@@ -1,4 +1,4 @@
-[warn] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\list.scala.html:82: comparing values of types Int and Null using `==' will always yield false
-[warn]                             @if(diagnoseoverzicht.diagnose_code == null) {
-[warn]                                                                 ^
-[warn] one warning found
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\samenhangendefactor.scala.html:5: not found: value samfac
+[error] @samfac {
+[error]  ^
+[error] one error found

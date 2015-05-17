@@ -20,7 +20,7 @@ public class Diagnoseklasse extends Model {
 	@Id
     public Long diagnoseklasse_id;
     
-	public Long diagnoseklasse_klasse;
+	public Long diagnoseklasse_code;
 	
 	public String diagnoseklasse_omschrijving;
 	

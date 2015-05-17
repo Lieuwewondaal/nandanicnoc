@@ -20,11 +20,11 @@ public class Diagnoseversie_Samenhangendefactor extends Model {
 
     @ManyToOne
     @JoinColumn(name="samenhangendefactor_id")
-    public Samenhangendefactor samenhangendefactor_id;
+    public Samenhangendefactor samenhangendefactor;
     
     @ManyToOne
     @JoinColumn(name="diagnoseversie_id")
-    public Diagnoseversie diagnoseversie_id;
+    public Diagnoseversie diagnoseversie;
     
     /**
      * Generic query helper for entity Company with id Long
