@@ -124,6 +124,36 @@ create table diagnoseversie_samenhangendefactor (
   ) engine=innodb
 ;
 
+create table bepalendkenmerk_diagnose (
+  bepalendkenmerk_id     								bigint,
+  diagnose_id 											bigint,
+  diagnose_bepalendkenmerk_releasestatus_datum 			datetime,
+  diagnose_bepalendkenmerk_releasestatus_omschrijving	text,
+
+  constraint pk_bepalendkenmerk_diagnose primary key (bepalendkenmerk_id, diagnose_id, diagnose_bepalendkenmerk_releasestatus_datum)
+  ) engine=innodb
+;
+
+create table risicofactor_diagnose (
+  risicofactor_id     									bigint,
+  diagnose_id 											bigint,
+  diagnose_risicofactor_releasestatus_datum 			datetime,
+  diagnose_risicofactor_releasestatus_omschrijving		text,
+
+  constraint pk_risicofactor_diagnose primary key (risicofactor_id, diagnose_id, diagnose_risicofactor_releasestatus_datum)
+  ) engine=innodb
+;
+
+create table samenhangendefactor_diagnose (
+  samenhangendefactor_id     								bigint,
+  diagnose_id 												bigint,
+  diagnose_samenhangendefactor_releasestatus_datum 			datetime,
+  diagnose_samenhangendefactor_releasestatus_omschrijving	text,
+
+  constraint pk_samenhangendefactor_diagnose primary key (samenhangendefactor_id, diagnose_id, diagnose_samenhangendefactor_releasestatus_datum)
+  ) engine=innodb
+;
+
 create table diagnose_specialisme (
   diagnose_id     bigint,
   specialisme_id bigint,
@@ -237,9 +267,112 @@ create table nocversie_releasestatus (
 create table nocversie_indicator (
   nocversie_id  		  bigint not null,
   indicator_id 	  		  bigint not null,
-  indicator_omschrjiving  text,
 
   constraint pk_nocversieindicator primary key (nocversie_id, indicator_id)
+  ) engine=innodb
+;
+
+create table noc_indicator_diagnose (
+  noc_id		   bigint not null,
+  indicator_id     bigint not null,
+  diagnose_id	   bigint not null,
+  noc_indicator_omschrijving text,
+  noc_indicator_definitie text,
+
+  constraint pk_indicator primary key (noc_id, indicator_id)
+  ) engine=innodb
+;
+
+create table nic (
+  nic_id                        bigint not null auto_increment,
+
+  constraint pk_nic primary key (nic_id)
+  ) engine=innodb
+;
+
+create table nicoverzicht (
+  nic_id        		       		bigint not null,
+  nicversie_id						bigint not null, 
+  nicklasse_id  	            	bigint,
+  nicoverzicht_code					bigint,
+  nicoverzicht_omschrijving 		text,
+  nicoverzicht_definitie 			text,
+  
+  constraint pk_nicoverzicht_nic_fk primary key (nic_id, nicversie_id)
+  ) engine=innodb
+;
+
+create table nicdomein (
+  nicdomein_id     bigint not null auto_increment,
+  nicdomein_code   bigint,
+  nicdomein_omschrijving text,
+
+  constraint pk_nicdomein primary key (nicdomein_id)
+  ) engine=innodb
+;
+
+create table nicklasse (
+  nicklasse_id		bigint not null auto_increment,
+  nicdomein_id     bigint,
+  nicklasse_code bigint not null,
+  nicklasse_omschrijving text,
+
+  constraint pk_nicdomein_fk primary key (nicklasse_id)
+  ) engine=innodb
+;
+
+create table nicversie (
+  nicversie_id     bigint not null auto_increment,
+  nicversie_begindatum datetime,
+  nicversie_einddatum datetime,
+
+  constraint pk_nicversie primary key (nicversie_id)
+  ) engine=innodb
+;
+
+create table nicversie_releasestatus (
+  nicversie_id     bigint not null,
+  nicversie_releasestatus_datum datetime,
+  nicversie_releasestatus_omschrijving text,
+
+  constraint pk_nicversiereleasestatus primary key (nicversie_id)
+  ) engine=innodb
+;
+
+create table nicactiviteit (
+  nicactiviteit_id     bigint not null,
+  nicactiviteit_omschrijving text,
+
+  constraint pk_nicactiviteit primary key (nicactiviteit_id)
+  ) engine=innodb
+;
+
+create table nicversie_nicactiviteit (
+  nicactiviteit_id     bigint,
+  nicversie_id bigint,
+
+  constraint pk_nicversie_nicactiviteit primary key (nicactiviteit_id, nicversie_id)
+  ) engine=innodb
+;
+
+create table nic_nicactiviteit (
+  nic_id     bigint,
+  nicactiviteit_id bigint,
+  nic_nicactiviteit_releasestatus_datum datetime,
+  nic_nicactiviteit_releasestatus_omschrijving text,
+  
+  constraint pk_nic_nicactiviteit primary key (nicactiviteit_id, nic_id)
+  ) engine=innodb
+;
+
+create table nic_diagnose (
+  nic_id     bigint,
+  nicactiviteit_id bigint,
+  diagnose_id bigint,
+  nic_diagnose_releasestatus_datum datetime,
+  nic_diagnose_releasestatus_omschrijving text,
+  
+  constraint pk_nic_nicactiviteit primary key (nicactiviteit_id, nic_id, diagnose_id)
   ) engine=innodb
 ;
 
@@ -255,6 +388,12 @@ alter table diagnoseversie_risicofactor add constraint fk_diagnoseversie_risicof
 alter table diagnoseversie_risicofactor add constraint fk_diagnoseversie_risicofactor_2 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
 alter table diagnoseversie_samenhangendefactor add constraint fk_diagnoseversie_samenhangendefactor_1 foreign key (samenhangendefactor_id) references samenhangendefactor (samenhangendefactor_id) on delete restrict on update restrict;
 alter table diagnoseversie_samenhangendefactor add constraint fk_diagnoseversie_samenhangendefactor_2 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
+alter table bepalendkenmerk_diagnose add constraint fk_bepalendkenmerk_diagnose_1 foreign key (bepalendkenmerk_id) references bepalendkenmerk (bepalendkenmerk_id) on delete restrict on update restrict;
+alter table bepalendkenmerk_diagnose add constraint fk_bepalendkenmerk_diagnose_2 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
+alter table risicofactor_diagnose add constraint fk_risicofactor_diagnose_1 foreign key (risicofactor_id) references risicofactor (risicofactor_id) on delete restrict on update restrict;
+alter table risicofactor_diagnose add constraint fk_risicofactor_diagnose_2 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
+alter table samenhangendefactor_diagnose add constraint fk_samenhangendefactor_diagnose_1 foreign key (samenhangendefactor_id) references samenhangendefactor (samenhangendefactor_id) on delete restrict on update restrict;
+alter table samenhangendefactor_diagnose add constraint fk_samenhangendefactor_diagnose_2 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table diagnose_specialisme add constraint fk_diagnose_specialisme_1 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table diagnose_specialisme add constraint fk_diagnose_specialisme_2 foreign key (specialisme_id) references specialisme (specialisme_id) on delete restrict on update restrict;
 alter table nocversie_releasestatus add constraint fk_nocversie_releasestatus_1 foreign key (nocversie_id) references nocversie (nocversie_id) on delete restrict on update restrict;
@@ -270,6 +409,21 @@ alter table noc_indicator add constraint fk_noc_indicator_1 foreign key (noc_id)
 alter table noc_indicator add constraint fk_noc_indicator_2 foreign key (indicator_id) references indicator (indicator_id) on delete restrict on update restrict;
 alter table indicator_waarde add constraint fk_indicator_waarde_1 foreign key (indicator_id) references indicator (indicator_id) on delete restrict on update restrict;
 alter table indicator_waarde add constraint fk_indicator_waarde_2 foreign key (waarde_id) references waarde (waarde_id) on delete restrict on update restrict;
+alter table noc_indicator_diagnose add constraint fk_noc_indicator_diagnose_1 foreign key (noc_id) references noc_indicator (noc_id) on delete restrict on update restrict;
+alter table noc_indicator_diagnose add constraint fk_noc_indicator_diagnose_2 foreign key (indicator_id) references noc_indicator (indicator_id) on delete restrict on update restrict;
+alter table noc_indicator_diagnose add constraint fk_noc_indicator_diagnose_3 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
+alter table nicversie_releasestatus add constraint fk_nicversie_releasestatus_1 foreign key (nicversie_id) references nicversie (nicversie_id) on delete restrict on update restrict;
+alter table nicversie_nicactiviteit add constraint fk_nicversie_nicactiviteit_1 foreign key (nicversie_id) references nicversie (nicversie_id) on delete restrict on update restrict;
+alter table nicversie_nicactiviteit add constraint fk_nicversie_nicactiviteit_2 foreign key (nicactiviteit_id) references nicactiviteit (nicactiviteit_id) on delete restrict on update restrict;
+alter table nicklasse add constraint fk_nicklasse_nicdomein_1 foreign key (nicdomein_id) references nicdomein (nicdomein_id) on delete restrict on update restrict;
+alter table nicoverzicht add constraint fk_nicoverzicht_nic_1 foreign key (nic_id) references nic (nic_id) on delete restrict on update restrict;
+alter table nicoverzicht add constraint fk_nicoverzicht_nicversie_1 foreign key (nicversie_id) references nicversie (nicversie_id) on delete restrict on update restrict;
+alter table nicoverzicht add constraint fk_nicoverzicht_nicklasse_1 foreign key (nicklasse_id) references nicklasse (nicklasse_id) on delete restrict on update restrict;
+alter table nic_nicactiviteit add constraint fk_nic_nicactiviteit_1 foreign key (nic_id) references nic (nic_id) on delete restrict on update restrict;
+alter table nic_nicactiviteit add constraint fk_nic_nicactiviteit_2 foreign key (nicactiviteit_id) references nicactiviteit (nicactiviteit_id) on delete restrict on update restrict;
+alter table nic_diagnose add constraint fk_nic_nic_diagnose_1 foreign key (nic_id) references nic_nicactiviteit (nic_id) on delete restrict on update restrict;
+alter table nic_diagnose add constraint fk_nic_nic_diagnose_2 foreign key (nicactiviteit_id) references nic_nicactiviteit (nicactiviteit_id) on delete restrict on update restrict;
+alter table nic_diagnose add constraint fk_nic_nic_diagnose_3 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -305,6 +459,12 @@ drop table if exists diagnoseversie_risicofactor;
 
 drop table if exists diagnoseversie_samenhangendefactor;
 
+drop table if exists bepalendkenmerk_diagnose;
+
+drop table if exists risicofactor_diagnose;
+
+drop table if exists samenhangendefactor_diagnose;
+
 drop table if exists noc;
 
 drop table if exists nocoverzicht;
@@ -328,6 +488,28 @@ drop table if exists nocversie;
 drop table if exists nocversie_releasestatus;
 
 drop table if exists nocversie_indicator;
+
+drop table if exists noc_indicator_diagnose;
+
+drop table if exists nic;
+
+drop table if exists nicactiviteit;
+
+drop table if exists nicdomein;
+
+drop table if exists nicklasse;
+
+drop table if exists nicoverzicht;
+
+drop table if exists nicversie;
+
+drop table if exists nicversie_nicactiviteit;
+
+drop table if exists nicversie_releasestatus;
+
+drop table if exists nic_nicactiviteit;
+
+drop table if exists nic_diagnose;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

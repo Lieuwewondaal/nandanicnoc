@@ -15,6 +15,13 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.FetchConfig;
+import com.avaje.ebean.SqlQuery;
+import com.avaje.ebean.SqlRow;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import play.libs.Json;
 import play.mvc.*;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -71,12 +78,67 @@ public class Application extends Controller {
 			    .findList()
 			    .get(0)
         );
+    	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
+    			.find
+    			.where()
+    			.ilike("diagnose_id", id.toString())
+                .findList();
+    	/*String sql = "select t0.nic_diagnose_releasestatus_datum c0, t0.nic_diagnose_releasestatus_omschrijving c1,t0.nicactiviteit_id c2,t0.diagnose_id c3,t1.nic_id c4,t1.nicoverzicht_omschrijving c5 from nic_diagnose t0 left outer join nicoverzicht t1 on t1.nic_id = t0.nic_id where diagnose_id = '491322316502'";
+   	 
+    	SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+   	 
+   	 	// execute the query returning a List of MapBean objects
+   	 	List<SqlRow> list = sqlQuery.findList();
+   	 	JsonNode j = Json.toJson(list);
+        int i = 0;
+        String x = "";
+        while(i < list.size()){
+        	x += list.get(i);
+        	i++;
+        }
+        */
+        
+    	/*List<Nic> n = Nic
+    			.find
+    			.fetch("nicoverzicht", new FetchConfig().query())
+    			.fetch("nic_diagnose")
+    			.where()
+    			.like("nic_id", "491322316502")
+                .findList();*/
 
+    	
+        /*response().setContentType("application/json");
+        Bepalendkenmerk_Diagnose d = Bepalendkenmerk_Diagnose.find.where()
+                .ilike("diagnose_id", id.toString())
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+        */
         return ok(
-            editForm.render(id, diagnoseForm)
+            editForm.render(id, diagnoseForm, d)
         );
     }
     
+    public static Result getBepalendeKenmerken(Long id){
+    	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+        return ok(
+        		bepalendkenmerkdiagnose.render(d)
+            );
+    }
+    
+    
+    /**
+     * Get Bepalend kenmerk pagina
+     * @param page
+     * @param sortBy
+     * @param order
+     * @param filter
+     * @return
+     */
     public static Result getBepalendkenmerk(int page, String sortBy, String order, String filter) {
         return ok(
         		bepalendkenmerk.render(
@@ -86,6 +148,14 @@ public class Application extends Controller {
             );
     }
     
+    /**
+     * Get Risicofactor pagina
+     * @param page
+     * @param sortBy
+     * @param order
+     * @param filter
+     * @return
+     */
     public static Result getRisicofactor(int page, String sortBy, String order, String filter) {
         return ok(
         		risicofactor.render(
@@ -95,10 +165,35 @@ public class Application extends Controller {
             );
     }
     
+    /**
+     * Get Samenhangendefactor pagina
+     * @param page
+     * @param sortBy
+     * @param order
+     * @param filter
+     * @return
+     */
     public static Result getSamenhangendefactor(int page, String sortBy, String order, String filter) {
         return ok(
         		samenhangendefactor.render(
     				Samenhangendefactor_Diagnose.page(page, 10, sortBy, order, filter),
+                    sortBy, order, filter
+                )
+            );
+    }
+    
+    /**
+     * Get NIC pagina
+     * @param page
+     * @param sortBy
+     * @param order
+     * @param filter
+     * @return
+     */
+    public static Result getNicActiviteit(int page, String sortBy, String order, String filter) {
+        return ok(
+        		nic_diagnose.render(
+    				Nic_Diagnose.page(page, 100, sortBy, order, filter),
                     sortBy, order, filter
                 )
             );
@@ -115,7 +210,12 @@ public class Application extends Controller {
     public static Result update(Long diagnose_id) {
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
         if(diagnoseForm.hasErrors()) {
-            return badRequest(editForm.render(diagnose_id, diagnoseForm));
+        	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
+        			.find
+        			.where().
+                    ilike("diagnose_id", diagnose_id.toString())
+                    .findList();
+            return badRequest(editForm.render(diagnose_id, diagnoseForm, d));
         }
         diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
@@ -527,14 +627,101 @@ public class Application extends Controller {
         	        		break;
         	        		
 	        	        	case "ref_zorgresultaat.xls":
-        	        			/*
-        	        			 * 
-        	        			 * Zie schaal
-        	        			 */
+		  	    	    		  Noc noc = new Noc();
+			    	    		  Nocversie nocversie;
+			    	    		  Nocoverzicht nocoverzicht = new Nocoverzicht();
+			    	    		  
+			    	    		  // Diagnose excel file column numbers
+			    	    		  int Noc_ID = 0, 
+		    						  Noc_Omschrijving = 2,
+    								  Noc_Definitie = 3,
+		    						  Noc_Code = 4;
+									  
+			    	    		  
+				    	    		  // Diagnose table
+			    	    		  noc.noc_id = (long)Long.parseLong(row.getCell(Noc_ID).toString());
+			    	    		  try{
+			    	    			  noc.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    		     System.out.println("Noc already exists");
+			    	    		  }
+		    	    		  	  
+			    	    		  // Diagnoseversie
+			    	    		  nocversie = createNocVersie(row.getCell(Noc_Definitie).toString());
+			    	    		  
+			    	    		  // Diagnoseoverzicht table
+			    	    		  nocoverzicht.noc = noc;
+			    	    		  nocoverzicht.nocversie = nocversie;
+			    	    		  nocoverzicht.nocoverzicht_code = (int)row.getCell(Noc_Code).getNumericCellValue();
+			    	    		  nocoverzicht.nocoverzicht_definitie = row.getCell(Noc_Definitie).toString();
+			    	    		  nocoverzicht.nocoverzicht_omschrijving = row.getCell(Noc_Omschrijving).toString();
+			    	    		  try{
+			    	    			  nocoverzicht.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    		     System.out.println("Nicoverzicht already exists");
+			    	    		  }
         	        		break;
         	        		
 	        	        	case "koppel_diagnose_zorgresultaat_indicator.xls":
-	        	        		
+		  	    	    		  int Noc_NocIndicator_Diagnose_DiagnoseID = 1, 
+  	    	    				  Noc_NocIndicator_Diagnose_NocID = 2,
+	    						  Noc_NocIndicator_Diagnose_IndicatorID = 3;
+	  	    	    		  
+		    	    		  Noc nocdiagnose_noc = Noc.find.byId((long)Long.parseLong(row.getCell(Noc_NocIndicator_Diagnose_NocID).toString()));
+		    	    		  Indicator nocdiagnose_indicator = Indicator.find.byId((long)Long.parseLong(row.getCell(Noc_NocIndicator_Diagnose_IndicatorID).toString()));
+		    	    		  Diagnose nocdiagnose_diagnose = Diagnose.find.byId((long)Long.parseLong(row.getCell(Noc_NocIndicator_Diagnose_DiagnoseID).toString()));
+		    	    		  Noc_Indicator noc_indicator = new Noc_Indicator();
+		    	    		  Noc_Indicator_Diagnose noc_indicator_diagnose = new Noc_Indicator_Diagnose();
+		    	    		  Nocoverzicht nocoverzichtversie;
+		    	    		  Nocversie_Indicator nocversie_indicator = new Nocversie_Indicator();
+		    	    		  
+		    	    			try{
+		    	    				
+		    	    				nocoverzichtversie = Nocoverzicht.find.where()
+		    	    						.ilike("noc.noc_id", row.getCell(Noc_NocIndicator_Diagnose_NocID).toString())
+	    	    						    .findList()
+	    	    						    .get(0);	    
+		    	    		   	}
+		    	    		   	catch(IndexOutOfBoundsException e){
+		    	    		   		nocoverzichtversie = new Nocoverzicht();
+		    	    		   	}
+		    	    		  
+		    	    		  
+		    	    		  noc_indicator.noc = nocdiagnose_noc;
+		    	    		  noc_indicator.indicator = nocdiagnose_indicator;
+		    	    		  noc_indicator.noc_indicator_releasestatus_datum = Calendar.getInstance().getTime();
+		    	    		  
+		    	    		  noc_indicator_diagnose.noc = nocdiagnose_noc;
+		    	    		  noc_indicator_diagnose.indicator = nocdiagnose_indicator;
+		    	    		  noc_indicator_diagnose.diagnose = nocdiagnose_diagnose;
+		    	    		  noc_indicator_diagnose.noc_indicator_diagnose_releasestatus_datum = Calendar.getInstance().getTime();
+		    	    		  
+		    	    		  nocversie_indicator.indicator = nocdiagnose_indicator;
+		    	    		  nocversie_indicator.nocversie = nocoverzichtversie.nocversie;
+		    	    		  
+		    	    		  
+		    	    		  try{
+		    	    			  noc_indicator.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("noc_indicator already exists");
+		    	    		  }
+		    	    		  
+		    	    		  try{
+		    	    			  noc_indicator_diagnose.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("noc_diagnose already exists");
+		    	    		  }		
+		    	    		  
+		    	    		  try{
+		    	    			  nocversie_indicator.save();
+		    	    		  }
+		    	    		  catch (PersistenceException e){
+		    	    		     System.out.println("nocversie_indicator already exists");
+		    	    		  }		
         	        		break;
         	        		
 	        	        	case "ref_activiteit.xls":
@@ -579,7 +766,7 @@ public class Application extends Controller {
 		    	    		  // Diagnoseoverzicht table
 		    	    		  nicoverzicht.nic = nic;
 		    	    		  nicoverzicht.nicversie = nicversie;
-		    	    		  nicoverzicht.nicoverzicht_code = (long)Long.parseLong(row.getCell(Nic_Code).toString());
+		    	    		  nicoverzicht.nicoverzicht_code = (int)row.getCell(Nic_Code).getNumericCellValue();
 		    	    		  nicoverzicht.nicoverzicht_definitie = row.getCell(Nic_Definitie).toString();
 		    	    		  nicoverzicht.nicoverzicht_omschrijving = row.getCell(Nic_Omschrijving).toString();
 		    	    		  try{
@@ -590,15 +777,62 @@ public class Application extends Controller {
 		    	    		  }
         	        		break;
         	        		
-	        	        	case "koppel_diagnose_interventie_activiteit.xls":
-		  	    	    		  Nic nic_koppel = new Nic();
-		  	    	    		  Diagnose diagnose_koppel = new Diagnose();
-		  	    	    		  Nicactiviteit activiteit_koppel = new Nicactiviteit(); 
-		  	    	    		  Nic_Nicactiviteit nic_nicactiviteit = new Nic_Nicactiviteit();
-		  	    	    		  Nic_Diagnose nic_diagnose = new Nic_Diagnose();
-		  	    	    		  int Diagnose_ID_Koppel = 1, 
-		  	    	    			  Nic_ID_Koppel = 2,
-									  Activiteit_ID_Koppel = 3;
+	        	        	case "koppel_diagnose_interventie_activiteit.xls":  	    	    		  
+		  	    	    		  int Nic_NicActiviteit_Diagnose_DiagnoseID = 1, 
+		  	    	    			  Nic_NicActiviteit_Diagnose_NicID = 2,
+									  Nic_NicActiviteit_Diagnose_ActiviteitID = 3;
+		  	    	    		  
+			    	    		  Nic nicdiagnose_nic = Nic.find.byId((long)Long.parseLong(row.getCell(Nic_NicActiviteit_Diagnose_NicID).toString()));
+			    	    		  Nicactiviteit nicdiagnose_activiteit = Nicactiviteit.find.byId((long)Long.parseLong(row.getCell(Nic_NicActiviteit_Diagnose_ActiviteitID).toString()));
+			    	    		  Diagnose nicdiagnose_diagnose = Diagnose.find.byId((long)Long.parseLong(row.getCell(Nic_NicActiviteit_Diagnose_DiagnoseID).toString()));
+			    	    		  Nic_Nicactiviteit nic_nicactiviteit = new Nic_Nicactiviteit();
+			    	    		  Nic_Diagnose nic_diagnose = new Nic_Diagnose();
+			    	    		  Nicoverzicht nicoverzichtversie;
+			    	    		  Nicversie_Nicactiviteit nicversie_nicactiviteit = new Nicversie_Nicactiviteit();
+			    	    		  
+			    	    			try{
+			    	    				
+			    	    				nicoverzichtversie = Nicoverzicht.find.where()
+			    	    						.ilike("nic.nic_id", row.getCell(Nic_NicActiviteit_Diagnose_NicID).toString())
+		    	    						    .findList()
+		    	    						    .get(0);	    
+			    	    		   	}
+			    	    		   	catch(IndexOutOfBoundsException e){
+			    	    		   		nicoverzichtversie = new Nicoverzicht();
+			    	    		   	}
+			    	    		  
+			    	    		  nic_nicactiviteit.nic = nicdiagnose_nic;
+			    	    		  nic_nicactiviteit.nicactiviteit = nicdiagnose_activiteit;
+			    	    		  nic_nicactiviteit.nic_nicactiviteit_releasestatus_datum = Calendar.getInstance().getTime();
+			    	    		  
+			    	    		  nic_diagnose.nic = nicdiagnose_nic;
+			    	    		  nic_diagnose.nicactiviteit = nicdiagnose_activiteit;
+			    	    		  nic_diagnose.diagnose = nicdiagnose_diagnose;
+			    	    		  nic_diagnose.nic_diagnose_releasestatus_datum = Calendar.getInstance().getTime();
+			    	    		  
+			    	    		  nicversie_nicactiviteit.activiteit = nicdiagnose_activiteit;
+			    	    		  nicversie_nicactiviteit.nicversie = nicoverzichtversie.nicversie;
+			    	    		  
+			    	    		  try{
+			    	    			  nic_nicactiviteit.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    		     System.out.println("nic_nicactiviteit already exists");
+			    	    		  }
+			    	    		  
+			    	    		  try{
+			    	    			  nic_diagnose.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    		     System.out.println("nic_diagnose already exists");
+			    	    		  }		    
+			    	    		  
+			    	    		  try{
+			    	    			  nicversie_nicactiviteit.save();
+			    	    		  }
+			    	    		  catch (PersistenceException e){
+			    	    		     System.out.println("nicversie_nicactiviteit already exists");
+			    	    		  }
         	        		break;
 	            		}
 	            	}
@@ -667,9 +901,9 @@ public class Application extends Controller {
     }
     
     /**
-     * Function for adding various Diagnoseversie rows
+     * Function for adding various Nicversie rows
      * @param omschrijving
-     * @return diagnoseversie object
+     * @return nicversie object
      */
     private static Nicversie createNicVersie(String omschrijving){
 		  // Diagnoseversie table
@@ -696,6 +930,38 @@ public class Application extends Controller {
 		     System.out.println("Diagnose already exists");
 		  }
 		return nicversie;
+    }
+    
+    /**
+     * Function for adding various Nocversie rows
+     * @param omschrijving
+     * @return diagnoseversie object
+     */
+    private static Nocversie createNocVersie(String omschrijving){
+		  // Diagnoseversie table
+		  Nocversie nocversie = new Nocversie();
+		  Nocversie_Releasestatus nocversie_releasestatus = new Nocversie_Releasestatus();
+		  Calendar cal = Calendar.getInstance();
+		  nocversie.nocversie_begindatum = cal.getTime();
+		  nocversie.nocversie_einddatum = cal.getTime();
+		  try{
+			  nocversie.save();
+		  }
+		  catch (PersistenceException e){
+		     System.out.println("Diagnoseversie already exists");
+		  }
+		  
+		  // Diagnoseversie_releasestatus table
+		  nocversie_releasestatus.nocversie = nocversie;
+		  nocversie_releasestatus.nocversie_releasestatus_datum = cal.getTime();
+		  nocversie_releasestatus.nocversie_releasestatus_omschrijving = omschrijving;
+		  try{
+			  nocversie_releasestatus.save();
+		  }
+		  catch (PersistenceException e){
+		     System.out.println("Diagnose already exists");
+		  }
+		return nocversie;
     }
 }
             

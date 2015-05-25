@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:6c4c0439ad626009e2a69e8050edbe6974beffef
-// @DATE:Sun May 17 22:44:41 CEST 2015
+// @HASH:b2bed3060c0909d690396aaaf87401354297bc48
+// @DATE:Wed May 20 16:54:37 CEST 2015
 
 package controllers;
 

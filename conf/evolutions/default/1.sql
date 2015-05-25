@@ -175,6 +175,7 @@ create table nocoverzicht (
   noc_id        		       		bigint not null,
   nocversie_id						bigint not null, 
   nocklasse_id  	            	bigint,
+  nocoverzicht_code					bigint,
   nocoverzicht_omschrijving 		text,
   nocoverzicht_definitie 			text,
   
@@ -239,8 +240,8 @@ create table indicator_waarde (
 create table noc_indicator (
   noc_id		   bigint not null,
   indicator_id     bigint not null,
-  noc_indicator_omschrijving text,
-  noc_indicator_definitie text,
+  noc_indicator_releasestatus_datum datetime,
+  noc_indicator_releasestatus_omschrijving text,
 
   constraint pk_indicator primary key (noc_id, indicator_id)
   ) engine=innodb
@@ -276,10 +277,10 @@ create table noc_indicator_diagnose (
   noc_id		   bigint not null,
   indicator_id     bigint not null,
   diagnose_id	   bigint not null,
-  noc_indicator_omschrijving text,
-  noc_indicator_definitie text,
+  noc_indicator_diagnose_releasestatus_datum datetime,
+  noc_indicator_diagnose_releasestatus_omschrijving text,
 
-  constraint pk_indicator primary key (noc_id, indicator_id)
+  constraint pk_indicator primary key (noc_id, indicator_id, diagnose_id)
   ) engine=innodb
 ;
 
@@ -358,8 +359,8 @@ create table nicversie_nicactiviteit (
 create table nic_nicactiviteit (
   nic_id     bigint,
   nicactiviteit_id bigint,
-  nocversie_releasestatus_datum datetime,
-  nocversie_releasestatus_omschrijving text,
+  nic_nicactiviteit_releasestatus_datum datetime,
+  nic_nicactiviteit_releasestatus_omschrijving text,
   
   constraint pk_nic_nicactiviteit primary key (nicactiviteit_id, nic_id)
   ) engine=innodb
@@ -369,8 +370,8 @@ create table nic_diagnose (
   nic_id     bigint,
   nicactiviteit_id bigint,
   diagnose_id bigint,
-  nocversie_releasestatus_datum datetime,
-  nocversie_releasestatus_omschrijving text,
+  nic_diagnose_releasestatus_datum datetime,
+  nic_diagnose_releasestatus_omschrijving text,
   
   constraint pk_nic_nicactiviteit primary key (nicactiviteit_id, nic_id, diagnose_id)
   ) engine=innodb

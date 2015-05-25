@@ -1,4 +1,3 @@
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\samenhangendefactor.scala.html:5: not found: value samfac
-[error] @samfac {
-[error]  ^
-[error] one error found
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:814:  error: cannot find symbol
+[error] 			    	    		  nicversie_nicactiviteit.nicversie = nicoverzichtversie.nicversie;
+[error] 			    	    		                         ^

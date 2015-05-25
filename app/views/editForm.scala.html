@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht])
+@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], d: List[Bepalendkenmerk_Diagnose])
 
 @import helper._
 
@@ -7,9 +7,9 @@
 @main {
 	<script>
 	  $( document ).ready(function() {
-	  var linkBepalendkenmerk = "bepalendkenmerk?f=" + window.location.pathname.substring(11);
-	  var linkRisicofactor = "risicofactor?f=" + window.location.pathname.substring(11);
-	  var linkSamenhangendefactor = "samenhangendefactor?f=" + window.location.pathname.substring(11);
+	  var linkBepalendkenmerk = "bepalendkenmerk?f=" + @id ;
+	  var linkRisicofactor = "risicofactor?f=" + @id ;
+	  var linkSamenhangendefactor = "samenhangendefactor?f=" + @id ;
 	  $.get( linkBepalendkenmerk, function( data ) {
 		  $( ".form" ).append( data );
 		});
@@ -20,7 +20,7 @@
 	  $.get( linkSamenhangendefactor, function( data ) {
 		  $( ".form" ).append( data );
 	  });
-		//$( ".bepalendkenmerk" ).load( "bepalendkenmerk?f=491322316502" );
+	  
 	});
 	</script>
 	
@@ -29,6 +29,7 @@
     @form(routes.Application.update(id)) {
         
         <fieldset class="form">
+		
 		<table class="diagnoses zebra-striped">
             <thead>
                 <tr>
@@ -101,8 +102,46 @@
 						
 					</td>
 				</tr>
+				<tr>
+				    <td>
+						Query
+					</td>
+					<td>
+						getBepalendeKenmerken(id)
+						
+					</td>
+				</tr>
             </tbody>
         </table>
+		<!--
+		@if(d.size() == 0) {
+			
+			<div class="well">
+				<em>Geen bepalende kenmerken gevonden</em>
+			</div>
+			
+		} else {
+			
+			<table class="diagnoses zebra-striped">
+				<thead>
+					<tr>
+						<th>Bepalende kenmerken:</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@for(bepalendkenmerk_diagnose <- d) {
+						<tr>
+							<td>
+								@bepalendkenmerk_diagnose.bepalendkenmerk.bepalendkenmerk_omschrijving
+							</td>
+						</tr>
+					}
+
+				</tbody>
+			</table>
+		}
+		-->
 		<!--
 		a @diagnoseForm("diagnoseoverzicht_omschrijving").value <br />
 		a @diagnoseForm("diagnoseoverzicht_definitie").value <br />

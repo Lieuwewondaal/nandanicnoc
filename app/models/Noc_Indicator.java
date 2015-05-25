@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import play.db.ebean.*;
+import play.data.format.Formats;
 import play.data.validation.*;
 
 
@@ -25,9 +26,10 @@ public class Noc_Indicator extends Model {
 	@JoinColumn(name="noc_id")
 	public Noc noc;
     
-    public String noc_indicator_omschrijving;
+	@Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date noc_indicator_releasestatus_datum;
     
-    public String noc_indicator_definitie;
+    public String noc_indicator_releasestatus_omschrijving;
     
     /**
      * Generic query helper for entity Company with id Long

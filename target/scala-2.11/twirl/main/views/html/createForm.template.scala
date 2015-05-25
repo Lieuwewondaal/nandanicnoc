@@ -39,7 +39,7 @@ Seq[Any](format.raw/*1.41*/("""
 	"""),format.raw/*12.2*/("""}"""),format.raw/*12.3*/(""");
 	</script>
 
-	<!-- Modal -->
+	<!-- Modal 
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 		<div class="modal-content">
@@ -56,7 +56,7 @@ Seq[Any](format.raw/*1.41*/("""
 		  </div>
 		</div>
 	  </div>
-	</div>
+	</div>-->
     <h1>Add a diagnose</h1>
 	
 	"""),_display_(/*35.3*/helper/*35.9*/.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data")/*35.87*/ {_display_(Seq[Any](format.raw/*35.89*/("""
@@ -109,9 +109,9 @@ Seq[Any](format.raw/*1.41*/("""
 }
               /*
                   -- GENERATED --
-                  DATE: Fri May 08 17:03:02 CEST 2015
+                  DATE: Wed May 20 15:13:48 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/createForm.scala.html
-                  HASH: b40ae0488b01845b941dc293f2354d51a9fd5424
+                  HASH: 199571a5b9ca4134a86854ccddc02bbc2e45cfdc
                   MATRIX: 745->1|879->61|911->85|995->40|1023->59|1051->139|1080->143|1091->147|1129->149|1157->151|1227->194|1255->195|1285->198|1376->262|1404->263|2174->1007|2188->1013|2275->1091|2315->1093|2344->1095|2611->1332|2642->1337|2682->1368|2722->1370|2767->1388|2827->1421|2948->1520|2979->1525|3105->1629|3136->1634|3239->1716|3270->1721|3399->1828|3430->1833|3559->1940|3604->1958|3895->2228|3945->2251|4132->2411|4147->2417|4187->2436|4272->2491
                   LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|35->8|36->9|36->9|37->10|39->12|39->12|62->35|62->35|62->35|62->35|63->36|71->44|73->46|73->46|73->46|75->48|77->50|77->50|78->51|78->51|79->52|79->52|80->53|80->53|81->54|81->54|83->56|88->61|91->64|95->68|95->68|95->68|98->71
                   -- GENERATED --

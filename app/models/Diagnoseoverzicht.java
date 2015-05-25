@@ -66,9 +66,13 @@ public class Diagnoseoverzicht extends Model {
     public static Page<Diagnoseoverzicht> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()
-                .ilike("diagnoseoverzicht_omschrijving", "%" + filter + "%")
+            	.or(
+            			com.avaje.ebean.Expr.like("gezondheidspatroon.gezondheidspatroon_omschrijving", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.like("diagnoseoverzicht_omschrijving", "%" + filter + "%")
+        			)
                 .orderBy(sortBy + " " + order)
                 .fetch("diagnose")
+                .fetch("gezondheidspatroon")
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);

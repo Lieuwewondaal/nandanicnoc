@@ -1,22 +1,161 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht])
+@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], d: List[Bepalendkenmerk_Diagnose])
 
 @import helper._
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main {
-    
+	<script>
+	  $( document ).ready(function() {
+	  var linkBepalendkenmerk = "bepalendkenmerk?f=" + @id ;
+	  var linkRisicofactor = "risicofactor?f=" + @id ;
+	  var linkSamenhangendefactor = "samenhangendefactor?f=" + @id ;
+	  $.get( linkBepalendkenmerk, function( data ) {
+		  $( ".form" ).append( data );
+		});
+	  $.get( linkRisicofactor, function( data ) {
+		  $( ".form" ).append( data );
+	  });
+		
+	  $.get( linkSamenhangendefactor, function( data ) {
+		  $( ".form" ).append( data );
+	  });
+	  
+	});
+	</script>
+	
     <h1>Edit diagnose</h1>
     
     @form(routes.Application.update(id)) {
         
-        <fieldset>
-        
+        <fieldset class="form">
+		
+		<table class="diagnoses zebra-striped">
+            <thead>
+                <tr>
+				  <th>Detail</th>
+				  <th>Waarde</th>
+                </tr>
+            </thead>
+            <tbody>
+				<tr>
+				    <td>
+						Code
+					</td>
+					<td>
+						@if(diagnoseForm("diagnose_code") == null) {
+							<em>-</em>
+						} else{
+							@diagnoseForm("diagnose_code").value
+						}
+						
+					</td>
+				</tr>
+				<tr>
+					<td>Omschrijving</td>
+					<td>
+						@diagnoseForm("diagnoseoverzicht_omschrijving").value
+					</td>
+				</tr>
+				<tr>
+					<td>Defintie</td>
+					<td>
+						@diagnoseForm("diagnoseoverzicht_definitie").value
+					</td>
+				</tr>
+				<tr>
+				    <td>
+						Domein
+					</td>
+					<td>
+						@if(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code") == null) {
+							<em>-</em>
+						} else{
+							@diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code").value
+						}
+						
+					</td>
+				</tr>
+				<tr>
+				    <td>
+						Klasse
+					</td>
+					<td>
+						@if(diagnoseForm("diagnoseklasse.diagnoseklasse_code") == null) {
+							<em>-</em>
+						} else{
+							@diagnoseForm("diagnoseklasse.diagnoseklasse_code").value
+						}
+						
+					</td>
+				</tr>
+				<tr>
+				    <td>
+						Gezondheidspatroon
+					</td>
+					<td>
+						@if(diagnoseForm("gezondheidspatroon.gezondheidspatroon_omschrijving") == null) {
+							<em>-</em>
+						} else{
+							@diagnoseForm("gezondheidspatroon.gezondheidspatroon_omschrijving").value
+						}
+						
+					</td>
+				</tr>
+				<tr>
+				    <td>
+						Query
+					</td>
+					<td>
+						getBepalendeKenmerken(id)
+						
+					</td>
+				</tr>
+            </tbody>
+        </table>
+		<!--
+		@if(d.size() == 0) {
+			
+			<div class="well">
+				<em>Geen bepalende kenmerken gevonden</em>
+			</div>
+			
+		} else {
+			
+			<table class="diagnoses zebra-striped">
+				<thead>
+					<tr>
+						<th>Bepalende kenmerken:</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@for(bepalendkenmerk_diagnose <- d) {
+						<tr>
+							<td>
+								@bepalendkenmerk_diagnose.bepalendkenmerk.bepalendkenmerk_omschrijving
+							</td>
+						</tr>
+					}
+
+				</tbody>
+			</table>
+		}
+		-->
+		<!--
+		a @diagnoseForm("diagnoseoverzicht_omschrijving").value <br />
+		a @diagnoseForm("diagnoseoverzicht_definitie").value <br />
+		a @diagnoseForm("diagnose_code").value <br />
+		a @diagnoseForm("diagnoseklasse_code").value <br />
+		a @diagnoseForm("diagnosedomein_code").value <br />
+		a @diagnoseForm("gezondheidspatroon_id").value <br />
+		a @diagnoseForm("diagnoseklasse.diagnoseklasse_code").value
+		
             @inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose naam", '_help -> "")
 			@inputText(diagnoseForm("diagnoseoverzicht_definitie"), '_label -> "Diagnose omschrijving", '_help -> "")
 			@inputText(diagnoseForm("diagnose_code"), '_label -> "Diagnose code", '_help -> "")
-			@inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_klasse"), '_label -> "Diagnose klasse", '_help -> "")
-			@inputText(diagnoseForm("diagnosedomein.diagnosedomein_domein"), '_label -> "Diagnose domein", '_help -> "")
+			@inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_code"), '_label -> "Diagnose klasse", '_help -> "")
+			@inputText(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code"), '_label -> "Diagnose domein", '_help -> "")
 			
             @select(
                 diagnoseForm("gezondheidspatroon.gezondheidspatroon_id"), 
@@ -25,12 +164,12 @@
                 '_showConstraints -> false
             )
             
-
+		-->
         </fieldset>
         
         <div class="actions">
-            <input type="submit" value="Save this diagnose" class="btn primary"> or 
-            <a href="@routes.Application.list()" class="btn">Cancel</a> 
+            <!--<input type="submit" value="Save this diagnose" class="btn primary"> or -->
+            <a href="@routes.Application.list()" class="btn">Terug</a> 
         </div>
         
     }

@@ -1,0 +1,36 @@
+@(currentPage: com.avaje.ebean.Page[Risicofactor_Diagnose], currentSortBy: String, currentOrder: String, currentFilter: String)
+
+
+
+
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Geen risicofactors gevonden</em>
+        </div>
+        
+    } else {
+        
+        <table class="diagnoses zebra-striped">
+            <thead>
+                <tr>
+					<th>Risicofactors:</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(risicofactor_diagnose <- currentPage.getList) {
+                    <tr>
+                        <td>
+							@risicofactor_diagnose.risicofactor.risicofactor_omschrijving
+						</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+        
+
+            

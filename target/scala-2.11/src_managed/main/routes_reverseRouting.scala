@@ -1,6 +1,6 @@
 // @SOURCE:C:/Users/Vincent/workspace/verpleegkunde-app/conf/routes
-// @HASH:6c4c0439ad626009e2a69e8050edbe6974beffef
-// @DATE:Sun May 17 22:44:41 CEST 2015
+// @HASH:b2bed3060c0909d690396aaaf87401354297bc48
+// @DATE:Wed May 20 16:54:37 CEST 2015
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -15,13 +15,14 @@ import _root_.play.libs.F
 import Router.queryString
 
 
-// @LINE:29
-// @LINE:26
+// @LINE:30
+// @LINE:27
+// @LINE:24
 // @LINE:23
-// @LINE:22
+// @LINE:20
 // @LINE:19
 // @LINE:18
-// @LINE:17
+// @LINE:15
 // @LINE:14
 // @LINE:13
 // @LINE:12
@@ -29,11 +30,11 @@ import Router.queryString
 // @LINE:6
 package controllers {
 
-// @LINE:29
+// @LINE:30
 class ReverseAssets {
 
 
-// @LINE:29
+// @LINE:30
 def at(file:String): Call = {
    implicit val _rrc = new ReverseRouteContext(Map(("path", "/public")))
    Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
@@ -43,12 +44,13 @@ def at(file:String): Call = {
 }
                           
 
-// @LINE:26
+// @LINE:27
+// @LINE:24
 // @LINE:23
-// @LINE:22
+// @LINE:20
 // @LINE:19
 // @LINE:18
-// @LINE:17
+// @LINE:15
 // @LINE:14
 // @LINE:13
 // @LINE:12
@@ -57,14 +59,21 @@ def at(file:String): Call = {
 class ReverseApplication {
 
 
-// @LINE:26
+// @LINE:15
+def getNicActiviteit(p:Int = 0, s:String = "", o:String = "asc", f:String = ""): Call = {
+   import ReverseRouteContext.empty
+   Call("GET", _prefix + { _defaultPrefix } + "diagnoses/nic_diagnose" + queryString(List(if(p == 0) None else Some(implicitly[QueryStringBindable[Int]].unbind("p", p)), if(s == "") None else Some(implicitly[QueryStringBindable[String]].unbind("s", s)), if(o == "asc") None else Some(implicitly[QueryStringBindable[String]].unbind("o", o)), if(f == "") None else Some(implicitly[QueryStringBindable[String]].unbind("f", f)))))
+}
+                        
+
+// @LINE:27
 def delete(id:Long): Call = {
    import ReverseRouteContext.empty
    Call("POST", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id) + "/delete")
 }
                         
 
-// @LINE:19
+// @LINE:20
 def upload(): Call = {
    import ReverseRouteContext.empty
    Call("POST", _prefix + { _defaultPrefix } + "diagnoses")
@@ -78,21 +87,21 @@ def getBepalendkenmerk(p:Int = 0, s:String = "", o:String = "asc", f:String = ""
 }
                         
 
-// @LINE:17
+// @LINE:18
 def create(): Call = {
    import ReverseRouteContext.empty
    Call("GET", _prefix + { _defaultPrefix } + "diagnoses/new")
 }
                         
 
-// @LINE:22
+// @LINE:23
 def edit(id:Long): Call = {
    import ReverseRouteContext.empty
    Call("GET", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                         
 
-// @LINE:23
+// @LINE:24
 def update(id:Long): Call = {
    import ReverseRouteContext.empty
    Call("POST", _prefix + { _defaultPrefix } + "diagnoses/" + implicitly[PathBindable[Long]].unbind("id", id))
@@ -120,7 +129,7 @@ def getSamenhangendefactor(p:Int = 0, s:String = "", o:String = "asc", f:String 
 }
                         
 
-// @LINE:18
+// @LINE:19
 def save(): Call = {
    import ReverseRouteContext.empty
    Call("GET", _prefix + { _defaultPrefix } + "diagnoses/now")
@@ -140,13 +149,14 @@ def index(): Call = {
                   
 
 
-// @LINE:29
-// @LINE:26
+// @LINE:30
+// @LINE:27
+// @LINE:24
 // @LINE:23
-// @LINE:22
+// @LINE:20
 // @LINE:19
 // @LINE:18
-// @LINE:17
+// @LINE:15
 // @LINE:14
 // @LINE:13
 // @LINE:12
@@ -155,11 +165,11 @@ def index(): Call = {
 package controllers.javascript {
 import ReverseRouteContext.empty
 
-// @LINE:29
+// @LINE:30
 class ReverseAssets {
 
 
-// @LINE:29
+// @LINE:30
 def at : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Assets.at",
    """
@@ -173,12 +183,13 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:26
+// @LINE:27
+// @LINE:24
 // @LINE:23
-// @LINE:22
+// @LINE:20
 // @LINE:19
 // @LINE:18
-// @LINE:17
+// @LINE:15
 // @LINE:14
 // @LINE:13
 // @LINE:12
@@ -187,7 +198,18 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
 class ReverseApplication {
 
 
-// @LINE:26
+// @LINE:15
+def getNicActiviteit : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Application.getNicActiviteit",
+   """
+      function(p,s,o,f) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "diagnoses/nic_diagnose" + _qS([(p == null ? null : (""" + implicitly[QueryStringBindable[Int]].javascriptUnbind + """)("p", p)), (s == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("s", s)), (o == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("o", o)), (f == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("f", f))])})
+      }
+   """
+)
+                        
+
+// @LINE:27
 def delete : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.delete",
    """
@@ -198,7 +220,7 @@ def delete : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:19
+// @LINE:20
 def upload : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.upload",
    """
@@ -220,7 +242,7 @@ def getBepalendkenmerk : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:17
+// @LINE:18
 def create : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.create",
    """
@@ -231,7 +253,7 @@ def create : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:22
+// @LINE:23
 def edit : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.edit",
    """
@@ -242,7 +264,7 @@ def edit : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:23
+// @LINE:24
 def update : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.update",
    """
@@ -286,7 +308,7 @@ def getSamenhangendefactor : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:18
+// @LINE:19
 def save : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Application.save",
    """
@@ -314,13 +336,14 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
-// @LINE:29
-// @LINE:26
+// @LINE:30
+// @LINE:27
+// @LINE:24
 // @LINE:23
-// @LINE:22
+// @LINE:20
 // @LINE:19
 // @LINE:18
-// @LINE:17
+// @LINE:15
 // @LINE:14
 // @LINE:13
 // @LINE:12
@@ -329,11 +352,11 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
 package controllers.ref {
 
 
-// @LINE:29
+// @LINE:30
 class ReverseAssets {
 
 
-// @LINE:29
+// @LINE:30
 def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Assets.at(path, file), HandlerDef(this.getClass.getClassLoader, "", "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
 )
@@ -342,12 +365,13 @@ def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.
 }
                           
 
-// @LINE:26
+// @LINE:27
+// @LINE:24
 // @LINE:23
-// @LINE:22
+// @LINE:20
 // @LINE:19
 // @LINE:18
-// @LINE:17
+// @LINE:15
 // @LINE:14
 // @LINE:13
 // @LINE:12
@@ -356,13 +380,19 @@ def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.
 class ReverseApplication {
 
 
-// @LINE:26
+// @LINE:15
+def getNicActiviteit(p:Int, s:String, o:String, f:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Application.getNicActiviteit(p, s, o, f), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "getNicActiviteit", Seq(classOf[Int], classOf[String], classOf[String], classOf[String]), "GET", """""", _prefix + """diagnoses/nic_diagnose""")
+)
+                      
+
+// @LINE:27
 def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.delete(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "delete", Seq(classOf[Long]), "POST", """ Delete a computer""", _prefix + """diagnoses/$id<[^/]+>/delete""")
 )
                       
 
-// @LINE:19
+// @LINE:20
 def upload(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.upload(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "upload", Seq(), "POST", """""", _prefix + """diagnoses""")
 )
@@ -374,19 +404,19 @@ def getBepalendkenmerk(p:Int, s:String, o:String, f:String): play.api.mvc.Handle
 )
                       
 
-// @LINE:17
+// @LINE:18
 def create(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.create(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "create", Seq(), "GET", """ Add computer""", _prefix + """diagnoses/new""")
 )
                       
 
-// @LINE:22
+// @LINE:23
 def edit(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.edit(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "edit", Seq(classOf[Long]), "GET", """ Edit existing computer""", _prefix + """diagnoses/$id<[^/]+>""")
 )
                       
 
-// @LINE:23
+// @LINE:24
 def update(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.update(id), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "update", Seq(classOf[Long]), "POST", """""", _prefix + """diagnoses/$id<[^/]+>""")
 )
@@ -410,7 +440,7 @@ def getSamenhangendefactor(p:Int, s:String, o:String, f:String): play.api.mvc.Ha
 )
                       
 
-// @LINE:18
+// @LINE:19
 def save(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.save(), HandlerDef(this.getClass.getClassLoader, "", "controllers.Application", "save", Seq(), "GET", """""", _prefix + """diagnoses/now""")
 )
