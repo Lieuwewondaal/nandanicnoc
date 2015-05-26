@@ -30,6 +30,9 @@ public class Nic_Nicactiviteit extends Model {
     public Date nic_nicactiviteit_releasestatus_datum;
     
     public String nic_nicactiviteit_releasestatus_omschrijving;
+    
+    @OneToMany(mappedBy="nicactiviteit")
+	public List<Nic_Diagnose> nic_diagnose;
     /**
      * Generic query helper for entity Company with id Long
      */

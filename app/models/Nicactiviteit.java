@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+
 import javax.persistence.*;
 
 import play.db.ebean.*;
@@ -23,6 +24,8 @@ public class Nicactiviteit extends Model {
 	
 	public String nicactiviteit_omschrijving;
     
+    @OneToMany(mappedBy="nicactiviteit")
+	public List<Nic_Nicactiviteit> nicactiviteit;
     /**
      * Generic query helper for entity Diagnose with id Long
      */

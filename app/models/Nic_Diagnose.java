@@ -56,12 +56,12 @@ public class Nic_Diagnose extends Model {
      * @param filter Filter applied on the name column
      */
     public static Page<Nic_Diagnose> page(int page, int pageSize, String sortBy, String order, String filter) {
-    	String sql = "select t0.nic_diagnose_releasestatus_datum c0, t0.nic_diagnose_releasestatus_omschrijving c1,t0.nicactiviteit_id c2,t0.diagnose_id c3,t1.nic_id c4,t1.nicoverzicht_omschrijving c5 from nic_diagnose t0 left outer join nicoverzicht t1 on t1.nic_id = t0.nic_id where diagnose_id = '491322316502'";
+    	/*String sql = "select t0.nic_diagnose_releasestatus_datum c0, t0.nic_diagnose_releasestatus_omschrijving c1,t0.nicactiviteit_id c2,t0.diagnose_id c3,t1.nic_id c4,t1.nicoverzicht_omschrijving c5 from nic_diagnose t0 left outer join nicoverzicht t1 on t1.nic_id = t0.nic_id where diagnose_id = '491322316502'";
     	 
     	 SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
     	 
     	 // execute the query returning a List of MapBean objects
-    	 List<SqlRow> list = sqlQuery.findList();
+    	 List<SqlRow> list = sqlQuery.findList();*/
     	 
         return 
         		find

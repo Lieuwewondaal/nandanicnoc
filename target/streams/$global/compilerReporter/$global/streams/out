@@ -1,3 +1,7 @@
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:814:  error: cannot find symbol
-[error] 			    	    		  nicversie_nicactiviteit.nicversie = nicoverzichtversie.nicversie;
-[error] 			    	    		                         ^
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\editForm.scala.html:137: value nicoverzicht is not a member of models.Nic_Nicactiviteit
+[error] 								@interventies.nicoverzicht.get(0).nicoverzicht_omschrijving
+[error] 								              ^
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\editForm.scala.html:140: value nicoverzicht is not a member of models.Nic_Nicactiviteit
+[error] 								@interventies.nicoverzicht.get(0).nicoverzicht_definitie
+[error] 								              ^
+[error] two errors found

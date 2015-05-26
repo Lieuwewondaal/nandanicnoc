@@ -78,7 +78,7 @@ public class Application extends Controller {
 			    .findList()
 			    .get(0)
         );
-    	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
+    	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
     			.find
     			.where()
     			.ilike("diagnose_id", id.toString())
@@ -98,13 +98,13 @@ public class Application extends Controller {
         }
         */
         
-    	/*List<Nic> n = Nic
+    	List<Nic> nic = Nic
     			.find
-    			.fetch("nicoverzicht", new FetchConfig().query())
+    			.fetch("nicoverzicht")
     			.fetch("nic_diagnose")
     			.where()
-    			.like("nic_id", "491322316502")
-                .findList();*/
+    			.like("nic_diagnose.diagnose", "491322316502")
+                .findList();
 
     	
         /*response().setContentType("application/json");
@@ -115,7 +115,7 @@ public class Application extends Controller {
                 .getPage(page);
         */
         return ok(
-            editForm.render(id, diagnoseForm, d)
+            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, nic)
         );
     }
     
@@ -210,12 +210,20 @@ public class Application extends Controller {
     public static Result update(Long diagnose_id) {
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
         if(diagnoseForm.hasErrors()) {
-        	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
+        	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
         			.find
         			.where().
                     ilike("diagnose_id", diagnose_id.toString())
                     .findList();
-            return badRequest(editForm.render(diagnose_id, diagnoseForm, d));
+        	List<Nic> nic = Nic
+        			.find
+        			.fetch("nicoverzicht")
+        			.fetch("nic_diagnose")
+        			.where()
+        			.like("nic_diagnose.diagnose", "491322316502")
+                    .findList();
+        	
+            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, nic));
         }
         diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");

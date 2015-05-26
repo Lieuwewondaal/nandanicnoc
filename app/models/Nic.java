@@ -22,10 +22,10 @@ public class Nic extends Model {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long nic_id;
 	
-	@OneToMany
+    @OneToMany(mappedBy="nic")
 	public List<Nicoverzicht> nicoverzicht;
     
-	@OneToMany
+	@OneToMany(mappedBy="nic")
 	public List<Nic_Diagnose> nic_diagnose;
 	
     /**

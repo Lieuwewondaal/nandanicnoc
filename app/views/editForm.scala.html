@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], d: List[Bepalendkenmerk_Diagnose])
+@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic])
 
 @import helper._
 
@@ -113,11 +113,11 @@
 				</tr>
             </tbody>
         </table>
-		<!--
-		@if(d.size() == 0) {
+
+		@if(nic.size() == 0) {
 			
 			<div class="well">
-				<em>Geen bepalende kenmerken gevonden</em>
+				<em>Geen interventies gevonden</em>
 			</div>
 			
 		} else {
@@ -125,15 +125,19 @@
 			<table class="diagnoses zebra-striped">
 				<thead>
 					<tr>
-						<th>Bepalende kenmerken:</th>
+						<th>Interventie omschrijving:</th>
+						<th>Interventie definitie:
 					</tr>
 				</thead>
 				<tbody>
 
-					@for(bepalendkenmerk_diagnose <- d) {
+					@for(interventies <- nic) {
 						<tr>
 							<td>
-								@bepalendkenmerk_diagnose.bepalendkenmerk.bepalendkenmerk_omschrijving
+								@interventies.nicoverzicht.get(0).nicoverzicht_omschrijving
+							</td>
+							<td>
+								@interventies.nicoverzicht.get(0).nicoverzicht_definitie
 							</td>
 						</tr>
 					}
@@ -141,7 +145,6 @@
 				</tbody>
 			</table>
 		}
-		-->
 		<!--
 		a @diagnoseForm("diagnoseoverzicht_omschrijving").value <br />
 		a @diagnoseForm("diagnoseoverzicht_definitie").value <br />
