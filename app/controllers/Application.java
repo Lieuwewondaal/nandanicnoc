@@ -98,12 +98,14 @@ public class Application extends Controller {
         }
         */
         
-    	List<Nic> nic = Nic
+    	List<Nic_Diagnose> nic = Nic_Diagnose
     			.find
-    			.fetch("nicoverzicht")
-    			.fetch("nic_diagnose")
+    			.fetch("nic")
+    			.fetch("nic.nicoverzicht")
+    			.fetch("diagnose")
+    			.fetch("nicactiviteit")
     			.where()
-    			.like("nic_diagnose.diagnose", "491322316502")
+    			.like("diagnose", id.toString())
                 .findList();
 
     	
@@ -215,10 +217,12 @@ public class Application extends Controller {
         			.where().
                     ilike("diagnose_id", diagnose_id.toString())
                     .findList();
-        	List<Nic> nic = Nic
+        	List<Nic_Diagnose> nic = Nic_Diagnose
         			.find
-        			.fetch("nicoverzicht")
+        			.fetch("nic")
+        			.fetch("nic.nicoverzicht")
         			.fetch("nic_diagnose")
+        			.fetch("nicactiviteit", new FetchConfig().query())
         			.where()
         			.like("nic_diagnose.diagnose", "491322316502")
                     .findList();

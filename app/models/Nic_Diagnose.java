@@ -30,11 +30,11 @@ public class Nic_Diagnose extends Model {
     
     @ManyToOne
 	@JoinColumn(name="nicactiviteit_id")
-	public Nicactiviteit nicactiviteit;
+    public Nicactiviteit nicactiviteit;
     
     @ManyToOne
 	@JoinColumn(name="diagnose_id")
-	public Diagnose diagnose;
+    public Diagnose diagnose;
     
     @Formats.DateTime(pattern="yyyy-MM-dd")
     public Date nic_diagnose_releasestatus_datum;

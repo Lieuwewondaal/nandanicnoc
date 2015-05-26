@@ -20,13 +20,13 @@ import play.mvc.Http.Context.Implicit._
 import views.html._
 
 /**/
-object editForm extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template4[Long,Form[Diagnoseoverzicht],List[Bepalendkenmerk_Diagnose],List[Nic],play.twirl.api.HtmlFormat.Appendable] {
+object editForm extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template4[Long,Form[Diagnoseoverzicht],List[Bepalendkenmerk_Diagnose],List[Nic_Diagnose],play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply/*1.2*/(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic]):play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*1.2*/(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic_Diagnose]):play.twirl.api.HtmlFormat.Appendable = {
       _display_ {import helper._
 implicit def /*5.2*/implicitFieldConstructor/*5.26*/ = {{ FieldConstructor(twitterBootstrapInput.render) }};
-Seq[Any](format.raw/*1.125*/("""
+Seq[Any](format.raw/*1.134*/("""
 
 """),format.raw/*4.1*/("""
 """),format.raw/*5.80*/(""" 
@@ -153,79 +153,83 @@ Seq[Any](format.raw/*1.125*/("""
 				<thead>
 					<tr>
 						<th>Interventie omschrijving:</th>
-						<th>Interventie definitie:
+						<th>Interventie definitie:</th>
+						<th>Interventie actie:</th>
 					</tr>
 				</thead>
 				<tbody>
 
-					"""),_display_(/*134.7*/for(interventies <- nic) yield /*134.31*/ {_display_(Seq[Any](format.raw/*134.33*/("""
-						"""),format.raw/*135.7*/("""<tr>
+					"""),_display_(/*135.7*/for(interventies <- nic) yield /*135.31*/ {_display_(Seq[Any](format.raw/*135.33*/("""
+						"""),format.raw/*136.7*/("""<tr>
 							<td>
-								"""),_display_(/*137.10*/interventies/*137.22*/.nicoverzicht.get(0).nicoverzicht_omschrijving),format.raw/*137.68*/("""
-							"""),format.raw/*138.8*/("""</td>
+								"""),_display_(/*138.10*/interventies/*138.22*/.nic.nicoverzicht.get(0).nicoverzicht_omschrijving),format.raw/*138.72*/("""
+							"""),format.raw/*139.8*/("""</td>
 							<td>
-								"""),_display_(/*140.10*/interventies/*140.22*/.nicoverzicht.get(0).nicoverzicht_definitie),format.raw/*140.65*/("""
-							"""),format.raw/*141.8*/("""</td>
+								"""),_display_(/*141.10*/interventies/*141.22*/.nic.nicoverzicht.get(0).nicoverzicht_definitie),format.raw/*141.69*/("""
+							"""),format.raw/*142.8*/("""</td>
+							<td>
+								"""),_display_(/*144.10*/interventies/*144.22*/.nicactiviteit.nicactiviteit_omschrijving),format.raw/*144.63*/("""
+							"""),format.raw/*145.8*/("""</td>
 						</tr>
-					""")))}),format.raw/*143.7*/("""
+					""")))}),format.raw/*147.7*/("""
 
-				"""),format.raw/*145.5*/("""</tbody>
+				"""),format.raw/*149.5*/("""</tbody>
 			</table>
-		""")))}),format.raw/*147.4*/("""
-		"""),format.raw/*148.3*/("""<!--
-		a """),_display_(/*149.6*/diagnoseForm("diagnoseoverzicht_omschrijving")/*149.52*/.value),format.raw/*149.58*/(""" """),format.raw/*149.59*/("""<br />
-		a """),_display_(/*150.6*/diagnoseForm("diagnoseoverzicht_definitie")/*150.49*/.value),format.raw/*150.55*/(""" """),format.raw/*150.56*/("""<br />
-		a """),_display_(/*151.6*/diagnoseForm("diagnose_code")/*151.35*/.value),format.raw/*151.41*/(""" """),format.raw/*151.42*/("""<br />
-		a """),_display_(/*152.6*/diagnoseForm("diagnoseklasse_code")/*152.41*/.value),format.raw/*152.47*/(""" """),format.raw/*152.48*/("""<br />
-		a """),_display_(/*153.6*/diagnoseForm("diagnosedomein_code")/*153.41*/.value),format.raw/*153.47*/(""" """),format.raw/*153.48*/("""<br />
-		a """),_display_(/*154.6*/diagnoseForm("gezondheidspatroon_id")/*154.43*/.value),format.raw/*154.49*/(""" """),format.raw/*154.50*/("""<br />
-		a """),_display_(/*155.6*/diagnoseForm("diagnoseklasse.diagnoseklasse_code")/*155.56*/.value),format.raw/*155.62*/("""
+		""")))}),format.raw/*151.4*/("""
+		"""),format.raw/*152.3*/("""<!--
+		a """),_display_(/*153.6*/diagnoseForm("diagnoseoverzicht_omschrijving")/*153.52*/.value),format.raw/*153.58*/(""" """),format.raw/*153.59*/("""<br />
+		a """),_display_(/*154.6*/diagnoseForm("diagnoseoverzicht_definitie")/*154.49*/.value),format.raw/*154.55*/(""" """),format.raw/*154.56*/("""<br />
+		a """),_display_(/*155.6*/diagnoseForm("diagnose_code")/*155.35*/.value),format.raw/*155.41*/(""" """),format.raw/*155.42*/("""<br />
+		a """),_display_(/*156.6*/diagnoseForm("diagnoseklasse_code")/*156.41*/.value),format.raw/*156.47*/(""" """),format.raw/*156.48*/("""<br />
+		a """),_display_(/*157.6*/diagnoseForm("diagnosedomein_code")/*157.41*/.value),format.raw/*157.47*/(""" """),format.raw/*157.48*/("""<br />
+		a """),_display_(/*158.6*/diagnoseForm("gezondheidspatroon_id")/*158.43*/.value),format.raw/*158.49*/(""" """),format.raw/*158.50*/("""<br />
+		a """),_display_(/*159.6*/diagnoseForm("diagnoseklasse.diagnoseklasse_code")/*159.56*/.value),format.raw/*159.62*/("""
 		
-            """),_display_(/*157.14*/inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose naam", '_help -> "")),format.raw/*157.113*/("""
-			"""),_display_(/*158.5*/inputText(diagnoseForm("diagnoseoverzicht_definitie"), '_label -> "Diagnose omschrijving", '_help -> "")),format.raw/*158.109*/("""
-			"""),_display_(/*159.5*/inputText(diagnoseForm("diagnose_code"), '_label -> "Diagnose code", '_help -> "")),format.raw/*159.87*/("""
-			"""),_display_(/*160.5*/inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_code"), '_label -> "Diagnose klasse", '_help -> "")),format.raw/*160.110*/("""
-			"""),_display_(/*161.5*/inputText(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code"), '_label -> "Diagnose domein", '_help -> "")),format.raw/*161.125*/("""
+            """),_display_(/*161.14*/inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose naam", '_help -> "")),format.raw/*161.113*/("""
+			"""),_display_(/*162.5*/inputText(diagnoseForm("diagnoseoverzicht_definitie"), '_label -> "Diagnose omschrijving", '_help -> "")),format.raw/*162.109*/("""
+			"""),_display_(/*163.5*/inputText(diagnoseForm("diagnose_code"), '_label -> "Diagnose code", '_help -> "")),format.raw/*163.87*/("""
+			"""),_display_(/*164.5*/inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_code"), '_label -> "Diagnose klasse", '_help -> "")),format.raw/*164.110*/("""
+			"""),_display_(/*165.5*/inputText(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code"), '_label -> "Diagnose domein", '_help -> "")),format.raw/*165.125*/("""
 			
-            """),_display_(/*163.14*/select(
+            """),_display_(/*167.14*/select(
                 diagnoseForm("gezondheidspatroon.gezondheidspatroon_id"), 
                 options(Gezondheidspatroon.options), 
                 '_label -> "Patroon", '_default -> "-- Kies een patroon --",
                 '_showConstraints -> false
-            )),format.raw/*168.14*/("""
+            )),format.raw/*172.14*/("""
             
-		"""),format.raw/*170.3*/("""-->
+		"""),format.raw/*174.3*/("""-->
         </fieldset>
         
         <div class="actions">
             <!--<input type="submit" value="Save this diagnose" class="btn primary"> or -->
-            <a href=""""),_display_(/*175.23*/routes/*175.29*/.Application.list()),format.raw/*175.48*/("""" class="btn">Terug</a> 
+            <a href=""""),_display_(/*179.23*/routes/*179.29*/.Application.list()),format.raw/*179.48*/("""" class="btn">Terug</a> 
         </div>
         
-    """)))}),format.raw/*178.6*/("""
-    
-    """),_display_(/*180.6*/form(routes.Application.delete(id), 'class -> "topRight")/*180.63*/ {_display_(Seq[Any](format.raw/*180.65*/("""
-        """),format.raw/*181.9*/("""<input type="submit" value="Delete this diagnose" class="btn danger">
     """)))}),format.raw/*182.6*/("""
     
-""")))}),format.raw/*184.2*/("""
+    """),_display_(/*184.6*/form(routes.Application.delete(id), 'class -> "topRight")/*184.63*/ {_display_(Seq[Any](format.raw/*184.65*/("""
+        """),format.raw/*185.9*/("""<input type="submit" value="Delete this diagnose" class="btn danger">
+    """)))}),format.raw/*186.6*/("""
+    
+""")))}),format.raw/*188.2*/("""
 """))}
   }
 
-  def render(id:Long,diagnoseForm:Form[Diagnoseoverzicht],bepalendkenmerk_diagnose:List[Bepalendkenmerk_Diagnose],nic:List[Nic]): play.twirl.api.HtmlFormat.Appendable = apply(id,diagnoseForm,bepalendkenmerk_diagnose,nic)
+  def render(id:Long,diagnoseForm:Form[Diagnoseoverzicht],bepalendkenmerk_diagnose:List[Bepalendkenmerk_Diagnose],nic:List[Nic_Diagnose]): play.twirl.api.HtmlFormat.Appendable = apply(id,diagnoseForm,bepalendkenmerk_diagnose,nic)
 
-  def f:((Long,Form[Diagnoseoverzicht],List[Bepalendkenmerk_Diagnose],List[Nic]) => play.twirl.api.HtmlFormat.Appendable) = (id,diagnoseForm,bepalendkenmerk_diagnose,nic) => apply(id,diagnoseForm,bepalendkenmerk_diagnose,nic)
+  def f:((Long,Form[Diagnoseoverzicht],List[Bepalendkenmerk_Diagnose],List[Nic_Diagnose]) => play.twirl.api.HtmlFormat.Appendable) = (id,diagnoseForm,bepalendkenmerk_diagnose,nic) => apply(id,diagnoseForm,bepalendkenmerk_diagnose,nic)
 
   def ref: this.type = this
 
 }
               /*
                   -- GENERATED --
-                  DATE: Tue May 26 13:51:12 CEST 2015
+                  DATE: Tue May 26 14:27:23 CEST 2015
                   SOURCE: C:/Users/Vincent/workspace/verpleegkunde-app/app/views/editForm.scala.html
-                  HASH: 205db14a1a935dd241180a50a437552ef762de1f
-                  MATRIX: 789->1|1007->145|1039->169|1124->124|1152->143|1180->223|1209->227|1220->231|1258->233|1286->235|1356->278|1384->279|1415->283|1492->333|1515->335|1544->336|1620->385|1643->387|1672->388|1762->451|1785->453|1814->454|1892->504|1921->505|1953->510|2011->541|2039->542|2115->590|2144->591|2176->596|2235->628|2263->629|2349->687|2378->688|2410->693|2469->725|2497->726|2532->734|2560->735|2639->788|2683->823|2723->825|2768->843|3072->1121|3122->1162|3162->1164|3197->1172|3233->1191|3246->1195|3285->1196|3320->1205|3358->1234|3385->1240|3423->1248|3463->1261|3558->1330|3613->1376|3640->1382|3673->1388|3764->1453|3816->1496|3843->1502|3876->1508|3981->1587|4067->1664|4107->1666|4142->1674|4178->1693|4191->1697|4230->1698|4265->1707|4339->1772|4366->1778|4404->1786|4444->1799|4549->1878|4620->1940|4660->1942|4695->1950|4731->1969|4744->1973|4783->1974|4818->1983|4877->2033|4904->2039|4942->2047|4982->2060|5099->2151|5186->2229|5226->2231|5261->2239|5297->2258|5310->2262|5349->2263|5385->2272|5461->2338|5489->2344|5528->2352|5569->2365|5769->2538|5798->2557|5839->2559|5875->2567|5970->2644|5984->2649|6024->2650|6060->2658|6266->2837|6307->2861|6348->2863|6383->2870|6437->2896|6459->2908|6527->2954|6563->2962|6618->2989|6640->3001|6705->3044|6741->3052|6796->3076|6830->3082|6885->3106|6916->3109|6953->3119|7009->3165|7037->3171|7067->3172|7106->3184|7159->3227|7187->3233|7217->3234|7256->3246|7295->3275|7323->3281|7353->3282|7392->3294|7437->3329|7465->3335|7495->3336|7534->3348|7579->3383|7607->3389|7637->3390|7676->3402|7723->3439|7751->3445|7781->3446|7820->3458|7880->3508|7908->3514|7953->3531|8075->3630|8107->3635|8234->3739|8266->3744|8370->3826|8402->3831|8530->3936|8562->3941|8705->4061|8751->4079|9043->4349|9087->4365|9292->4542|9308->4548|9349->4567|9434->4621|9472->4632|9539->4689|9580->4691|9617->4700|9723->4775|9761->4782
-                  LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|35->8|36->9|36->9|37->10|37->10|37->10|37->10|38->11|38->11|38->11|39->12|39->12|39->12|40->13|40->13|41->14|42->15|42->15|43->16|43->16|44->17|45->18|45->18|47->20|47->20|48->21|49->22|49->22|51->24|51->24|56->29|56->29|56->29|58->31|73->46|73->46|73->46|74->47|75->48|75->48|75->48|76->49|76->49|76->49|77->50|79->52|84->57|84->57|84->57|85->58|90->63|90->63|90->63|91->64|98->71|98->71|98->71|99->72|100->73|100->73|100->73|101->74|101->74|101->74|102->75|104->77|111->84|111->84|111->84|112->85|113->86|113->86|113->86|114->87|114->87|114->87|115->88|117->90|124->97|124->97|124->97|125->98|126->99|126->99|126->99|127->100|127->100|127->100|128->101|130->103|144->117|144->117|144->117|146->119|150->123|150->123|150->123|152->125|161->134|161->134|161->134|162->135|164->137|164->137|164->137|165->138|167->140|167->140|167->140|168->141|170->143|172->145|174->147|175->148|176->149|176->149|176->149|176->149|177->150|177->150|177->150|177->150|178->151|178->151|178->151|178->151|179->152|179->152|179->152|179->152|180->153|180->153|180->153|180->153|181->154|181->154|181->154|181->154|182->155|182->155|182->155|184->157|184->157|185->158|185->158|186->159|186->159|187->160|187->160|188->161|188->161|190->163|195->168|197->170|202->175|202->175|202->175|205->178|207->180|207->180|207->180|208->181|209->182|211->184
+                  HASH: 9fe9925117007c45d0624c8ca849106f1e02fb9d
+                  MATRIX: 798->1|1025->154|1057->178|1142->133|1170->152|1198->232|1227->236|1238->240|1276->242|1304->244|1374->287|1402->288|1433->292|1510->342|1533->344|1562->345|1638->394|1661->396|1690->397|1780->460|1803->462|1832->463|1910->513|1939->514|1971->519|2029->550|2057->551|2133->599|2162->600|2194->605|2253->637|2281->638|2367->696|2396->697|2428->702|2487->734|2515->735|2550->743|2578->744|2657->797|2701->832|2741->834|2786->852|3090->1130|3140->1171|3180->1173|3215->1181|3251->1200|3264->1204|3303->1205|3338->1214|3376->1243|3403->1249|3441->1257|3481->1270|3576->1339|3631->1385|3658->1391|3691->1397|3782->1462|3834->1505|3861->1511|3894->1517|3999->1596|4085->1673|4125->1675|4160->1683|4196->1702|4209->1706|4248->1707|4283->1716|4357->1781|4384->1787|4422->1795|4462->1808|4567->1887|4638->1949|4678->1951|4713->1959|4749->1978|4762->1982|4801->1983|4836->1992|4895->2042|4922->2048|4960->2056|5000->2069|5117->2160|5204->2238|5244->2240|5279->2248|5315->2267|5328->2271|5367->2272|5403->2281|5479->2347|5507->2353|5546->2361|5587->2374|5787->2547|5816->2566|5857->2568|5893->2576|5988->2653|6002->2658|6042->2659|6078->2667|6323->2885|6364->2909|6405->2911|6440->2918|6494->2944|6516->2956|6588->3006|6624->3014|6679->3041|6701->3053|6770->3100|6806->3108|6861->3135|6883->3147|6946->3188|6982->3196|7037->3220|7071->3226|7126->3250|7157->3253|7194->3263|7250->3309|7278->3315|7308->3316|7347->3328|7400->3371|7428->3377|7458->3378|7497->3390|7536->3419|7564->3425|7594->3426|7633->3438|7678->3473|7706->3479|7736->3480|7775->3492|7820->3527|7848->3533|7878->3534|7917->3546|7964->3583|7992->3589|8022->3590|8061->3602|8121->3652|8149->3658|8194->3675|8316->3774|8348->3779|8475->3883|8507->3888|8611->3970|8643->3975|8771->4080|8803->4085|8946->4205|8992->4223|9284->4493|9328->4509|9533->4686|9549->4692|9590->4711|9675->4765|9713->4776|9780->4833|9821->4835|9858->4844|9964->4919|10002->4926
+                  LINES: 26->1|28->5|28->5|29->1|31->4|32->5|34->7|34->7|34->7|35->8|36->9|36->9|37->10|37->10|37->10|37->10|38->11|38->11|38->11|39->12|39->12|39->12|40->13|40->13|41->14|42->15|42->15|43->16|43->16|44->17|45->18|45->18|47->20|47->20|48->21|49->22|49->22|51->24|51->24|56->29|56->29|56->29|58->31|73->46|73->46|73->46|74->47|75->48|75->48|75->48|76->49|76->49|76->49|77->50|79->52|84->57|84->57|84->57|85->58|90->63|90->63|90->63|91->64|98->71|98->71|98->71|99->72|100->73|100->73|100->73|101->74|101->74|101->74|102->75|104->77|111->84|111->84|111->84|112->85|113->86|113->86|113->86|114->87|114->87|114->87|115->88|117->90|124->97|124->97|124->97|125->98|126->99|126->99|126->99|127->100|127->100|127->100|128->101|130->103|144->117|144->117|144->117|146->119|150->123|150->123|150->123|152->125|162->135|162->135|162->135|163->136|165->138|165->138|165->138|166->139|168->141|168->141|168->141|169->142|171->144|171->144|171->144|172->145|174->147|176->149|178->151|179->152|180->153|180->153|180->153|180->153|181->154|181->154|181->154|181->154|182->155|182->155|182->155|182->155|183->156|183->156|183->156|183->156|184->157|184->157|184->157|184->157|185->158|185->158|185->158|185->158|186->159|186->159|186->159|188->161|188->161|189->162|189->162|190->163|190->163|191->164|191->164|192->165|192->165|194->167|199->172|201->174|206->179|206->179|206->179|209->182|211->184|211->184|211->184|212->185|213->186|215->188
                   -- GENERATED --
               */
           

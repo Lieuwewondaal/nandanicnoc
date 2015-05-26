@@ -1,7 +1,4 @@
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\editForm.scala.html:137: value nicoverzicht is not a member of models.Nic_Nicactiviteit
-[error] 								@interventies.nicoverzicht.get(0).nicoverzicht_omschrijving
-[error] 								              ^
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\editForm.scala.html:140: value nicoverzicht is not a member of models.Nic_Nicactiviteit
-[error] 								@interventies.nicoverzicht.get(0).nicoverzicht_definitie
-[error] 								              ^
-[error] two errors found
+[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\views\editForm.scala.html:144: value get is not a member of models.Nicactiviteit
+[error] 								@interventies.nicactiviteit.get(0).nicactiviteit_omschrijving
+[error] 								                            ^
+[error] one error found

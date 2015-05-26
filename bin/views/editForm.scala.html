@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic])
+@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic_Nicactiviteit])
 
 @import helper._
 
@@ -134,10 +134,10 @@
 					@for(interventies <- nic) {
 						<tr>
 							<td>
-								@interventies.nicoverzicht.get(0).nicoverzicht_omschrijving
+								@interventies
 							</td>
 							<td>
-								@interventies.nicoverzicht.get(0).nicoverzicht_definitie
+								@interventies
 							</td>
 						</tr>
 					}
