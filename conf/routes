@@ -14,10 +14,10 @@ GET		/diagnoses/risicofactor			controllers.Application.getRisicofactor(p:Int ?= 
 GET		/diagnoses/samenhangendefactor	controllers.Application.getSamenhangendefactor(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
 GET		/diagnoses/nic_diagnose	controllers.Application.getNicActiviteit(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
 
-# Add computer
+# Add diagnose
 GET     /diagnoses/new              controllers.Application.create()
 GET     /diagnoses/now              controllers.Application.save()
-POST    /diagnoses                  controllers.Application.upload()
+POST    /diagnoses                  controllers.ImportExcel.upload()
 
 # Edit existing computer
 GET     /diagnoses/:id              controllers.Application.edit(id:Long)

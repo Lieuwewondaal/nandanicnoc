@@ -32,7 +32,7 @@
 	</div>-->
     <h1>Add a diagnose</h1>
 	
-	@helper.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data") {
+	@helper.form(action = routes.ImportExcel.upload(), 'enctype -> "multipart/form-data") {
 	<input type="file" name="picture">
 	<p>
 	  <input type="submit">
