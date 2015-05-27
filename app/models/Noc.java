@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+
 import javax.persistence.*;
 
 import play.db.ebean.*;
@@ -21,6 +22,14 @@ public class Noc extends Model {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long noc_id;
     
+    @OneToMany(mappedBy="noc")
+	public List<Noc_Indicator> noc_indicator;
+    
+	@OneToMany(mappedBy="noc")
+	public List<Noc_Waarde> noc_waarde;
+	
+	@OneToMany(mappedBy="noc")
+	public List<Nocoverzicht> nocoverzicht;
     /**
      * Generic query helper for entity Diagnose with id Long
      */

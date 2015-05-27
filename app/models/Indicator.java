@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+
 import javax.persistence.*;
 
 import play.db.ebean.*;
@@ -20,6 +21,9 @@ public class Indicator extends Model {
     public Long indicator_id;
     
     public String indicator_omschrijving;
+    
+    @OneToMany(mappedBy="indicator")
+	public List<Noc_Indicator> noc_indicator;
     
     /**
      * Generic query helper for entity Company with id Long

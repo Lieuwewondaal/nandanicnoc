@@ -72,12 +72,15 @@ public class Application extends Controller {
      * @param id Id of the diagnose to edit
      */
     public static Result edit(Long id) {
+    	// Get Diagnoseoverzicht values
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
         		Diagnoseoverzicht.find.where()
 			    .ilike("diagnose_id", id.toString())
 			    .findList()
 			    .get(0)
         );
+        
+        // Get Bepalendkenmerk values of diagnose
     	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
     			.find
     			.where()
@@ -99,6 +102,7 @@ public class Application extends Controller {
         }
         */
         
+    	// Get NIC/Activiteit attached to diagnose
     	List<Nic_Diagnose> nic = Nic_Diagnose
     			.find
     			.fetch("nic")
@@ -109,8 +113,18 @@ public class Application extends Controller {
     			.like("diagnose", id.toString())
                 .findList();
     	
+    	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
+    			.find
+    			.fetch("noc")
+    			.fetch("noc.nocoverzicht")
+    			.fetch("diagnose")
+    			.fetch("indicator")
+    			.where()
+    			.like("diagnose", id.toString())
+                .findList();
+    	
         return ok(
-            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, nic)
+            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, nic, noc)
         );
     }
     
@@ -137,7 +151,7 @@ public class Application extends Controller {
     public static Result getBepalendkenmerk(int page, String sortBy, String order, String filter) {
         return ok(
         		bepalendkenmerk.render(
-                    Bepalendkenmerk_Diagnose.page(page, 10, sortBy, order, filter),
+                    Bepalendkenmerk_Diagnose.page(page, 100, sortBy, order, filter),
                     sortBy, order, filter
                 )
             );
@@ -154,7 +168,7 @@ public class Application extends Controller {
     public static Result getRisicofactor(int page, String sortBy, String order, String filter) {
         return ok(
         		risicofactor.render(
-    				Risicofactor_Diagnose.page(page, 10, sortBy, order, filter),
+    				Risicofactor_Diagnose.page(page, 100, sortBy, order, filter),
                     sortBy, order, filter
                 )
             );
@@ -171,7 +185,7 @@ public class Application extends Controller {
     public static Result getSamenhangendefactor(int page, String sortBy, String order, String filter) {
         return ok(
         		samenhangendefactor.render(
-    				Samenhangendefactor_Diagnose.page(page, 10, sortBy, order, filter),
+    				Samenhangendefactor_Diagnose.page(page, 100, sortBy, order, filter),
                     sortBy, order, filter
                 )
             );
@@ -194,9 +208,6 @@ public class Application extends Controller {
             );
     }
     
-    
-   
-    
     /**
      * Handle the 'edit form' submission 
      *
@@ -210,6 +221,8 @@ public class Application extends Controller {
         			.where().
                     ilike("diagnose_id", diagnose_id.toString())
                     .findList();
+        	
+        	// Get NIC of diagnose
         	List<Nic_Diagnose> nic = Nic_Diagnose
         			.find
         			.fetch("nic")
@@ -217,10 +230,21 @@ public class Application extends Controller {
         			.fetch("nic_diagnose")
         			.fetch("nicactiviteit", new FetchConfig().query())
         			.where()
-        			.like("nic_diagnose.diagnose", "491322316502")
+        			.like("nic_diagnose.diagnose", diagnose_id.toString())
                     .findList();
         	
-            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, nic));
+        	// Get NOC of diagnose
+        	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
+        			.find
+        			.fetch("noc")
+        			.fetch("noc.nocoverzicht")
+        			.fetch("diagnose")
+        			.fetch("indicator")
+        			.where()
+        			.like("diagnose", diagnose_id.toString())
+                    .findList();
+        	
+            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, nic, noc));
         }
         diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
@@ -265,8 +289,8 @@ public class Application extends Controller {
      * Handle diagnose deletion
      */
     public static Result delete(Long id) {
-        Diagnose.find.ref(id).delete();
-        flash("success", "Diagnose has been deleted");
+        /*Diagnose.find.ref(id).delete();
+        flash("success", "Diagnose has been deleted");*/
         return GO_HOME;
     }
 }

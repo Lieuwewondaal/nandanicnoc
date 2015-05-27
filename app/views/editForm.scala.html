@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic_Diagnose])
+@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic_Diagnose], noc: List[Noc_Indicator_Diagnose])
 
 @import helper._
 
@@ -140,6 +140,44 @@
 				</tbody>
 			</table>
 		}
+		
+		@if(noc.size() == 0) {
+			
+			<div class="well">
+				<em>Geen zorgresultaten gevonden</em>
+			</div>
+			
+		} else {
+			<br /><br /><hr /><br /><br />
+			<table class="diagnoses zebra-striped">
+				<thead>
+					<tr>
+						<th>Zorgresultaat omschrijving:</th>
+						<th>Zorgresultaat definitie:</th>
+						<th>Zorgresultaat indicator:</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@for(zorgresultaten <- noc) {
+						<tr>
+							<td>
+								@zorgresultaten.noc.nocoverzicht.get(0).nocoverzicht_omschrijving
+							</td>
+							<td>
+								@zorgresultaten.noc.nocoverzicht.get(0).nocoverzicht_definitie
+							</td>
+							<td>
+								@zorgresultaten.indicator.indicator_omschrijving
+							</td>
+						</tr>
+					}
+
+				</tbody>
+			</table>
+		}
+		
+		
 		<!--
 		a @diagnoseForm("diagnoseoverzicht_omschrijving").value <br />
 		a @diagnoseForm("diagnoseoverzicht_definitie").value <br />
@@ -173,7 +211,7 @@
     }
     
     @form(routes.Application.delete(id), 'class -> "topRight") {
-        <input type="submit" value="Delete this diagnose" class="btn danger">
+        <!--<input type="submit" value="Delete this diagnose" class="btn danger">-->
     }
     
 }
