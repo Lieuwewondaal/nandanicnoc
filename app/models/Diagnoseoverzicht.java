@@ -55,7 +55,7 @@ public class Diagnoseoverzicht extends Model {
     }
     
     /**
-     * Return a page of computer
+     * Return a page of a diagnosis
      *
      * @param page Page to display
      * @param pageSize Number of computers per page

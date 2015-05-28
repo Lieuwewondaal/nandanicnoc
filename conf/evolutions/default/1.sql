@@ -377,6 +377,85 @@ create table nic_diagnose (
   ) engine=innodb
 ;
 
+create table casus (
+  casus_id                        bigint not null auto_increment,
+
+  constraint pk_casus primary key (casus_id)
+  ) engine=innodb
+;
+
+create table casus_diagnose (
+  casus_diagnose_id				  bigint not null auto_increment,
+  casus_id                        bigint not null,
+  diagnose_id                     bigint not null,
+  user_id						  bigint,
+
+  constraint pk_casus_diagnose primary key (casus_diagnose_id)
+  ) engine=innodb
+;
+
+create table casus_bepalendkenmerk (
+  casus_diagnose_id				  bigint not null,
+  bepalendkenmerk_id              bigint not null,
+
+  constraint pk_casus_bepalendkenmerk primary key (casus_diagnose_id, bepalendkenmerk_id)
+  ) engine=innodb
+;
+
+create table casus_risicofactor (
+  casus_diagnose_id				 bigint not null,
+  risicofactor_id                bigint not null,
+
+  constraint pk_casus_risicofactor primary key (casus_diagnose_id, risicofactor_id)
+  ) engine=innodb
+;
+
+create table casus_samenhangendefactor (
+  casus_diagnose_id				  bigint not null,
+  samenhangendefactor_id          bigint not null,
+
+  constraint pk_casus_samenhangendefactor primary key (casus_diagnose_id, samenhangendefactor_id)
+  ) engine=innodb
+;
+
+create table casus_nic (
+  casus_diagnose_id				  bigint not null,
+  nic_id				          bigint not null,
+  nicactiviteit_id				  bigint not null,
+  
+  constraint pk_casus_nic primary key (casus_diagnose_id, nic_id, nicactiviteit_id)
+  ) engine=innodb
+;
+
+create table casus_noc (
+  casus_diagnose_id				  bigint not null,
+  noc_id				          bigint not null,
+  indicator_id				      bigint not null,
+
+  constraint pk_casus_noc primary key (casus_diagnose_id, noc_id, indicator_id)
+  ) engine=innodb
+;
+
+create table casusopmerkingen (
+  casus_diagnose_id				  bigint not null,
+  casusopmerking         		  text,
+  casusopmerkingdatum			  datetime,
+
+  constraint pk_casus_samenhangendefactor primary key (casus_diagnose_id)
+  ) engine=innodb
+;
+
+create table casusoverzicht (
+  casus_id						  bigint not null,
+  casus_omschrijving	          text,
+  casus_definitie				  text,
+  casus_begindatum				  datetime,
+  casus_einddatum				  datetime,
+
+  constraint pk_casus_samenhangendefactor primary key (casus_id)
+  ) engine=innodb
+;
+
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_diagnose_1 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_diagnoseversie_1 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_gezondheidspatroon_1 foreign key (gezondheidspatroon_id) references gezondheidspatroon (gezondheidspatroon_id) on delete restrict on update restrict;
@@ -425,6 +504,22 @@ alter table nic_nicactiviteit add constraint fk_nic_nicactiviteit_2 foreign key 
 alter table nic_diagnose add constraint fk_nic_nic_diagnose_1 foreign key (nic_id) references nic_nicactiviteit (nic_id) on delete restrict on update restrict;
 alter table nic_diagnose add constraint fk_nic_nic_diagnose_2 foreign key (nicactiviteit_id) references nic_nicactiviteit (nicactiviteit_id) on delete restrict on update restrict;
 alter table nic_diagnose add constraint fk_nic_nic_diagnose_3 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
+alter table casus_diagnose add constraint fk_casus_diagnose_1 foreign key (casus_id) references casus (casus_id) on delete restrict on update restrict;
+alter table casus_diagnose add constraint fk_casus_diagnose_2 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
+alter table casus_bepalendkenmerk add constraint fk_casus_bepalendkenmerk_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
+alter table casus_bepalendkenmerk add constraint fk_casus_bepalendkenmerk_2 foreign key (bepalendkenmerk_id) references bepalendkenmerk (bepalendkenmerk_id) on delete restrict on update restrict;
+alter table casus_risicofactor add constraint fk_casus_risicofactor_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
+alter table casus_risicofactor add constraint fk_casus_risicofactor_2 foreign key (risicofactor_id) references risicofactor (risicofactor_id) on delete restrict on update restrict;
+alter table casus_samenhangendefactor add constraint fk_casus_samenhangendefactor_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
+alter table casus_samenhangendefactor add constraint fk_casus_samenhangendefactor_2 foreign key (samenhangendefactor_id) references samenhangendefactor (samenhangendefactor_id) on delete restrict on update restrict;
+alter table casus_nic add constraint fk_casus_nic_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
+alter table casus_nic add constraint fk_casus_nic_2 foreign key (nic_id) references nic (nic_id) on delete restrict on update restrict;
+alter table casus_nic add constraint fk_casus_nic_3 foreign key (nicactiviteit_id) references nicactiviteit (nicactiviteit_id) on delete restrict on update restrict;
+alter table casus_noc add constraint fk_casus_noc_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
+alter table casus_noc add constraint fk_casus_noc_2 foreign key (noc_id) references noc (noc_id) on delete restrict on update restrict;
+alter table casus_noc add constraint fk_casus_noc_3 foreign key (indicator_id) references indicator (indicator_id) on delete restrict on update restrict;
+alter table casusopmerkingen add constraint fk_casus_opmerkingen_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
+alter table casusoverzicht add constraint fk_casus_overzicht_1 foreign key (casus_id) references casus (casus_id) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -511,6 +606,24 @@ drop table if exists nicversie_releasestatus;
 drop table if exists nic_nicactiviteit;
 
 drop table if exists nic_diagnose;
+
+drop table if exists casus;
+
+drop table if exists casus_diagnose;
+
+drop table if exists casus_bepalendkenmerk;
+
+drop table if exists casus_risicofactor;
+
+drop table if exists casus_samenhangendefactor;
+
+drop table if exists casus_nic;
+
+drop table if exists casus_noc;
+
+drop table if exists casusopmerkingen;
+
+drop table if exists casusoverzicht;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

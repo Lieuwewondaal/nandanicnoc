@@ -39,7 +39,7 @@ public class Application extends Controller {
      * This result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
-        routes.Application.list(0, "diagnoseoverzicht_omschrijving", "asc", "")
+        routes.Application.casuslist(0, "diagnoseoverzicht_omschrijving", "asc", "")
     );
     
     /**
@@ -67,6 +67,23 @@ public class Application extends Controller {
     }
     
     /**
+     * Display the paginated list of cases
+     * @param page
+     * @param sortBy
+     * @param order
+     * @param filter
+     * @return
+     */
+    public static Result casuslist(int page, String sortBy, String order, String filter) {
+        return ok(
+                casuslist.render(
+                    Diagnoseoverzicht.page(page, 10, sortBy, order, filter),
+                    sortBy, order, filter
+                )
+            );
+        }
+    
+    /**
      * Display the 'edit form' of a existing Diagnose.
      *
      * @param id Id of the diagnose to edit
@@ -87,10 +104,7 @@ public class Application extends Controller {
     			.ilike("diagnose_id", id.toString())
                 .findList();
     	
-    	/*String sql = "select t0.nic_diagnose_releasestatus_datum c0, t0.nic_diagnose_releasestatus_omschrijving c1,t0.nicactiviteit_id c2,t0.diagnose_id c3,t1.nic_id c4,t1.nicoverzicht_omschrijving c5 from nic_diagnose t0 left outer join nicoverzicht t1 on t1.nic_id = t0.nic_id where diagnose_id = '491322316502'";
-   	 
-    	SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
-   	 
+		/*
    	 	// execute the query returning a List of MapBean objects
    	 	List<SqlRow> list = sqlQuery.findList();
    	 	JsonNode j = Json.toJson(list);
@@ -113,6 +127,7 @@ public class Application extends Controller {
     			.like("diagnose", id.toString())
                 .findList();
     	
+    	// Get NOC/Indicator attached to diagnose
     	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
     			.find
     			.fetch("noc")
