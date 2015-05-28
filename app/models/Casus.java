@@ -22,8 +22,16 @@ public class Casus extends Model {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long casus_id;
 	
-    @OneToMany(mappedBy="casus")
-	public List<Casusoverzicht> casusoverzicht;
+	@Constraints.Required
+    public String casus_omschrijving;
+    
+    public String casus_definitie;
+    
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date casus_begindatum;
+    
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date casus_einddatum;
 	
     /**
      * Generic query helper for entity Diagnose with id Long
@@ -39,12 +47,23 @@ public class Casus extends Model {
      * @param order Sort order (either or asc or desc)
      * @param filter Filter applied on the name column
      */
+    /**
+     * Return a page of a diagnosis
+     *
+     * @param page Page to display
+     * @param pageSize Number of computers per page
+     * @param sortBy Diagnose property used for sorting
+     * @param order Sort order (either or asc or desc)
+     * @param filter Filter applied on the name column
+     */
     public static Page<Casus> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()
-                .ilike("name", "%" + filter + "%")
+            	.or(
+            			com.avaje.ebean.Expr.like("casus_definitie", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.like("casus_omschrijving", "%" + filter + "%")
+        			)
                 .orderBy(sortBy + " " + order)
-                .fetch("company")
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);

@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Diagnoseoverzicht], currentSortBy: String, currentOrder: String, currentFilter: String)
+@(currentPage: com.avaje.ebean.Page[Casus], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -22,7 +22,7 @@
     }
     
     // Generate the link
-    routes.Application.casuslist(newPage, sortBy, order, currentFilter)
+    routes.CasusApplication.listCasus(newPage, sortBy, order, currentFilter)
     
 }
 
@@ -48,11 +48,11 @@
     <div id="actions">
         
         <form action="@link(0, "name")" method="GET">
-            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Diagnose naam">
+            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Casus">
             <input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
         </form>
         
-        <a class="btn success" id="add" href="@routes.Application.create()">Nieuwe Casus</a>
+        <a class="btn success" id="add" href="@routes.CasusApplication.createCasus()">Nieuwe Casus</a>
         
     </div>
     
@@ -64,37 +64,33 @@
         
     } else {
         
-        <table class="diagnoses zebra-striped">
+        <table class="casussen zebra-striped">
             <thead>
                 <tr>
-                    @header("diagnoseoverzicht_omschrijving", "Diagnose name")
-                    @header("diagnose_code", "Code")
-                    @header("gezondheidspatroon.gezondheidspatroon_omschrijving", "Patroon")
-                    @header("diagnose.diagnose_id", "DiagnoseID")
+                    @header("casus_omschrijving", "Casus omschrijving")
+                    @header("casus_definitie", "Casus definitie")
+                    @header("casus_begindatum", "Datum")
                 </tr>
             </thead>
             <tbody>
 
-                @for(diagnoseoverzicht <- currentPage.getList) {
+                @for(casus <- currentPage.getList) {
                     <tr>
-                        <td><a href="@routes.Application.edit(diagnoseoverzicht.diagnose.diagnose_id )">@diagnoseoverzicht.diagnoseoverzicht_omschrijving</a></td>
+                        <td><a href="@routes.CasusApplication.editCasus(casus.casus_id )">@casus.casus_omschrijving</a></td>
                         <td>
-                            @if(diagnoseoverzicht.diagnose_code == null) {
+                            @if(casus.casus_definitie == null) {
                                 <em>-</em>
                             } else{
-								@diagnoseoverzicht.diagnose_code
+								@casus.casus_definitie
 							}
 							
                         </td>
                         <td>
-                            @if(diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving == null) {
+                            @if(casus.casus_begindatum == null) {
                                 <em>-</em>
                             } else {
-                                @diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving
+                                @casus.casus_begindatum
                             }
-                        </td>
-                        <td>
-                                @diagnoseoverzicht.diagnose.diagnose_id
                         </td>
                     </tr>
                 }

@@ -5,9 +5,6 @@
 # Default path will just redirect to the computer list
 GET     /                           controllers.Application.index()
 
-# Casus list
-GET     /casus                  	controllers.Application.casuslist(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
-
 # Diagnoses list (look at the default values for pagination parameters)
 GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
 
@@ -21,6 +18,20 @@ GET		/diagnoses/nic_diagnose	controllers.Application.getNicActiviteit(p:Int ?= 0
 GET     /diagnoses/new              controllers.Application.create()
 GET     /diagnoses/now              controllers.Application.save()
 POST    /diagnoses                  controllers.ImportExcel.upload()
+
+# Casus list
+GET     /casus                  	controllers.CasusApplication.listCasus(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+
+# Add casus
+GET     /casus/new             		controllers.CasusApplication.createCasus()
+GET     /casus/now		            controllers.CasusApplication.saveCasus()
+
+# Edit existing casus
+GET 	/casus/:id					controllers.CasusApplication.editCasus(id:Long)
+POST    /casus/:id              	controllers.CasusApplication.updateCasus(id:Long)
+
+# Delete a computer
+POST    /diagnoses/:id/delete       controllers.CasusApplication.deleteCasus(id:Long)
 
 # Edit existing computer
 GET     /diagnoses/:id              controllers.Application.edit(id:Long)

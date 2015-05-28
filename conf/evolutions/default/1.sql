@@ -379,6 +379,10 @@ create table nic_diagnose (
 
 create table casus (
   casus_id                        bigint not null auto_increment,
+  casus_omschrijving	          text,
+  casus_definitie				  text,
+  casus_begindatum				  datetime,
+  casus_einddatum				  datetime,
 
   constraint pk_casus primary key (casus_id)
   ) engine=innodb
@@ -445,17 +449,6 @@ create table casusopmerkingen (
   ) engine=innodb
 ;
 
-create table casusoverzicht (
-  casus_id						  bigint not null,
-  casus_omschrijving	          text,
-  casus_definitie				  text,
-  casus_begindatum				  datetime,
-  casus_einddatum				  datetime,
-
-  constraint pk_casus_samenhangendefactor primary key (casus_id)
-  ) engine=innodb
-;
-
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_diagnose_1 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_diagnoseversie_1 foreign key (diagnoseversie_id) references diagnoseversie (diagnoseversie_id) on delete restrict on update restrict;
 alter table diagnoseoverzicht add constraint fk_diagnoseoverzicht_gezondheidspatroon_1 foreign key (gezondheidspatroon_id) references gezondheidspatroon (gezondheidspatroon_id) on delete restrict on update restrict;
@@ -519,7 +512,6 @@ alter table casus_noc add constraint fk_casus_noc_1 foreign key (casus_diagnose_
 alter table casus_noc add constraint fk_casus_noc_2 foreign key (noc_id) references noc (noc_id) on delete restrict on update restrict;
 alter table casus_noc add constraint fk_casus_noc_3 foreign key (indicator_id) references indicator (indicator_id) on delete restrict on update restrict;
 alter table casusopmerkingen add constraint fk_casus_opmerkingen_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
-alter table casusoverzicht add constraint fk_casus_overzicht_1 foreign key (casus_id) references casus (casus_id) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -622,8 +614,6 @@ drop table if exists casus_nic;
 drop table if exists casus_noc;
 
 drop table if exists casusopmerkingen;
-
-drop table if exists casusoverzicht;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

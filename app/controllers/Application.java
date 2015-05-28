@@ -39,7 +39,7 @@ public class Application extends Controller {
      * This result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
-        routes.Application.casuslist(0, "diagnoseoverzicht_omschrijving", "asc", "")
+        routes.CasusApplication.listCasus(0, "casus_omschrijving", "asc", "")
     );
     
     /**
@@ -65,23 +65,6 @@ public class Application extends Controller {
             )
         );
     }
-    
-    /**
-     * Display the paginated list of cases
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    public static Result casuslist(int page, String sortBy, String order, String filter) {
-        return ok(
-                casuslist.render(
-                    Diagnoseoverzicht.page(page, 10, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-        }
     
     /**
      * Display the 'edit form' of a existing Diagnose.
