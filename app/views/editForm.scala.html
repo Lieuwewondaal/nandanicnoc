@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], nic: List[Nic_Diagnose], noc: List[Noc_Indicator_Diagnose])
+@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], noc: List[Noc_Indicator_Diagnose])
 
 @import helper._
 
@@ -21,8 +21,33 @@
 		  $( ".form" ).append( data );
 	  });
 	  
+	  /*(function() {
+		  $(function() {
+			return $.get("/nicdiagnose/" + @id, function(data) {
+			  return $.each(data, function(key, nicdiagnose) {
+				return $("#tasks").append("<tr><td>" + nicdiagnose.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + nicdiagnose.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>" + nicdiagnose.nicactiviteit.nicactiviteit_omschrijving + "</td></tr>");
+			  });
+			});
+		  });
+
+		}).call(this);*/
+	  
+	  $.get( "/nicdiagnose/" + @id, function(data) {
+		if(data.length > 0){
+			$("#nicDiagnoseHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th></tr>");
+			$.each(data, function(key, nicdiagnose) {
+			  $("#nicDiagnose").append("<tr><td>" + nicdiagnose.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + nicdiagnose.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>" + nicdiagnose.nicactiviteit.nicactiviteit_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#nicDiagnose").append("<tr><td>Geen interventies gevonden");
+		}
+	  });
 	});
+	
+	
 	</script>
+	
 	
     <h1>Edit diagnose</h1>
     
@@ -104,42 +129,14 @@
 				</tr>
             </tbody>
         </table>
-
-		@if(nic.size() == 0) {
-			
-			<div class="well">
-				<em>Geen interventies gevonden</em>
-			</div>
-			
-		} else {
-			
-			<table class="diagnoses zebra-striped">
-				<thead>
-					<tr>
-						<th>Interventie omschrijving:</th>
-						<th>Interventie definitie:</th>
-						<th>Interventie actie:</th>
-					</tr>
-				</thead>
-				<tbody>
-
-					@for(interventies <- nic) {
-						<tr>
-							<td>
-								@interventies.nic.nicoverzicht.get(0).nicoverzicht_omschrijving
-							</td>
-							<td>
-								@interventies.nic.nicoverzicht.get(0).nicoverzicht_definitie
-							</td>
-							<td>
-								@interventies.nicactiviteit.nicactiviteit_omschrijving
-							</td>
-						</tr>
-					}
-
-				</tbody>
-			</table>
-		}
+		
+		<table id="nicDiagnose" class="diagnoses zebra-striped">
+			<thead id="nicDiagnoseHead">
+				<tr>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Interventies laden...</th>
+				</tr>
+			</thead>
+		</table>
 		
 		@if(noc.size() == 0) {
 			

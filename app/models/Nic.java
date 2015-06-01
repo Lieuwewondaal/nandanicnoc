@@ -9,6 +9,7 @@ import play.data.format.*;
 import play.data.validation.*;
 
 import com.avaje.ebean.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Diagnose entity managed by Ebean
@@ -26,6 +27,7 @@ public class Nic extends Model {
 	public List<Nicoverzicht> nicoverzicht;
     
 	@OneToMany(mappedBy="nic")
+	@JsonManagedReference
 	public List<Nic_Diagnose> nic_diagnose;
 	
     /**

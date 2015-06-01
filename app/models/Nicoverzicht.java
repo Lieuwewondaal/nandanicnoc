@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import com.avaje.ebean.Page;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import play.db.ebean.*;
 import play.data.validation.*;
@@ -21,6 +22,7 @@ public class Nicoverzicht extends Model {
 
 	@ManyToOne
 	@JoinColumn(name="nic_id")
+	@JsonBackReference
 	public Nic nic;
     
     @ManyToOne

@@ -50,6 +50,40 @@ public class Application extends Controller {
     }
 
     /**
+     * JSON test
+     */
+    public static Result getGezondheidspatroon() {
+        java.util.List<models.Gezondheidspatroon> tasks = new play.db.ebean.Model.Finder(String.class, models.Gezondheidspatroon.class).all();
+        return ok(play.libs.Json.toJson(tasks));
+    }
+    
+    /**
+     * JSON test 2
+     */
+    /*public static Result getNicDiagnose() {
+    	List<Nic_Diagnose> nic = Nic_Diagnose
+    			.find
+    			.where()
+    			.like("diagnose", "491322316502")
+                .findList();
+        return ok(play.libs.Json.toJson(nic));
+    }*/
+    
+    /**
+     * Get nic_diagnose from diagnose_id
+     * @param id
+     * @return
+     */
+    public static Result getNicDiagnose(Long id) {
+    	List<Nic_Diagnose> nic = Nic_Diagnose
+    			.find
+    			.where()
+    			.like("diagnose", id.toString())
+                .findList();
+        return ok(play.libs.Json.toJson(nic));
+    }
+    
+    /**
      * Display the paginated list of diagnoses.
      *
      * @param page Current page number (starts from 0)
@@ -98,17 +132,6 @@ public class Application extends Controller {
         	i++;
         }
         */
-        
-    	// Get NIC/Activiteit attached to diagnose
-    	List<Nic_Diagnose> nic = Nic_Diagnose
-    			.find
-    			.fetch("nic")
-    			.fetch("nic.nicoverzicht")
-    			.fetch("diagnose")
-    			.fetch("nicactiviteit")
-    			.where()
-    			.like("diagnose", id.toString())
-                .findList();
     	
     	// Get NOC/Indicator attached to diagnose
     	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
@@ -122,7 +145,7 @@ public class Application extends Controller {
                 .findList();
     	
         return ok(
-            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, nic, noc)
+            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, noc)
         );
     }
     
@@ -220,17 +243,6 @@ public class Application extends Controller {
                     ilike("diagnose_id", diagnose_id.toString())
                     .findList();
         	
-        	// Get NIC of diagnose
-        	List<Nic_Diagnose> nic = Nic_Diagnose
-        			.find
-        			.fetch("nic")
-        			.fetch("nic.nicoverzicht")
-        			.fetch("nic_diagnose")
-        			.fetch("nicactiviteit", new FetchConfig().query())
-        			.where()
-        			.like("nic_diagnose.diagnose", diagnose_id.toString())
-                    .findList();
-        	
         	// Get NOC of diagnose
         	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
         			.find
@@ -242,7 +254,7 @@ public class Application extends Controller {
         			.like("diagnose", diagnose_id.toString())
                     .findList();
         	
-            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, nic, noc));
+            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, noc));
         }
         diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
