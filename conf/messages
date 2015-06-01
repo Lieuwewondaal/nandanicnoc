@@ -1,0 +1,6 @@
+# Messages
+
+diagnose.list.title={0,choice,0#Geen diagnoses|1#One diagnose|1<{0,number,integer} diagnoses} gevonden
+diagnose.casuslist.title={0,choice,0#Geen casus|1#Eén casus|1<{0,number,integer} casussen} gevonden
+
+

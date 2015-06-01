@@ -1,0 +1,49 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Default path will just redirect to the computer list
+GET     /                           controllers.Application.index()
+
+# Diagnoses list (look at the default values for pagination parameters)
+GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
+
+# Get diagnoseoverzicht information
+GET		/diagnoses/bepalendkenmerk		controllers.Application.getBepalendkenmerk(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
+GET		/diagnoses/risicofactor			controllers.Application.getRisicofactor(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
+GET		/diagnoses/samenhangendefactor	controllers.Application.getSamenhangendefactor(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
+GET		/diagnoses/nic_diagnose	controllers.Application.getNicActiviteit(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
+
+# Add diagnose
+GET     /diagnoses/new              controllers.Application.create()
+GET     /diagnoses/now              controllers.Application.save()
+POST    /diagnoses                  controllers.ImportExcel.upload()
+
+# Casus list
+GET     /casus                  	controllers.CasusApplication.listCasus(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+
+# Add casus
+GET     /casus/new             		controllers.CasusApplication.createCasus()
+GET     /casus/now		            controllers.CasusApplication.saveCasus()
+
+# Edit existing casus
+GET 	/casus/:id					controllers.CasusApplication.editCasus(id:Long)
+POST    /casus/:id              	controllers.CasusApplication.updateCasus(id:Long)
+
+# Delete a computer
+POST    /diagnoses/:id/delete       controllers.CasusApplication.deleteCasus(id:Long)
+
+# Edit existing computer
+GET     /diagnoses/:id              controllers.Application.edit(id:Long)
+POST    /diagnoses/:id              controllers.Application.update(id:Long)
+
+# Delete a computer
+POST    /diagnoses/:id/delete       controllers.Application.delete(id:Long)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+GET     /gezondheidspatroon         controllers.Application.getGezondheidspatroon()
+GET     /nicdiagnose/:id		    controllers.Application.getNicDiagnose(id:Long)
+
+
