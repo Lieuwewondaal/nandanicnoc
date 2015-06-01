@@ -1,6 +1,0 @@
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:1034:  error: method importGezonheidsPatroon(HSSFRow) is already defined in class Application
-[error]     private static void importGezonheidsPatroon(HSSFRow row){
-[error]                         ^
-[error] C:\Users\Vincent\workspace\verpleegkunde-app\app\controllers\Application.java:419:  error: cannot find symbol
-[error]         	        		importDiagnoseNicActiviteit(row);
-[error]         	        		^
