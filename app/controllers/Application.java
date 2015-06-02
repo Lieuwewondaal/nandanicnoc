@@ -48,14 +48,6 @@ public class Application extends Controller {
     public static Result index() {
         return GO_HOME;
     }
-
-    /**
-     * JSON test
-     */
-    public static Result getGezondheidspatroon() {
-        java.util.List<models.Gezondheidspatroon> tasks = new play.db.ebean.Model.Finder(String.class, models.Gezondheidspatroon.class).all();
-        return ok(play.libs.Json.toJson(tasks));
-    }
     
     /**
      * Get nic_diagnose from diagnose_id in JSON format

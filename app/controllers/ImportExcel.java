@@ -383,6 +383,9 @@ public class ImportExcel extends Controller {
     			  System.out.println("Klasse already exists");
     		  }
 		  }
+		  else{
+			  diagnoseklasse = klasse;
+		  }
 	  // Diagnose table
 	  diagnose.diagnose_id = (long)Long.parseLong(row.getCell(Diagnose_ID).toString());
 	  System.out.println(diagnose.diagnose_id);

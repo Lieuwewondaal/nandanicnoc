@@ -9,7 +9,6 @@ GET     /                           controllers.Application.index()
 GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
 
 # Get diagnoseoverzicht information
-GET     /gezondheidspatroon         controllers.Application.getGezondheidspatroon()
 GET     /nicdiagnose/:id		    controllers.Application.getNicDiagnose(id:Long)
 GET     /nocdiagnose/:id		    controllers.Application.getNocDiagnose(id:Long)
 GET     /bepalendkenmerk/:id		controllers.Application.getBepalendKenmerk(id:Long)
