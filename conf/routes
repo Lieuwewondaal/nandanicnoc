@@ -32,6 +32,9 @@ GET     /casus/now		            controllers.CasusApplication.saveCasus()
 GET 	/casus/:id					controllers.CasusApplication.editCasus(id:Long)
 POST    /casus/:id              	controllers.CasusApplication.updateCasus(id:Long)
 
+# Verpleegkundige views
+GET		/verpleegkundige			controllers.VerpleegkundigeApplication.listCasusVerpleegkundige()
+
 # Delete a computer
 POST    /diagnoses/:id/delete       controllers.CasusApplication.deleteCasus(id:Long)
 
