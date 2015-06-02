@@ -123,6 +123,16 @@ public class Application extends Controller {
         return ok(play.libs.Json.toJson(noc));
     }
     
+    public static Result getDiagnoseOverzicht(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Diagnoseoverzicht> diagnoseoverzicht = Diagnoseoverzicht
+    			.find
+    			.where()
+			    .ilike("diagnose_id", id.toString())
+			    .findList();
+        return ok(play.libs.Json.toJson(diagnoseoverzicht));
+    }
+    
     /**
      * Display the paginated list of diagnoses.
      *
@@ -147,15 +157,15 @@ public class Application extends Controller {
      */
     public static Result edit(Long id) {
     	// Get Diagnoseoverzicht values
-        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
+        /*Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
         		Diagnoseoverzicht.find.where()
 			    .ilike("diagnose_id", id.toString())
 			    .findList()
 			    .get(0)
-        );
+        );*/
     	
         return ok(
-            editForm.render(id, diagnoseForm)
+            editForm.render(id)
         );
     } 
     
@@ -165,11 +175,11 @@ public class Application extends Controller {
      * @param id Id of the diagnose to edit
      */
     public static Result update(Long diagnose_id) {
-        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
-        if(diagnoseForm.hasErrors()) {	
+        //Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
+        /*if(diagnoseForm.hasErrors()) {	
             return badRequest(editForm.render(diagnose_id, diagnoseForm));
-        }
-        diagnoseForm.get().update(diagnose_id);
+        }*/
+        //diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
         return GO_HOME;
     }

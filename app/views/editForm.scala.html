@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht])
+@(id: Long)
 
 @import helper._
 
@@ -7,6 +7,24 @@
 @main {
 	<script>
 	  $( document ).ready(function() {
+
+	  $.get( "/diagnoseoverzicht/" + @id, function(data) {
+		if(data.length > 0){
+			$("#diagnoseOverzichtHead").html("<tr><th>Detail:</th><th>Waarde</th></tr>");
+			$.each(data, function(key, diagnoseoverzicht) {
+			  $("#diagnoseOverzicht").append("<tr><td>Code</td><td>" + diagnoseoverzicht.diagnose_code + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Omschrijving</td><td>" + diagnoseoverzicht.diagnoseoverzicht_omschrijving + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Definitie</td><td>" + diagnoseoverzicht.diagnoseoverzicht_definitie + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Domein</td><td>" + diagnoseoverzicht.diagnoseklasse.diagnosedomein.diagnosedomein_code + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Klasse</td><td>" + diagnoseoverzicht.diagnoseklasse.diagnoseklasse_code + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Gezondheidspatroon</td><td>" + diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#diagnoseOverzichtHead").html("<tr><th>Diagnosegegevens:</th></tr>");
+		  $("#diagnoseOverzicht").append("<tr><td>Geen diagnosegegevens gevonden");
+		}
+	  });
 	  
 	  $.get( "/nicdiagnose/" + @id, function(data) {
 		if(data.length > 0){
@@ -77,88 +95,21 @@
 	
 	</script>
 	
-	
-    <h1>Edit diagnose</h1>
+	<br />
+    <h1>Diagnose</h1>
     
     @form(routes.Application.update(id)) {
         
         <fieldset class="form">
-		
-		<table class="diagnoses zebra-striped">
-            <thead>
-                <tr>
-				  <th>Detail</th>
-				  <th>Waarde</th>
-                </tr>
-            </thead>
-            <tbody>
+	
+		<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
+			<thead id="diagnoseOverzichtHead">
 				<tr>
-				    <td>
-						Code
-					</td>
-					<td>
-						@if(diagnoseForm("diagnose_code") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("diagnose_code").value
-						}
-						
-					</td>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnose gegevens laden...</th>
 				</tr>
-				<tr>
-					<td>Omschrijving</td>
-					<td>
-						@diagnoseForm("diagnoseoverzicht_omschrijving").value
-					</td>
-				</tr>
-				<tr>
-					<td>Defintie</td>
-					<td>
-						@diagnoseForm("diagnoseoverzicht_definitie").value
-					</td>
-				</tr>
-				<tr>
-				    <td>
-						Domein
-					</td>
-					<td>
-						@if(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code").value
-						}
-						
-					</td>
-				</tr>
-				<tr>
-				    <td>
-						Klasse
-					</td>
-					<td>
-						@if(diagnoseForm("diagnoseklasse.diagnoseklasse_code") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("diagnoseklasse.diagnoseklasse_code").value
-						}
-						
-					</td>
-				</tr>
-				<tr>
-				    <td>
-						Gezondheidspatroon
-					</td>
-					<td>
-						@if(diagnoseForm("gezondheidspatroon.gezondheidspatroon_omschrijving") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("gezondheidspatroon.gezondheidspatroon_omschrijving").value
-						}
-						
-					</td>
-				</tr>
-            </tbody>
-        </table>
-		
+			</thead>
+		</table>
+	
 		<table id="bepalendKenmerk" class="diagnoses zebra-striped">
 			<thead id="bepalendKenmerkHead">
 				<tr>
@@ -199,30 +150,6 @@
 			</thead>
 		</table>
 		
-		
-		<!--
-		a @diagnoseForm("diagnoseoverzicht_omschrijving").value <br />
-		a @diagnoseForm("diagnoseoverzicht_definitie").value <br />
-		a @diagnoseForm("diagnose_code").value <br />
-		a @diagnoseForm("diagnoseklasse_code").value <br />
-		a @diagnoseForm("diagnosedomein_code").value <br />
-		a @diagnoseForm("gezondheidspatroon_id").value <br />
-		a @diagnoseForm("diagnoseklasse.diagnoseklasse_code").value
-		
-            @inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose naam", '_help -> "")
-			@inputText(diagnoseForm("diagnoseoverzicht_definitie"), '_label -> "Diagnose omschrijving", '_help -> "")
-			@inputText(diagnoseForm("diagnose_code"), '_label -> "Diagnose code", '_help -> "")
-			@inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_code"), '_label -> "Diagnose klasse", '_help -> "")
-			@inputText(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code"), '_label -> "Diagnose domein", '_help -> "")
-			
-            @select(
-                diagnoseForm("gezondheidspatroon.gezondheidspatroon_id"), 
-                options(Gezondheidspatroon.options), 
-                '_label -> "Patroon", '_default -> "-- Kies een patroon --",
-                '_showConstraints -> false
-            )
-            
-		-->
         </fieldset>
         
         <div class="actions">
