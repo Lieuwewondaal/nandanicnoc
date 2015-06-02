@@ -58,19 +58,7 @@ public class Application extends Controller {
     }
     
     /**
-     * JSON test 2
-     */
-    /*public static Result getNicDiagnose() {
-    	List<Nic_Diagnose> nic = Nic_Diagnose
-    			.find
-    			.where()
-    			.like("diagnose", "491322316502")
-                .findList();
-        return ok(play.libs.Json.toJson(nic));
-    }*/
-    
-    /**
-     * Get nic_diagnose from diagnose_id
+     * Get nic_diagnose from diagnose_id in JSON format
      * @param id
      * @return
      */
@@ -81,6 +69,66 @@ public class Application extends Controller {
     			.like("diagnose", id.toString())
                 .findList();
         return ok(play.libs.Json.toJson(nic));
+    }
+    
+    /**
+     * Get bepalendkenmerk_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getBepalendKenmerk(Long id){
+    	List<Bepalendkenmerk_Diagnose> bepalendkenmerk = Bepalendkenmerk_Diagnose
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+    	return ok(play.libs.Json.toJson(bepalendkenmerk));
+    }
+    
+    /**
+     * Get risicofactor_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getRisicoFactor(Long id){
+    	List<Risicofactor_Diagnose> risicofactor = Risicofactor_Diagnose
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+    	return ok(play.libs.Json.toJson(risicofactor));
+    }
+    
+    
+    /**
+     * Get samenhangendefactor_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getSamenhangendeFactor(Long id){
+    	List<Samenhangendefactor_Diagnose> samenhangendefactor = Samenhangendefactor_Diagnose
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+    	return ok(play.libs.Json.toJson(samenhangendefactor));
+    }
+    
+    /**
+     * Get noc_indicator_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getNocDiagnose(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
+    			.find
+    			.fetch("noc")
+    			.fetch("noc.nocoverzicht")
+    			.where()
+    			.like("diagnose", id.toString())
+                .findList();
+        return ok(play.libs.Json.toJson(noc));
     }
     
     /**
@@ -113,121 +161,11 @@ public class Application extends Controller {
 			    .findList()
 			    .get(0)
         );
-        
-        // Get Bepalendkenmerk values of diagnose
-    	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
-    			.find
-    			.where()
-    			.ilike("diagnose_id", id.toString())
-                .findList();
-    	
-		/*
-   	 	// execute the query returning a List of MapBean objects
-   	 	List<SqlRow> list = sqlQuery.findList();
-   	 	JsonNode j = Json.toJson(list);
-        int i = 0;
-        String x = "";
-        while(i < list.size()){
-        	x += list.get(i);
-        	i++;
-        }
-        */
-    	
-    	// Get NOC/Indicator attached to diagnose
-    	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
-    			.find
-    			.fetch("noc")
-    			.fetch("noc.nocoverzicht")
-    			.fetch("diagnose")
-    			.fetch("indicator")
-    			.where()
-    			.like("diagnose", id.toString())
-                .findList();
     	
         return ok(
-            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, noc)
+            editForm.render(id, diagnoseForm)
         );
-    }
-    
-    public static Result getBepalendeKenmerken(Long id){
-    	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
-    			.find
-    			.where().
-                ilike("diagnose_id", id.toString())
-                .findList();
-        return ok(
-        		bepalendkenmerkdiagnose.render(d)
-            );
-    }
-    
-    
-    /**
-     * Get Bepalend kenmerk pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    public static Result getBepalendkenmerk(int page, String sortBy, String order, String filter) {
-        return ok(
-        		bepalendkenmerk.render(
-                    Bepalendkenmerk_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-    
-    /**
-     * Get Risicofactor pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    public static Result getRisicofactor(int page, String sortBy, String order, String filter) {
-        return ok(
-        		risicofactor.render(
-    				Risicofactor_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-    
-    /**
-     * Get Samenhangendefactor pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    public static Result getSamenhangendefactor(int page, String sortBy, String order, String filter) {
-        return ok(
-        		samenhangendefactor.render(
-    				Samenhangendefactor_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-    
-    /**
-     * Get NIC pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    public static Result getNicActiviteit(int page, String sortBy, String order, String filter) {
-        return ok(
-        		nic_diagnose.render(
-    				Nic_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
+    } 
     
     /**
      * Handle the 'edit form' submission 
@@ -236,25 +174,8 @@ public class Application extends Controller {
      */
     public static Result update(Long diagnose_id) {
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
-        if(diagnoseForm.hasErrors()) {
-        	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
-        			.find
-        			.where().
-                    ilike("diagnose_id", diagnose_id.toString())
-                    .findList();
-        	
-        	// Get NOC of diagnose
-        	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
-        			.find
-        			.fetch("noc")
-        			.fetch("noc.nocoverzicht")
-        			.fetch("diagnose")
-        			.fetch("indicator")
-        			.where()
-        			.like("diagnose", diagnose_id.toString())
-                    .findList();
-        	
-            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, noc));
+        if(diagnoseForm.hasErrors()) {	
+            return badRequest(editForm.render(diagnose_id, diagnoseForm));
         }
         diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
