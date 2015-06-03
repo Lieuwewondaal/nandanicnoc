@@ -1,9 +1,17 @@
 package controllers;
 
+import java.util.List;
+
+import com.avaje.ebean.Page;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import models.Casus;
+import models.Samenhangendefactor_Diagnose;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.casuslist;
+import views.html.*;
 
 public class VerpleegkundigeApplication extends Controller  {
     /**
@@ -14,7 +22,39 @@ public class VerpleegkundigeApplication extends Controller  {
      * @param filter
      * @return
      */
-    public static Result listCasusVerpleegkundige() {
-    	return Application.GO_HOME;
+    public static Result listCasusVerpleegkundige(int page, String sortBy, String order, String filter) {
+        return ok(
+        		verpleegkundigeCasuslist.render(
+                    Casus.page(page, 10, sortBy, order, filter),
+                    sortBy, order, filter
+            )
+        );
+    }
+    
+    /**
+     * Get samenhangendefactor_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getCasusVerpleegkundige(int page, int pageSize, String sortBy, String order, String filter){
+    	Page<Casus> casus = Casus
+    			.find.where()
+            	.or(
+            			com.avaje.ebean.Expr.like("casus_definitie", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.like("casus_omschrijving", "%" + filter + "%")
+        			)
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(true)
+                .getPage(page);
+    	
+    	int pages = casus.getTotalPageCount();
+    	int rows = casus.getTotalRowCount();
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("casus", Json.toJson(casus.getList()));
+    	result.put("pages", pages);
+    	result.put("rows", rows);
+    	return ok(result);
     }
 }

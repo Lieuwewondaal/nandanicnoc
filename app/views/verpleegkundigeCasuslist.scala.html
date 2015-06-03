@@ -22,21 +22,37 @@
     }
     
     // Generate the link
-    routes.CasusApplication.listCasus(newPage, sortBy, order, currentFilter)
+    routes.VerpleegkundigeApplication.listCasusVerpleegkundige(newPage, sortBy, order, currentFilter)
     
 }
 
 @**********************************
 * Helper generating table headers *
 ***********************************@
-@header(key:String, title:String) = {
-    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
-        <a href="@link(0, key)">@title</a>
-    </th>
-}
+@header(key:String, title:String) = { <th class=@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"} id=@key><a href=@link(0, key)>@title</a></th> }
 
 @main {
-    
+	<script>
+	var x = 0;
+	  $( document ).ready(function() {
+		x = 0;
+		  $.get( "/verpleegkundigecasus", function(data) {
+			if(data.casus.length > 0){
+				$("#casusOverzichtBody").html("");
+				$("#casusOverzichtHead").html("<tr>@header("casus_omschrijving", "Casus omschrijving")@header("casus_definitie", "Casus definitie")@header("casus_begindatum", "Datum")</tr>");
+				$.each(data.casus, function(key, casus) {
+				var date = new Date(casus.casus_begindatum);
+				  $("#casusOverzichtBody").append("<tr><td>" + casus.casus_omschrijving + "</td><td>" + casus.casus_definitie + "</td><td>" + date + "</td></tr>");
+				});
+			}
+			else{
+			  $("#casusOverzichtHead").html("<tr><th>Casussen</th></tr>");
+			  $("#casusOverzicht").append("<tr><td>Geen casussen gevonden");
+			}
+		  });
+	  });
+    </script>
+	
     <h1 id="homeTitle">@Messages("diagnose.casuslist.title", currentPage.getTotalRowCount)</h1>
 
     @if(flash.containsKey("success")) {
@@ -52,10 +68,88 @@
             <input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
         </form>
         
-        <a class="btn success" id="add" href="@routes.CasusApplication.createCasus()">Nieuwe Casus</a>
-        
     </div>
     
+	<table id="casusOverzicht" class="diagnoses zebra-striped">
+		<thead id="casusOverzichtHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Casussen laden...</th>
+			</tr>
+		</thead>
+		<tbody id="casusOverzichtBody">
+		
+		</tbody>
+	</table>
+	
+	<div id="eggs">
+	  Click here
+	</div>
+	
+	<script>
+	  $( "#eggs" ).mouseup(function() {
+		if(x == 0){
+		  x = 1;
+		  $.get( "/verpleegkundigecasus?p=1", function(data) {
+			if(data.casus.length > 0){
+				$("#casusOverzichtBody").html("");
+				$("#casusOverzichtHead").html("<tr>@header("casus_omschrijving", "Casus omschrijving")@header("casus_definitie", "Casus definitie")@header("casus_begindatum", "Datum")</tr>");
+				$.each(data.casus, function(key, casus) {
+					var date = new Date(casus.casus_begindatum);
+				  $("#casusOverzichtBody").append("<tr><td>" + casus.casus_omschrijving + "</td><td>" + casus.casus_definitie + "</td><td>" + date + "</td></tr>");
+				});
+			}
+			else{
+			  $("#casusOverzichtHead").html("<tr><th>Casussen</th></tr>");
+			  $("#casusOverzicht").append("<tr><td>Geen casussen gevonden");
+			}
+		  });
+		}
+		else if(x == 1){
+		  x = 0;
+		  $.get( "/verpleegkundigecasus?p=0", function(data) {
+			if(data.casus.length > 0){
+				$("#casusOverzichtBody").html("");
+				$("#casusOverzichtHead").html("<tr>@header("casus_omschrijving", "Casus omschrijving")@header("casus_definitie", "Casus definitie")@header("casus_begindatum", "Datum")</tr>");
+				$.each(data.casus, function(key, casus) {
+				var date = new Date(casus.casus_begindatum);
+				  $("#casusOverzichtBody").append("<tr><td>" + casus.casus_omschrijving + "</td><td>" + casus.casus_definitie + "</td><td>" + date + "</td></tr>");
+				});
+			}
+			else{
+			  $("#casusOverzichtHead").html("<tr><th>Casussen</th></tr>");
+			  $("#casusOverzicht").append("<tr><td>Geen casussen gevonden");
+			}
+		  });
+		}
+	  });
+	</script>
+	
+	<div id="pagination" class="pagination">
+		<ul>
+			@if(currentPage.hasPrev) {
+				<li class="prev">
+					<a href="#">&larr; Previous</a>
+				</li>
+			} else {
+				<li class="prev disabled">
+					<a>&larr; Previous</a>
+				</li>
+			}
+			<li class="current">
+				<a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+			</li>
+			@if(currentPage.hasNext) {
+				<li class="next">
+					<a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+				</li>
+			} else {
+				<li class="next disabled">
+					<a>Next &rarr;</a>
+				</li>
+			}
+		</ul>
+	</div>
+	
     @if(currentPage.getTotalRowCount == 0) {
         
         <div class="well">
@@ -123,9 +217,7 @@
                 }
             </ul>
         </div>
-        
     }
-        
 }
 
             
