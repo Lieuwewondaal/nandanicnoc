@@ -48,13 +48,14 @@ public class VerpleegkundigeApplication extends Controller  {
                 .setFetchAhead(true)
                 .getPage(page);
     	
-    	int pages = casus.getTotalPageCount();
-    	int rows = casus.getTotalRowCount();
-    	
     	ObjectNode result = Json.newObject();
     	result.put("casus", Json.toJson(casus.getList()));
-    	result.put("pages", pages);
-    	result.put("rows", rows);
+    	result.put("pages", casus.getTotalPageCount());
+    	result.put("rows", casus.getTotalRowCount());
+    	result.put("index", casus.getPageIndex());
+    	result.put("XtoYofZ", casus.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", casus.hasNext());
+    	result.put("hasPrev", casus.hasPrev());
     	return ok(result);
     }
 }

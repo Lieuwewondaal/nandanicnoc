@@ -61,4 +61,11 @@ table.computers .header a {
     color: #666;
 }
 
+#prevli {
+	cursor:pointer
+}
+
+#nextli {
+	cursor:pointer
+}
 
