@@ -9,6 +9,7 @@ import play.data.format.*;
 import play.data.validation.*;
 
 import com.avaje.ebean.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Diagnose entity managed by Ebean
@@ -22,14 +23,15 @@ public class Noc extends Model {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long noc_id;
     
-    @OneToMany(mappedBy="noc")
-	public List<Noc_Indicator> noc_indicator;
-    
 	@OneToMany(mappedBy="noc")
 	public List<Noc_Waarde> noc_waarde;
 	
 	@OneToMany(mappedBy="noc")
 	public List<Nocoverzicht> nocoverzicht;
+	
+	@OneToMany(mappedBy="noc")
+	@JsonManagedReference
+	public List<Noc_Indicator_Diagnose> noc_indicator_diagnose;
     /**
      * Generic query helper for entity Diagnose with id Long
      */

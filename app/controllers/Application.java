@@ -1,30 +1,7 @@
 package controllers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-
-import javax.persistence.PersistenceException;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.FetchConfig;
-import com.avaje.ebean.SqlQuery;
-import com.avaje.ebean.SqlRow;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import play.libs.Json;
 import play.mvc.*;
-import play.mvc.Http.MultipartFormData;
-import play.mvc.Http.MultipartFormData.FilePart;
 import play.data.*;
 import static play.data.Form.*;
 import views.html.*;
@@ -49,6 +26,7 @@ public class Application extends Controller {
     public static Result index() {
         return GO_HOME;
     }
+<<<<<<< HEAD
     
     public static Result login() {
         return ok(
@@ -84,25 +62,14 @@ public class Application extends Controller {
         java.util.List<models.Gezondheidspatroon> tasks = new play.db.ebean.Model.Finder(String.class, models.Gezondheidspatroon.class).all();
         return ok(play.libs.Json.toJson(tasks));
     }
+=======
+>>>>>>> 3e89c30aab80e6d4a82eaac0ed400959f9c17f49
     
     /**
-     * JSON test 2
-     */
-    /*public static Result getNicDiagnose() {
-    	List<Nic_Diagnose> nic = Nic_Diagnose
-    			.find
-    			.where()
-    			.like("diagnose", "491322316502")
-                .findList();
-        return ok(play.libs.Json.toJson(nic));
-    }*/
-    
-    /**
-     * Get nic_diagnose from diagnose_id
+     * Get nic_diagnose from diagnose_id in JSON format
      * @param id
      * @return
      */
-    @Security.Authenticated(Secured.class)
     public static Result getNicDiagnose(Long id) {
     	List<Nic_Diagnose> nic = Nic_Diagnose
     			.find
@@ -110,6 +77,82 @@ public class Application extends Controller {
     			.like("diagnose", id.toString())
                 .findList();
         return ok(play.libs.Json.toJson(nic));
+    }
+    
+    /**
+     * Get bepalendkenmerk_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+<<<<<<< HEAD
+    @Security.Authenticated(Secured.class)
+    public static Result getNicDiagnose(Long id) {
+    	List<Nic_Diagnose> nic = Nic_Diagnose
+=======
+    public static Result getBepalendKenmerk(Long id){
+    	List<Bepalendkenmerk_Diagnose> bepalendkenmerk = Bepalendkenmerk_Diagnose
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+    	return ok(play.libs.Json.toJson(bepalendkenmerk));
+    }
+    
+    /**
+     * Get risicofactor_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getRisicoFactor(Long id){
+    	List<Risicofactor_Diagnose> risicofactor = Risicofactor_Diagnose
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+    	return ok(play.libs.Json.toJson(risicofactor));
+    }
+    
+    
+    /**
+     * Get samenhangendefactor_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getSamenhangendeFactor(Long id){
+    	List<Samenhangendefactor_Diagnose> samenhangendefactor = Samenhangendefactor_Diagnose
+>>>>>>> 3e89c30aab80e6d4a82eaac0ed400959f9c17f49
+    			.find
+    			.where().
+                ilike("diagnose_id", id.toString())
+                .findList();
+    	return ok(play.libs.Json.toJson(samenhangendefactor));
+    }
+    
+    /**
+     * Get noc_indicator_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+    public static Result getNocDiagnose(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
+    			.find
+    			.fetch("noc")
+    			.fetch("noc.nocoverzicht")
+    			.where()
+    			.like("diagnose", id.toString())
+                .findList();
+        return ok(play.libs.Json.toJson(noc));
+    }
+    
+    public static Result getDiagnoseOverzicht(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Diagnoseoverzicht> diagnoseoverzicht = Diagnoseoverzicht
+    			.find
+    			.where()
+			    .ilike("diagnose_id", id.toString())
+			    .findList();
+        return ok(play.libs.Json.toJson(diagnoseoverzicht));
     }
     
     /**
@@ -138,46 +181,17 @@ public class Application extends Controller {
     @Security.Authenticated(Secured.class)
     public static Result edit(Long id) {
     	// Get Diagnoseoverzicht values
-        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
+        /*Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
         		Diagnoseoverzicht.find.where()
 			    .ilike("diagnose_id", id.toString())
 			    .findList()
 			    .get(0)
-        );
-        
-        // Get Bepalendkenmerk values of diagnose
-    	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
-    			.find
-    			.where()
-    			.ilike("diagnose_id", id.toString())
-                .findList();
-    	
-		/*
-   	 	// execute the query returning a List of MapBean objects
-   	 	List<SqlRow> list = sqlQuery.findList();
-   	 	JsonNode j = Json.toJson(list);
-        int i = 0;
-        String x = "";
-        while(i < list.size()){
-        	x += list.get(i);
-        	i++;
-        }
-        */
-    	
-    	// Get NOC/Indicator attached to diagnose
-    	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
-    			.find
-    			.fetch("noc")
-    			.fetch("noc.nocoverzicht")
-    			.fetch("diagnose")
-    			.fetch("indicator")
-    			.where()
-    			.like("diagnose", id.toString())
-                .findList();
+        );*/
     	
         return ok(
-            editForm.render(id, diagnoseForm, bepalendkenmerk_diagnose, noc)
+            editForm.render(id)
         );
+<<<<<<< HEAD
     }
     
     @Security.Authenticated(Secured.class)
@@ -264,6 +278,9 @@ public class Application extends Controller {
                 )
             );
     }
+=======
+    } 
+>>>>>>> 3e89c30aab80e6d4a82eaac0ed400959f9c17f49
     
     /**
      * Handle the 'edit form' submission 
@@ -272,28 +289,11 @@ public class Application extends Controller {
      */
     @Security.Authenticated(Secured.class)
     public static Result update(Long diagnose_id) {
-        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
-        if(diagnoseForm.hasErrors()) {
-        	List<Bepalendkenmerk_Diagnose> bepalendkenmerk_diagnose = Bepalendkenmerk_Diagnose
-        			.find
-        			.where().
-                    ilike("diagnose_id", diagnose_id.toString())
-                    .findList();
-        	
-        	// Get NOC of diagnose
-        	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
-        			.find
-        			.fetch("noc")
-        			.fetch("noc.nocoverzicht")
-        			.fetch("diagnose")
-        			.fetch("indicator")
-        			.where()
-        			.like("diagnose", diagnose_id.toString())
-                    .findList();
-        	
-            return badRequest(editForm.render(diagnose_id, diagnoseForm, bepalendkenmerk_diagnose, noc));
-        }
-        diagnoseForm.get().update(diagnose_id);
+        //Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
+        /*if(diagnoseForm.hasErrors()) {	
+            return badRequest(editForm.render(diagnose_id, diagnoseForm));
+        }*/
+        //diagnoseForm.get().update(diagnose_id);
         //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
         return GO_HOME;
     }

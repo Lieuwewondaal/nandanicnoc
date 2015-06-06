@@ -17,3 +17,5 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava)
 fork in run := true
 
 fork in run := true
+
+fork in run := true

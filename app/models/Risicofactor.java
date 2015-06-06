@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import play.db.ebean.*;
 import play.data.format.Formats;
 import play.data.validation.*;
@@ -23,6 +25,10 @@ public class Risicofactor extends Model {
     
     public String risicofactor_omschrijving;
     
+	@OneToMany(mappedBy="risicofactor")
+	@JsonManagedReference
+	public List<Risicofactor_Diagnose> risicofactor_diagnose;
+	
     /**
      * Generic query helper for entity Company with id Long
      */

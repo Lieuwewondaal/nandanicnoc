@@ -13,10 +13,12 @@ POST	/login						controllers.Application.authenticate()
 GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
 
 # Get diagnoseoverzicht information
-GET		/diagnoses/bepalendkenmerk		controllers.Application.getBepalendkenmerk(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
-GET		/diagnoses/risicofactor			controllers.Application.getRisicofactor(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
-GET		/diagnoses/samenhangendefactor	controllers.Application.getSamenhangendefactor(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
-GET		/diagnoses/nic_diagnose	controllers.Application.getNicActiviteit(p:Int ?= 0, s ?= "", o ?= "asc", f ?= "")
+GET     /diagnoseoverzicht/:id	    controllers.Application.getDiagnoseOverzicht(id:Long)
+GET     /nicdiagnose/:id		    controllers.Application.getNicDiagnose(id:Long)
+GET     /nocdiagnose/:id		    controllers.Application.getNocDiagnose(id:Long)
+GET     /bepalendkenmerk/:id		controllers.Application.getBepalendKenmerk(id:Long)
+GET     /risicofactor/:id		    controllers.Application.getRisicoFactor(id:Long)
+GET     /samenhangendefactor/:id	controllers.Application.getSamenhangendeFactor(id:Long)
 
 # Add diagnose
 GET     /diagnoses/new              controllers.Application.create()
@@ -34,6 +36,10 @@ GET     /casus/now		            controllers.CasusApplication.saveCasus()
 GET 	/casus/:id					controllers.CasusApplication.editCasus(id:Long)
 POST    /casus/:id              	controllers.CasusApplication.updateCasus(id:Long)
 
+# Verpleegkundige views
+GET		/verpleegkundige			controllers.VerpleegkundigeApplication.listCasusVerpleegkundige(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+GET		/verpleegkundigecasus		controllers.VerpleegkundigeApplication.getCasusVerpleegkundige(p:Int ?= 0, ps:Int ?= 10, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+
 # Delete a computer
 POST    /diagnoses/:id/delete       controllers.CasusApplication.deleteCasus(id:Long)
 
@@ -46,8 +52,5 @@ POST    /diagnoses/:id/delete       controllers.Application.delete(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
-GET     /gezondheidspatroon         controllers.Application.getGezondheidspatroon()
-GET     /nicdiagnose/:id		    controllers.Application.getNicDiagnose(id:Long)
 
 

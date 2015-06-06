@@ -1,4 +1,4 @@
-@(id: Long, diagnoseForm: Form[Diagnoseoverzicht], bepalendkenmerk_diagnose: List[Bepalendkenmerk_Diagnose], noc: List[Noc_Indicator_Diagnose])
+@(id: Long)
 
 @import helper._
 
@@ -7,30 +7,24 @@
 @main {
 	<script>
 	  $( document ).ready(function() {
-	  var linkBepalendkenmerk = "bepalendkenmerk?f=" + @id ;
-	  var linkRisicofactor = "risicofactor?f=" + @id ;
-	  var linkSamenhangendefactor = "samenhangendefactor?f=" + @id ;
-	  $.get( linkBepalendkenmerk, function( data ) {
-		  $( ".form" ).append( data );
-		});
-	  $.get( linkRisicofactor, function( data ) {
-		  $( ".form" ).append( data );
-	  });
-		
-	  $.get( linkSamenhangendefactor, function( data ) {
-		  $( ".form" ).append( data );
-	  });
-	  
-	  /*(function() {
-		  $(function() {
-			return $.get("/nicdiagnose/" + @id, function(data) {
-			  return $.each(data, function(key, nicdiagnose) {
-				return $("#tasks").append("<tr><td>" + nicdiagnose.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + nicdiagnose.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>" + nicdiagnose.nicactiviteit.nicactiviteit_omschrijving + "</td></tr>");
-			  });
-			});
-		  });
 
-		}).call(this);*/
+	  $.get( "/diagnoseoverzicht/" + @id, function(data) {
+		if(data.length > 0){
+			$("#diagnoseOverzichtHead").html("<tr><th>Detail:</th><th>Waarde</th></tr>");
+			$.each(data, function(key, diagnoseoverzicht) {
+			  $("#diagnoseOverzicht").append("<tr><td>Code</td><td>" + diagnoseoverzicht.diagnose_code + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Omschrijving</td><td>" + diagnoseoverzicht.diagnoseoverzicht_omschrijving + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Definitie</td><td>" + diagnoseoverzicht.diagnoseoverzicht_definitie + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Domein</td><td>" + diagnoseoverzicht.diagnoseklasse.diagnosedomein.diagnosedomein_code + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Klasse</td><td>" + diagnoseoverzicht.diagnoseklasse.diagnoseklasse_code + "</td></tr>");
+			  $("#diagnoseOverzicht").append("<tr><td>Gezondheidspatroon</td><td>" + diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#diagnoseOverzichtHead").html("<tr><th>Diagnosegegevens:</th></tr>");
+		  $("#diagnoseOverzicht").append("<tr><td>Geen diagnosegegevens gevonden");
+		}
+	  });
 	  
 	  $.get( "/nicdiagnose/" + @id, function(data) {
 		if(data.length > 0){
@@ -40,7 +34,60 @@
 			});
 		}
 		else{
+		  $("#nicDiagnoseHead").html("<tr><th>Interventies</th></tr>");
 		  $("#nicDiagnose").append("<tr><td>Geen interventies gevonden");
+		}
+	  });
+	  
+	  $.get( "/nocdiagnose/" + @id, function(data) {
+		if(data.length > 0){
+			$("#nocDiagnoseHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th></tr>");
+			$.each(data, function(key, nocdiagnose) {
+			  $("#nocDiagnose").append("<tr><td>" + nocdiagnose.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + nocdiagnose.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>" + nocdiagnose.indicator.indicator_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#nocDiagnoseHead").html("<tr><th>Zorgresultaten:</th></tr>");
+		  $("#nocDiagnose").append("<tr><td>Geen zorgresultaten gevonden");
+		}
+	  });
+	  
+	  $.get( "/bepalendkenmerk/" + @id, function(data) {
+		if(data.length > 0){
+			$("#bepalendKenmerkHead").html("<tr><th>Bepalende kenmerken:</th></tr>");
+			$.each(data, function(key, bepalendkenmerk) {
+			  $("#bepalendKenmerk").append("<tr><td>" + bepalendkenmerk.bepalendkenmerk.bepalendkenmerk_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#bepalendKenmerkHead").html("<tr><th>Bepalende kenmerken:</th></tr>");
+		  $("#bepalendKenmerk").append("<tr><td>Geen bepalende kenmerken gevonden");
+		}
+	  });
+	  
+	  $.get( "/risicofactor/" + @id, function(data) {
+		if(data.length > 0){
+			$("#risicoFactorHead").html("<tr><th>Risicofactoren:</th></tr>");
+			$.each(data, function(key, risicofactor) {
+			  $("#risicoFactor").append("<tr><td>" + risicofactor.risicofactor.risicofactor_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#risicoFactorHead").html("<tr><th>Risicofactoren:</th></tr>");
+		  $("#risicoFactor").append("<tr><td>Geen risicofactoren gevonden");
+		}
+	  });
+	  
+	  $.get( "/samenhangendefactor/" + @id, function(data) {
+		if(data.length > 0){
+			$("#samenhangendeFactorHead").html("<tr><th>Samenhangende factoren:</th></tr>");
+			$.each(data, function(key, samenhangendefactor) {
+			  $("#samenhangendeFactor").append("<tr><td>" + samenhangendefactor.samenhangendefactor.samenhangendefactor_omschrijving + "</td></tr>");
+			});
+		}
+		else{
+		  $("#samenhangendeFactorHead").html("<tr><th>Samenhangende factoren:</th></tr>");
+		  $("#samenhangendeFactor").append("<tr><td>Geen samenhangende factoren gevonden");
 		}
 	  });
 	});
@@ -49,86 +96,43 @@
 	</script>
 	
 	
-    <h1>Edit diagnose</h1>
+    <h1>Diagnose</h1>
     
     @form(routes.Application.update(id)) {
         
         <fieldset class="form">
+	
+		<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
+			<thead id="diagnoseOverzichtHead">
+				<tr>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnose gegevens laden...</th>
+				</tr>
+			</thead>
+		</table>
+	
+		<table id="bepalendKenmerk" class="diagnoses zebra-striped">
+			<thead id="bepalendKenmerkHead">
+				<tr>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Bepalende kenmerken laden...</th>
+				</tr>
+			</thead>
+		</table>
 		
-		<table class="diagnoses zebra-striped">
-            <thead>
-                <tr>
-				  <th>Detail</th>
-				  <th>Waarde</th>
-                </tr>
-            </thead>
-            <tbody>
+		<table id="risicoFactor" class="diagnoses zebra-striped">
+			<thead id="risicoFactorHead">
 				<tr>
-				    <td>
-						Code
-					</td>
-					<td>
-						@if(diagnoseForm("diagnose_code") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("diagnose_code").value
-						}
-						
-					</td>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Risicofactoren laden...</th>
 				</tr>
+			</thead>
+		</table>
+		
+		<table id="samenhangendeFactor" class="diagnoses zebra-striped">
+			<thead id="samenhangendeFactorHead">
 				<tr>
-					<td>Omschrijving</td>
-					<td>
-						@diagnoseForm("diagnoseoverzicht_omschrijving").value
-					</td>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Samenhangende factoren laden...</th>
 				</tr>
-				<tr>
-					<td>Defintie</td>
-					<td>
-						@diagnoseForm("diagnoseoverzicht_definitie").value
-					</td>
-				</tr>
-				<tr>
-				    <td>
-						Domein
-					</td>
-					<td>
-						@if(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code").value
-						}
-						
-					</td>
-				</tr>
-				<tr>
-				    <td>
-						Klasse
-					</td>
-					<td>
-						@if(diagnoseForm("diagnoseklasse.diagnoseklasse_code") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("diagnoseklasse.diagnoseklasse_code").value
-						}
-						
-					</td>
-				</tr>
-				<tr>
-				    <td>
-						Gezondheidspatroon
-					</td>
-					<td>
-						@if(diagnoseForm("gezondheidspatroon.gezondheidspatroon_omschrijving") == null) {
-							<em>-</em>
-						} else{
-							@diagnoseForm("gezondheidspatroon.gezondheidspatroon_omschrijving").value
-						}
-						
-					</td>
-				</tr>
-            </tbody>
-        </table>
+			</thead>
+		</table>
 		
 		<table id="nicDiagnose" class="diagnoses zebra-striped">
 			<thead id="nicDiagnoseHead">
@@ -138,66 +142,14 @@
 			</thead>
 		</table>
 		
-		@if(noc.size() == 0) {
-			
-			<div class="well">
-				<em>Geen zorgresultaten gevonden</em>
-			</div>
-			
-		} else {
-			<br /><br /><hr /><br /><br />
-			<table class="diagnoses zebra-striped">
-				<thead>
-					<tr>
-						<th>Zorgresultaat omschrijving:</th>
-						<th>Zorgresultaat definitie:</th>
-						<th>Zorgresultaat indicator:</th>
-					</tr>
-				</thead>
-				<tbody>
-
-					@for(zorgresultaten <- noc) {
-						<tr>
-							<td>
-								@zorgresultaten.noc.nocoverzicht.get(0).nocoverzicht_omschrijving
-							</td>
-							<td>
-								@zorgresultaten.noc.nocoverzicht.get(0).nocoverzicht_definitie
-							</td>
-							<td>
-								@zorgresultaten.indicator.indicator_omschrijving
-							</td>
-						</tr>
-					}
-
-				</tbody>
-			</table>
-		}
+		<table id="nocDiagnose" class="diagnoses zebra-striped">
+			<thead id="nocDiagnoseHead">
+				<tr>
+					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> zorgresultaten laden...</th>
+				</tr>
+			</thead>
+		</table>
 		
-		
-		<!--
-		a @diagnoseForm("diagnoseoverzicht_omschrijving").value <br />
-		a @diagnoseForm("diagnoseoverzicht_definitie").value <br />
-		a @diagnoseForm("diagnose_code").value <br />
-		a @diagnoseForm("diagnoseklasse_code").value <br />
-		a @diagnoseForm("diagnosedomein_code").value <br />
-		a @diagnoseForm("gezondheidspatroon_id").value <br />
-		a @diagnoseForm("diagnoseklasse.diagnoseklasse_code").value
-		
-            @inputText(diagnoseForm("diagnoseoverzicht_omschrijving"), '_label -> "Diagnose naam", '_help -> "")
-			@inputText(diagnoseForm("diagnoseoverzicht_definitie"), '_label -> "Diagnose omschrijving", '_help -> "")
-			@inputText(diagnoseForm("diagnose_code"), '_label -> "Diagnose code", '_help -> "")
-			@inputText(diagnoseForm("diagnoseklasse.diagnoseklasse_code"), '_label -> "Diagnose klasse", '_help -> "")
-			@inputText(diagnoseForm("diagnoseklasse.diagnosedomein.diagnosedomein_code"), '_label -> "Diagnose domein", '_help -> "")
-			
-            @select(
-                diagnoseForm("gezondheidspatroon.gezondheidspatroon_id"), 
-                options(Gezondheidspatroon.options), 
-                '_label -> "Patroon", '_default -> "-- Kies een patroon --",
-                '_showConstraints -> false
-            )
-            
-		-->
         </fieldset>
         
         <div class="actions">
