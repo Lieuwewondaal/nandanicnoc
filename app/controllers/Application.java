@@ -45,8 +45,36 @@ public class Application extends Controller {
     /**
      * Handle default path requests, redirect to diagnoses list
      */
+    @Security.Authenticated(Secured.class)
     public static Result index() {
         return GO_HOME;
+    }
+    
+    public static Result login() {
+        return ok(
+            login.render(form(Login.class))
+        );
+    }
+    
+    public static Result logout() {
+        session().clear();
+        flash("success", "You've been logged out");
+        return redirect(
+            routes.Application.login()
+        );
+    }
+    
+    public static Result authenticate() {
+        Form<Login> loginForm = form(Login.class).bindFromRequest();
+        if (loginForm.hasErrors()) {
+            return badRequest(login.render(loginForm));
+        } else {
+            session().clear();
+            session("username", loginForm.get().username);
+            return redirect(
+                routes.Application.index()
+            );
+        }
     }
 
     /**
@@ -74,6 +102,7 @@ public class Application extends Controller {
      * @param id
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getNicDiagnose(Long id) {
     	List<Nic_Diagnose> nic = Nic_Diagnose
     			.find
@@ -91,6 +120,7 @@ public class Application extends Controller {
      * @param order Sort order (either asc or desc)
      * @param filter Filter applied on diagnose names
      */
+    @Security.Authenticated(Secured.class)
     public static Result list(int page, String sortBy, String order, String filter) {
         return ok(
             list.render(
@@ -105,6 +135,7 @@ public class Application extends Controller {
      *
      * @param id Id of the diagnose to edit
      */
+    @Security.Authenticated(Secured.class)
     public static Result edit(Long id) {
     	// Get Diagnoseoverzicht values
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
@@ -149,6 +180,7 @@ public class Application extends Controller {
         );
     }
     
+    @Security.Authenticated(Secured.class)
     public static Result getBepalendeKenmerken(Long id){
     	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
     			.find
@@ -169,6 +201,7 @@ public class Application extends Controller {
      * @param filter
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getBepalendkenmerk(int page, String sortBy, String order, String filter) {
         return ok(
         		bepalendkenmerk.render(
@@ -186,6 +219,7 @@ public class Application extends Controller {
      * @param filter
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getRisicofactor(int page, String sortBy, String order, String filter) {
         return ok(
         		risicofactor.render(
@@ -203,6 +237,7 @@ public class Application extends Controller {
      * @param filter
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getSamenhangendefactor(int page, String sortBy, String order, String filter) {
         return ok(
         		samenhangendefactor.render(
@@ -220,6 +255,7 @@ public class Application extends Controller {
      * @param filter
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getNicActiviteit(int page, String sortBy, String order, String filter) {
         return ok(
         		nic_diagnose.render(
@@ -234,6 +270,7 @@ public class Application extends Controller {
      *
      * @param id Id of the diagnose to edit
      */
+    @Security.Authenticated(Secured.class)
     public static Result update(Long diagnose_id) {
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
         if(diagnoseForm.hasErrors()) {
@@ -264,6 +301,7 @@ public class Application extends Controller {
     /**
      * Display the 'new diagnose form'.
      */
+    @Security.Authenticated(Secured.class)
     public static Result create() {
         Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class);
         return ok(
@@ -274,6 +312,7 @@ public class Application extends Controller {
     /**
      * Handle the 'new diagnose form' submission 
      */
+    @Security.Authenticated(Secured.class)
     public static Result save() {
         /*Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
         DynamicForm domein = Form.form().bindFromRequest();
@@ -298,10 +337,25 @@ public class Application extends Controller {
     /**
      * Handle diagnose deletion
      */
+    @Security.Authenticated(Secured.class)
     public static Result delete(Long id) {
         /*Diagnose.find.ref(id).delete();
         flash("success", "Diagnose has been deleted");*/
         return GO_HOME;
+    }
+    
+    public static class Login {
+
+        public String username;
+        public String password;
+        
+        public String validate() {
+            if (Gebruiker.authenticate(username, password) == null) {
+              return "Invalid user or password";
+            }
+            return null;
+        }
+
     }
 }
             

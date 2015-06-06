@@ -5,6 +5,10 @@
 # Default path will just redirect to the computer list
 GET     /                           controllers.Application.index()
 
+GET     /login                  	controllers.Application.login()
+GET     /logout                     controllers.Application.logout()
+POST	/login						controllers.Application.authenticate()
+
 # Diagnoses list (look at the default values for pagination parameters)
 GET     /diagnoses                  controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
 

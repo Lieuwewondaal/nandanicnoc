@@ -11,6 +11,7 @@ import models.Diagnoseoverzicht;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import views.html.*;
 
 public class CasusApplication extends Controller  {
@@ -23,6 +24,7 @@ public class CasusApplication extends Controller  {
      * @param filter
      * @return
      */
+	@Security.Authenticated(Secured.class)
     public static Result listCasus(int page, String sortBy, String order, String filter) {
         return ok(
                 casuslist.render(
@@ -35,6 +37,7 @@ public class CasusApplication extends Controller  {
 	/**
      * Display the 'new casus form'.
      */
+	@Security.Authenticated(Secured.class)
     public static Result createCasus() {
         Form<Casus> casusForm = form(Casus.class);
         return ok(
@@ -45,6 +48,7 @@ public class CasusApplication extends Controller  {
     /**
      * Handle the 'new casus form' submission 
      */
+	@Security.Authenticated(Secured.class)
     public static Result saveCasus() {
         Form<Casus> casusForm = form(Casus.class).bindFromRequest();
         
@@ -68,6 +72,7 @@ public class CasusApplication extends Controller  {
 	/**
      * Display the 'new casus form'.
      */
+	@Security.Authenticated(Secured.class)
     public static Result editCasus(Long id) {
         Form<Casus> casusForm = form(Casus.class).fill(
         		Casus.find.where()
@@ -85,6 +90,7 @@ public class CasusApplication extends Controller  {
      *
      * @param id Id of the computer to edit
      */
+	@Security.Authenticated(Secured.class)
     public static Result updateCasus(Long id) {
         Form<Casus> casusForm = form(Casus.class).bindFromRequest();
         if(casusForm.hasErrors()) {
@@ -98,6 +104,7 @@ public class CasusApplication extends Controller  {
     /**
      * Handle casus deletion
      */
+	@Security.Authenticated(Secured.class)
     public static Result deleteCasus(Long id) {
         Casus.find.ref(id).delete();
         flash("success", "Casus has been deleted");
