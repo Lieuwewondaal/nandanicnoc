@@ -2,6 +2,15 @@
 
 # --- !Ups
 
+create table gebruiker (
+  gebruiker_id                        bigint not null auto_increment,
+  gebruiker_naam              		  text,
+  gebruiker_wachtwoord		 		  text,
+  gebruiker_admin				 	  boolean,
+  constraint pk_gebruiker primary key (gebruiker_id)
+  ) engine=innodb
+;
+
 create table diagnose (
   diagnose_id                        bigint not null auto_increment,
 
@@ -614,6 +623,8 @@ drop table if exists casus_nic;
 drop table if exists casus_noc;
 
 drop table if exists casusopmerkingen;
+
+drop table if exists gebruiker;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

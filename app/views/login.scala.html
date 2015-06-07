@@ -1,31 +1,26 @@
 @(form: Form[Application.Login])
-<html>
-<head>
-<title>LOGIN</title>
-</head>
-<body>
+
+@main {
 	@helper.form(routes.Application.authenticate) {
-	<h1>Sign in</h1>
+		<h1>Sign in</h1>
 
-	@if(form.hasGlobalErrors) {
-	<p class="error">@form.globalError.message</p>
-	} 
-	
-	@if(flash.contains("success")) {
-	<p class="success">@flash.get("success")</p>
+		@if(form.hasGlobalErrors) {
+		<p class="error">@form.globalError.message</p>
+		} 
+		
+		@if(flash.contains("success")) {
+		<p class="success">@flash.get("success")</p>
+		}
+
+		<p>
+			<input type="text" name="username" placeholder="Gebruikersnaam"
+				value="@form("username").value">
+		</p>
+		<p>
+			<input type="password" name="password" placeholder="Wachtwoord">
+		</p>
+		<p>
+			<button type="submit">Login</button>
+		</p>
 	}
-
-	<p>
-		<input type="text" name="username" placeholder="Gebruikersnaam"
-			value="@form("username").value">
-	</p>
-	<p>
-		<input type="password" name="password" placeholder="Wachtwoord">
-	</p>
-	<p>
-		<button type="submit">Login</button>
-	</p>
-	}
-
-</body>
-</html>
+}

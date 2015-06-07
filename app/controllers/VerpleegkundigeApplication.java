@@ -1,5 +1,7 @@
 package controllers;
 
+import static play.data.Form.form;
+
 import java.util.List;
 
 import com.avaje.ebean.Page;
@@ -7,10 +9,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import models.Casus;
+import models.Diagnoseoverzicht;
 import models.Samenhangendefactor_Diagnose;
+import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import views.html.*;
 
 public class VerpleegkundigeApplication extends Controller  {
@@ -22,6 +27,7 @@ public class VerpleegkundigeApplication extends Controller  {
      * @param filter
      * @return
      */
+	@Security.Authenticated(Secured.class)
     public static Result listCasusVerpleegkundige(int page, String sortBy, String order, String filter) {
         return ok(
         		verpleegkundigeCasuslist.render(
@@ -36,7 +42,8 @@ public class VerpleegkundigeApplication extends Controller  {
      * @param id
      * @return
      */
-    public static Result getCasusVerpleegkundige(int page, int pageSize, String sortBy, String order, String filter){
+	@Security.Authenticated(Secured.class)
+    public static Result getListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
     	Page<Casus> casus = Casus
     			.find.where()
             	.or(
@@ -57,5 +64,41 @@ public class VerpleegkundigeApplication extends Controller  {
     	result.put("hasNext", casus.hasNext());
     	result.put("hasPrev", casus.hasPrev());
     	return ok(result);
+    }
+    
+	/**
+     * Display the casus.
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result editCasusVerpleegkundige(Long id) {
+        return ok(
+    		verpleegkundigeCasus.render(id)
+        );
+    }
+
+	/**
+     * Display the casus 2.
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result editCasusVerpleegkundige2(Long id) {
+        return ok(
+    		verpleegkundigeCasus2.render(id)
+        );
+    }
+    
+    /**
+     * 
+     * @param id
+     * @return
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result getCasusOverzichtJSON(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Casus> casus = Casus
+    			.find
+    			.where()
+			    .ilike("casus_id", id.toString())
+			    .findList();
+        return ok(play.libs.Json.toJson(casus));
     }
 }

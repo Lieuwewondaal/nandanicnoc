@@ -13,7 +13,7 @@ import models.*;
 public class Application extends Controller {
     
     /**
-     * This result directly redirect to application home.
+     *sThis result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
         routes.CasusApplication.listCasus(0, "casus_omschrijving", "asc", "")
@@ -26,7 +26,6 @@ public class Application extends Controller {
     public static Result index() {
         return GO_HOME;
     }
-<<<<<<< HEAD
     
     public static Result login() {
         return ok(
@@ -54,22 +53,13 @@ public class Application extends Controller {
             );
         }
     }
-
-    /**
-     * JSON test
-     */
-    public static Result getGezondheidspatroon() {
-        java.util.List<models.Gezondheidspatroon> tasks = new play.db.ebean.Model.Finder(String.class, models.Gezondheidspatroon.class).all();
-        return ok(play.libs.Json.toJson(tasks));
-    }
-=======
->>>>>>> 3e89c30aab80e6d4a82eaac0ed400959f9c17f49
     
     /**
      * Get nic_diagnose from diagnose_id in JSON format
      * @param id
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getNicDiagnose(Long id) {
     	List<Nic_Diagnose> nic = Nic_Diagnose
     			.find
@@ -84,11 +74,7 @@ public class Application extends Controller {
      * @param id
      * @return
      */
-<<<<<<< HEAD
     @Security.Authenticated(Secured.class)
-    public static Result getNicDiagnose(Long id) {
-    	List<Nic_Diagnose> nic = Nic_Diagnose
-=======
     public static Result getBepalendKenmerk(Long id){
     	List<Bepalendkenmerk_Diagnose> bepalendkenmerk = Bepalendkenmerk_Diagnose
     			.find
@@ -103,6 +89,7 @@ public class Application extends Controller {
      * @param id
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getRisicoFactor(Long id){
     	List<Risicofactor_Diagnose> risicofactor = Risicofactor_Diagnose
     			.find
@@ -118,9 +105,9 @@ public class Application extends Controller {
      * @param id
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getSamenhangendeFactor(Long id){
     	List<Samenhangendefactor_Diagnose> samenhangendefactor = Samenhangendefactor_Diagnose
->>>>>>> 3e89c30aab80e6d4a82eaac0ed400959f9c17f49
     			.find
     			.where().
                 ilike("diagnose_id", id.toString())
@@ -133,6 +120,7 @@ public class Application extends Controller {
      * @param id
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result getNocDiagnose(Long id) {
     	// Get NOC/Indicator attached to diagnose
     	List<Noc_Indicator_Diagnose> noc = Noc_Indicator_Diagnose
@@ -145,6 +133,7 @@ public class Application extends Controller {
         return ok(play.libs.Json.toJson(noc));
     }
     
+    @Security.Authenticated(Secured.class)
     public static Result getDiagnoseOverzicht(Long id) {
     	// Get NOC/Indicator attached to diagnose
     	List<Diagnoseoverzicht> diagnoseoverzicht = Diagnoseoverzicht
@@ -191,96 +180,7 @@ public class Application extends Controller {
         return ok(
             editForm.render(id)
         );
-<<<<<<< HEAD
-    }
-    
-    @Security.Authenticated(Secured.class)
-    public static Result getBepalendeKenmerken(Long id){
-    	List<Bepalendkenmerk_Diagnose> d = Bepalendkenmerk_Diagnose
-    			.find
-    			.where().
-                ilike("diagnose_id", id.toString())
-                .findList();
-        return ok(
-        		bepalendkenmerkdiagnose.render(d)
-            );
-    }
-    
-    
-    /**
-     * Get Bepalend kenmerk pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result getBepalendkenmerk(int page, String sortBy, String order, String filter) {
-        return ok(
-        		bepalendkenmerk.render(
-                    Bepalendkenmerk_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-    
-    /**
-     * Get Risicofactor pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result getRisicofactor(int page, String sortBy, String order, String filter) {
-        return ok(
-        		risicofactor.render(
-    				Risicofactor_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-    
-    /**
-     * Get Samenhangendefactor pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result getSamenhangendefactor(int page, String sortBy, String order, String filter) {
-        return ok(
-        		samenhangendefactor.render(
-    				Samenhangendefactor_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-    
-    /**
-     * Get NIC pagina
-     * @param page
-     * @param sortBy
-     * @param order
-     * @param filter
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result getNicActiviteit(int page, String sortBy, String order, String filter) {
-        return ok(
-        		nic_diagnose.render(
-    				Nic_Diagnose.page(page, 100, sortBy, order, filter),
-                    sortBy, order, filter
-                )
-            );
-    }
-=======
     } 
->>>>>>> 3e89c30aab80e6d4a82eaac0ed400959f9c17f49
     
     /**
      * Handle the 'edit form' submission 

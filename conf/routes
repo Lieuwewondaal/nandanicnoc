@@ -38,16 +38,18 @@ POST    /casus/:id              	controllers.CasusApplication.updateCasus(id:Lon
 
 # Verpleegkundige views
 GET		/verpleegkundige			controllers.VerpleegkundigeApplication.listCasusVerpleegkundige(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
-GET		/verpleegkundigecasus		controllers.VerpleegkundigeApplication.getCasusVerpleegkundige(p:Int ?= 0, ps:Int ?= 10, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
-
-# Delete a computer
+GET		/verpleegkundigecasusjson	controllers.VerpleegkundigeApplication.getListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+GET		/verpleegkundigecasus/:id	controllers.VerpleegkundigeApplication.editCasusVerpleegkundige(id:Long)
+GET		/verpleegkundigecasus2/:id	controllers.VerpleegkundigeApplication.editCasusVerpleegkundige2(id:Long)
+GET		/verpleegkundigecasusjson/:id	controllers.VerpleegkundigeApplication.getCasusOverzichtJSON(id:Long)
+# Delete a diagnose
 POST    /diagnoses/:id/delete       controllers.CasusApplication.deleteCasus(id:Long)
 
-# Edit existing computer
+# Edit existing diagnose
 GET     /diagnoses/:id              controllers.Application.edit(id:Long)
 POST    /diagnoses/:id              controllers.Application.update(id:Long)
 
-# Delete a computer
+# Delete a diagnose
 POST    /diagnoses/:id/delete       controllers.Application.delete(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path

@@ -1,0 +1,73 @@
+@(id: Long)
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+@main {
+<script>
+	$( document ).ready(function() {
+	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#casusOverzichtHead").html("<tr><th>Casus detail:</th><th>Casus waarde:</th></tr>");
+			$.each(data, function(key, casus) {
+			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + casus.casus_definitie + "</td></tr>");
+			});
+		}
+		else{
+		  $("#casusOverzichtHead").html("<tr><th>Casus:</th></tr>");
+		  $("#casusOverzicht").append("<tr><td>Geen casus gevonden");
+		}
+	  });
+	});
+</script>
+    <h1>Edit casus</h1>
+        
+	<table id="casusOverzicht" class="diagnoses zebra-striped">
+		<thead id="casusOverzichtHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Casus gegevens laden...</th>
+			</tr>
+		</thead>
+	</table>
+	<hr />
+	
+	<h2>NANDA/NIC/NOC</h2>
+	<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
+		<thead id="diagnoseOverzichtHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnoses laden...</th>
+			</tr>
+		</thead>
+	</table>
+	<hr />
+	
+	<h2>Informatie toevoegen</h2>
+        
+		<input type="search" id="searchbox" name="f" placeholder="Diagnose/Interventie/Zorgresultaat">
+		<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
+        
+		<br />
+	<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
+		<thead id="diagnoseOverzichtHead">
+		
+		</thead>
+		<tbody id="casusOverzichtBody">
+		
+		</tbody>
+	</table>
+	<hr />
+	
+	<h2>Opmerkingen</h2>
+		<table id="OpmerkingenOverzicht" class="diagnoses zebra-striped">
+		<thead id="OpmerkingenOverzichtHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Opmerkingen laden...</th>
+			</tr>
+		</thead>
+	</table>
+	<div class="actions">
+		<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()" class="btn">Terug</a> 
+	</div>	
+    
+}
