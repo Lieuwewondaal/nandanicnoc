@@ -9,6 +9,7 @@ import com.avaje.ebean.FetchConfig;
 import com.avaje.ebean.Page;
 import com.avaje.ebean.SqlQuery;
 import com.avaje.ebean.SqlRow;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import play.db.ebean.*;
 import play.data.format.Formats;
@@ -34,6 +35,7 @@ public class Nic_Diagnose extends Model {
     
     @ManyToOne
 	@JoinColumn(name="diagnose_id")
+    @JsonBackReference
     public Diagnose diagnose;
     
     @Formats.DateTime(pattern="yyyy-MM-dd")

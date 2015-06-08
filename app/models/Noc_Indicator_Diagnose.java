@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import play.db.ebean.*;
 import play.data.format.Formats;
 import play.data.validation.*;
@@ -28,6 +30,7 @@ public class Noc_Indicator_Diagnose extends Model {
     
 	@ManyToOne
 	@JoinColumn(name="diagnose_id")
+	@JsonBackReference
 	public Diagnose diagnose;
 	
 	@Formats.DateTime(pattern="yyyy-MM-dd")

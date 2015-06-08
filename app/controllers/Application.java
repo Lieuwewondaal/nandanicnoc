@@ -1,6 +1,11 @@
 package controllers;
 
 import java.util.List;
+
+import com.avaje.ebean.Page;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import play.libs.Json;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
@@ -48,6 +53,14 @@ public class Application extends Controller {
         } else {
             session().clear();
             session("username", loginForm.get().username);
+            
+        	Gebruiker userid = Gebruiker
+        			.find
+        			.where()
+        			.like("gebruiker_naam", loginForm.get().username)
+                    .findUnique();
+        	session("userid", userid.gebruiker_id.toString());
+            
             return redirect(
                 routes.Application.index()
             );

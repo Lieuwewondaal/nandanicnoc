@@ -19,6 +19,19 @@
 		  $("#casusOverzicht").append("<tr><td>Geen casus gevonden");
 		}
 	  });
+	  
+	  $.get( "/vepleegkundigecasusdiagnosejson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th></tr>");
+			$.each(data, function(key, casusdiagnose) {
+			  $("#diagnoseOverzicht").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td></tr>");
+			});
+		}
+		else{
+		  $("#diagnoseOverzichtHead").html("<tr><th>Diagnoses</th></tr>");
+		  $("#diagnoseOverzicht").append("<tr><td>Geen diagnoses gevonden");
+		}
+	  });
 	});
 </script>
     <h1>Edit casus</h1>

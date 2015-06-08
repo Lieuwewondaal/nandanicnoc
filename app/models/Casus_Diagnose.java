@@ -25,7 +25,7 @@ public class Casus_Diagnose extends Model {
     
     public int user_id;
     
-    @ManyToOne
+    @ManyToOne(optional=true) 
     @JoinColumn(name="diagnose_id")
     public Diagnose diagnose;
     

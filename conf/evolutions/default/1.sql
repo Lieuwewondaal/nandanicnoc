@@ -400,7 +400,7 @@ create table casus (
 create table casus_diagnose (
   casus_diagnose_id				  bigint not null auto_increment,
   casus_id                        bigint not null,
-  diagnose_id                     bigint not null,
+  diagnose_id                     bigint,
   user_id						  bigint,
 
   constraint pk_casus_diagnose primary key (casus_diagnose_id)
@@ -507,7 +507,6 @@ alter table nic_diagnose add constraint fk_nic_nic_diagnose_1 foreign key (nic_i
 alter table nic_diagnose add constraint fk_nic_nic_diagnose_2 foreign key (nicactiviteit_id) references nic_nicactiviteit (nicactiviteit_id) on delete restrict on update restrict;
 alter table nic_diagnose add constraint fk_nic_nic_diagnose_3 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table casus_diagnose add constraint fk_casus_diagnose_1 foreign key (casus_id) references casus (casus_id) on delete restrict on update restrict;
-alter table casus_diagnose add constraint fk_casus_diagnose_2 foreign key (diagnose_id) references diagnose (diagnose_id) on delete restrict on update restrict;
 alter table casus_bepalendkenmerk add constraint fk_casus_bepalendkenmerk_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
 alter table casus_bepalendkenmerk add constraint fk_casus_bepalendkenmerk_2 foreign key (bepalendkenmerk_id) references bepalendkenmerk (bepalendkenmerk_id) on delete restrict on update restrict;
 alter table casus_risicofactor add constraint fk_casus_risicofactor_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;

@@ -4,11 +4,16 @@ import static play.data.Form.form;
 
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
+import com.avaje.ebean.FetchConfig;
 import com.avaje.ebean.Page;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import models.Casus;
+import models.Casus_Diagnose;
+import models.Diagnose;
 import models.Diagnoseoverzicht;
 import models.Samenhangendefactor_Diagnose;
 import play.data.Form;
@@ -100,5 +105,175 @@ public class VerpleegkundigeApplication extends Controller  {
 			    .ilike("casus_id", id.toString())
 			    .findList();
         return ok(play.libs.Json.toJson(casus));
+    }
+	
+	/**
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @param sortBy
+	 * @param order
+	 * @param filter
+	 * @return
+	 */
+    @Security.Authenticated(Secured.class)
+    public static Result getNandaNicNoc(int page, int pageSize, String sortBy, String order, String filter) {
+    	// Get NOC/Indicator attached to diagnose
+    	Page<Diagnose> nanda = Diagnose
+    			.find
+    			.fetch("nic_diagnose", new FetchConfig().query())
+    			.fetch("noc_indicator_diagnose", new FetchConfig().query())
+    			.fetch("diagnoseoverzicht", new FetchConfig().query())
+    			.where()
+    			/*.or(
+    					com.avaje.ebean.Expr.or(
+    		        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + "pijn" + "%"), 
+    		        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + "pijn" + "%")
+						),
+						com.avaje.ebean.Expr.or(
+		            			com.avaje.ebean.Expr.like("nic_diagnose.nic.nicoverzicht.nicoverzicht_omschrijving", "%" + "pijn" + "%"),
+		            			com.avaje.ebean.Expr.like("nic_diagnose.nic.nicoverzicht.nicoverzicht_definitie", "%" + "pijn" + "%")	
+						)
+    			)*/
+            	.like("diagnose_id", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(true)
+                .getPage(page);
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("nanda", Json.toJson(nanda.getList()));
+    	//result.put("pages", nanda.getTotalPageCount());
+    	result.put("rows", nanda.getTotalRowCount());
+    	result.put("index", nanda.getPageIndex());
+    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", nanda.hasNext());
+    	result.put("hasPrev", nanda.hasPrev());
+    	return ok(result);
+    }
+    
+	/**
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @param sortBy
+	 * @param order
+	 * @param filter
+	 * @return
+	 */
+    @Security.Authenticated(Secured.class)
+    public static Result getNanda(int page, int pageSize, String sortBy, String order, String filter) {
+    	// Get NOC/Indicator attached to diagnose
+    	Page<Diagnose> nanda = Diagnose
+    			.find
+    			.fetch("diagnoseoverzicht")
+    			.where()
+    			.or(
+        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + filter + "%"), 
+        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + filter + "%")
+    			)
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(true)
+                .getPage(page);
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("nanda", Json.toJson(nanda.getList()));
+    	//result.put("pages", nanda.getTotalPageCount());
+    	result.put("rows", nanda.getTotalRowCount());
+    	result.put("index", nanda.getPageIndex());
+    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", nanda.hasNext());
+    	result.put("hasPrev", nanda.hasPrev());
+    	return ok(result);
+    }
+    
+	/**
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @param sortBy
+	 * @param order
+	 * @param filter
+	 * @return
+	 */
+    @Security.Authenticated(Secured.class)
+    public static Result getNic(int page, int pageSize, String sortBy, String order, String filter) {
+    	// Get NOC/Indicator attached to diagnose
+    	Page<Diagnose> nanda = Diagnose
+    			.find
+    			.fetch("diagnoseoverzicht")
+    			.where()
+    			.or(
+        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + filter + "%"), 
+        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + filter + "%")
+    			)
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(true)
+                .getPage(page);
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("nanda", Json.toJson(nanda.getList()));
+    	//result.put("pages", nanda.getTotalPageCount());
+    	result.put("rows", nanda.getTotalRowCount());
+    	result.put("index", nanda.getPageIndex());
+    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", nanda.hasNext());
+    	result.put("hasPrev", nanda.hasPrev());
+    	return ok(result);
+    }
+    
+	/**
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @param sortBy
+	 * @param order
+	 * @param filter
+	 * @return
+	 */
+    @Security.Authenticated(Secured.class)
+    public static Result getNoc(int page, int pageSize, String sortBy, String order, String filter) {
+    	// Get NOC/Indicator attached to diagnose
+    	Page<Diagnose> nanda = Diagnose
+    			.find
+    			.fetch("diagnoseoverzicht")
+    			.where()
+    			.or(
+        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + filter + "%"), 
+        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + filter + "%")
+    			)
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(true)
+                .getPage(page);
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("nanda", Json.toJson(nanda.getList()));
+    	//result.put("pages", nanda.getTotalPageCount());
+    	result.put("rows", nanda.getTotalRowCount());
+    	result.put("index", nanda.getPageIndex());
+    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", nanda.hasNext());
+    	result.put("hasPrev", nanda.hasPrev());
+    	return ok(result);
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result getCasusDiagnose(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Casus_Diagnose> casus_diagnose;
+
+	    	casus_diagnose = Casus_Diagnose
+				.find
+				.fetch("diagnose")
+				.fetch("diagnose.diagnoseoverzicht", "diagnoseoverzicht_omschrijving, diagnoseoverzicht_definitie")
+				.where()
+			    .ilike("casus_id", id.toString())
+			    .ilike("user_id", session("userid"))
+			    .findList();
+	    	return ok(play.libs.Json.toJson(casus_diagnose));
+    	
     }
 }

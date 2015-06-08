@@ -1,3 +1,14 @@
+Login:
+Standaard login is:
+
+username:
+admin
+
+password:
+admin
+
+Wordt toegevoegd bij SQL evolutions in conf/evolutions/default/2.sql
+
 Verpleegkunde applicatie
 
 Importvolgorde (Bestanden MOETEN deze namen hebben om geïmporteerd te kunnen worden):
@@ -21,3 +32,4 @@ koppel_diagnose_zorgresultaat_indicator.xls
 SQL Data import:
 
 Conf/nanda.sql bevat alle gegevens tot voor het user/casus systeem
+

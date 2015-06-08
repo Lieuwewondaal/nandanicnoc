@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+
 import javax.persistence.*;
 
 import play.db.ebean.*;
@@ -8,6 +9,7 @@ import play.data.format.*;
 import play.data.validation.*;
 
 import com.avaje.ebean.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Diagnose entity managed by Ebean
@@ -20,6 +22,18 @@ public class Diagnose extends Model {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long diagnose_id;
+	
+	@OneToMany(mappedBy="diagnose")
+	@JsonManagedReference
+	public List<Noc_Indicator_Diagnose> noc_indicator_diagnose;
+	
+	@OneToMany(mappedBy="diagnose")
+	@JsonManagedReference
+	public List<Nic_Diagnose> nic_diagnose;
+	
+	@OneToMany(mappedBy="diagnose")
+	@JsonManagedReference
+	public List<Diagnoseoverzicht> diagnoseoverzicht;
     
     /**
      * Generic query helper for entity Diagnose with id Long

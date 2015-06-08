@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import com.avaje.ebean.Page;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import play.db.ebean.*;
 import play.data.validation.*;
@@ -21,12 +22,14 @@ public class Diagnoseoverzicht extends Model {
 
 	@ManyToOne
 	@JoinColumn(name="diagnose_id")
+    @JsonBackReference
 	public Diagnose diagnose;
     
     @ManyToOne
     @JoinColumn(name="diagnoseversie_id")
     public Diagnoseversie diagnoseversie;
     
+    @Column(nullable = true)
     public int diagnose_code;
     
     @ManyToOne
