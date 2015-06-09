@@ -353,6 +353,38 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    @Security.Authenticated(Secured.class)
+    public static Result deleteCasusDiagnose(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	return ok();
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result deleteCasusNic(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	Casus_Nic casus_nic = Casus_Nic
+			.find
+			.where()
+		    .ilike("casus_nic_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findUnique();
+    	casus_nic.delete();
+    	return ok();
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result deleteCasusNoc(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	Casus_Noc casus_noc = Casus_Noc
+			.find
+			.where()
+		    .ilike("casus_noc_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findUnique();
+    	casus_noc.delete();
+    	return ok();
+    }
+    
     public static Casus_Diagnose createEmptyCasusDiagnose(Long id){
 		Casus_Diagnose casus_diagnose = new Casus_Diagnose();
 		Casus casus = Casus

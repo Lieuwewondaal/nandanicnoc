@@ -25,16 +25,17 @@
   function getCasusDiagnose(){
   	  $.get( "/verpleegkundigecasusdiagnosejson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th></tr>");
+			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th><th>Diagnose verwijderen</th></tr>");
+			$("#diagnoseOverzichtBody").html("");
 			$.each(data, function(key, casusdiagnose) {
 			  if(casusdiagnose.diagnose !== null){
-			    $("#diagnoseOverzicht").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td></tr>");
+			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td><a class=link name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
 			  }
 			});
 		}
 		else{
 		  $("#diagnoseOverzichtHead").html("<tr><th>Diagnoses</th></tr>");
-		  $("#diagnoseOverzicht").append("<tr><td>Geen diagnoses gevonden");
+		  $("#diagnoseOverzichtBody").html("<tr><td>Geen diagnoses gevonden");
 		}
 	  });
   }
@@ -42,14 +43,15 @@
   function getCasusNIC(){
   	  $.get( "/verpleegkundigecasusnicjson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th></tr>");
+			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Interventie verwijderen</th></tr>");
+			$("#NICOverzichtBody").html("");
 			$.each(data, function(key, casusnic) {
-			  $("#NICOverzicht").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td></tr>");
+			  $("#NICOverzichtBody").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td><td><a class=link name=" + casusnic.casus_nic_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
 		  $("#NICOverzichtHead").html("<tr><th>Interventies</th></tr>");
-		  $("#NICOverzicht").append("<tr><td>Geen interventies gevonden");
+		  $("#NICOverzichtBody").html("<tr><td>Geen interventies gevonden");
 		}
 	  });
   }
@@ -57,14 +59,15 @@
   function getCasusNOC(){
   	  $.get( "/verpleegkundigecasusnocjson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th></tr>");
+			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Zorgresultaat verwijderen</th></tr>");
+			$("#NOCOverzichtBody").html("");
 			$.each(data, function(key, casusnoc) {
-			  $("#NOCOverzicht").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td></tr>");
+			  $("#NOCOverzichtBody").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td><td><a class=link name=" + casusnoc.casus_noc_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
 		  $("#NOCOverzichtHead").html("<tr><th>Zorgresultaten</th></tr>");
-		  $("#NOCOverzicht").append("<tr><td>Geen zorgresultaten gevonden");
+		  $("#NOCOverzichtBody").html("<tr><td>Geen zorgresultaten gevonden");
 		}
 	  });
   }
@@ -113,6 +116,9 @@
 				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnoses laden...</th>
 			</tr>
 		</thead>
+		<tbody id="diagnoseOverzichtBody">
+		
+		</tbody>
 	</table>
 	Diagnose toevoegen
 	<hr />
@@ -124,6 +130,9 @@
 				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Interventies laden...</th>
 			</tr>
 		</thead>
+		<tbody id="NICOverzichtBody">
+		
+		</tbody>
 	</table>
 	Interventie toevoegen
 	<hr />
@@ -135,6 +144,9 @@
 				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Zorgresultaten laden...</th>
 			</tr>
 		</thead>
+		<tbody id="NOCOverzichtBody">
+		
+		</tbody>
 	</table>
 	Zorgresultaat toevoegen
 	<hr />
@@ -159,8 +171,32 @@
     
 	<script>
 	
+	$("#diagnoseOverzicht").on("click", function(event){
+		if(event.target.name != undefined){
+			alert(event.target.name);
+		}
+	});
+	
+	$("#NICOverzicht").on("click", function(event){
+		if(event.target.name != undefined){
+			$.post( "/verpleegkundigedeletecasusnic/"+event.target.name )
+			.done(function( data ) {
+				getCasusNIC();
+			});
+		}
+	});
+	
+	$("#NOCOverzicht").on("click", function(event){
+		if(event.target.name != undefined){
+			$.post( "/verpleegkundigedeletecasusnoc/"+event.target.name )
+			.done(function( data ) {
+				getCasusNOC();
+			});
+		}
+	});
+	
 	$("#OpmerkingenOverzicht").on("click", function(event){
-		if(event.target.name != "undefined"){
+		if(event.target.name != undefined){
 			$.post( "/verpleegkundigedeletecasusopmerking/"+event.target.name )
 			.done(function( data ) {
 				getCasusOpmerkingen();
