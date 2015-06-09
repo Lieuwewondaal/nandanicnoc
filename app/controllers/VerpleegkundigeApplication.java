@@ -98,7 +98,7 @@ public class VerpleegkundigeApplication extends Controller  {
      */
 	@Security.Authenticated(Secured.class)
     public static Result getCasusOverzichtJSON(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	List<Casus> casus = Casus
     			.find
     			.where()
@@ -118,7 +118,7 @@ public class VerpleegkundigeApplication extends Controller  {
 	 */
     @Security.Authenticated(Secured.class)
     public static Result getNandaNicNoc(int page, int pageSize, String sortBy, String order, String filter) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Page<Diagnose> nanda = Diagnose
     			.find
     			.fetch("nic_diagnose", new FetchConfig().query())
@@ -163,7 +163,7 @@ public class VerpleegkundigeApplication extends Controller  {
 	 */
     @Security.Authenticated(Secured.class)
     public static Result getNanda(int page, int pageSize, String sortBy, String order, String filter) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Page<Diagnose> nanda = Diagnose
     			.find
     			.fetch("diagnoseoverzicht")
@@ -199,7 +199,7 @@ public class VerpleegkundigeApplication extends Controller  {
 	 */
     @Security.Authenticated(Secured.class)
     public static Result getNic(int page, int pageSize, String sortBy, String order, String filter) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Page<Diagnose> nanda = Diagnose
     			.find
     			.fetch("diagnoseoverzicht")
@@ -235,7 +235,7 @@ public class VerpleegkundigeApplication extends Controller  {
 	 */
     @Security.Authenticated(Secured.class)
     public static Result getNoc(int page, int pageSize, String sortBy, String order, String filter) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Page<Diagnose> nanda = Diagnose
     			.find
     			.fetch("diagnoseoverzicht")
@@ -262,7 +262,7 @@ public class VerpleegkundigeApplication extends Controller  {
     
     @Security.Authenticated(Secured.class)
     public static Result getCasusDiagnose(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	List<Casus_Diagnose>casus_diagnose = Casus_Diagnose
 			.find
 			.fetch("diagnose.diagnoseoverzicht", "diagnoseoverzicht_omschrijving, diagnoseoverzicht_definitie")
@@ -276,7 +276,7 @@ public class VerpleegkundigeApplication extends Controller  {
     
     @Security.Authenticated(Secured.class)
     public static Result getCasusNic(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	List<Casus_Nic>casus_nic = Casus_Nic
 			.find
 			.fetch("nic.nicoverzicht", "nicoverzicht_omschrijving, nicoverzicht_definitie")
@@ -290,7 +290,7 @@ public class VerpleegkundigeApplication extends Controller  {
     
     @Security.Authenticated(Secured.class)
     public static Result getCasusNoc(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+    	
     	List<Casus_Noc>casus_noc = Casus_Noc
 			.find
 			.fetch("noc.nocoverzicht", "nocoverzicht_omschrijving, nocoverzicht_definitie")
@@ -304,7 +304,7 @@ public class VerpleegkundigeApplication extends Controller  {
     
     @Security.Authenticated(Secured.class)
     public static Result getCasusOpmerkingen(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	List<Casusopmerkingen>casusopmerkingen = Casusopmerkingen
 			.find
 			.where()
@@ -336,13 +336,13 @@ public class VerpleegkundigeApplication extends Controller  {
     	casusopmerkingen.casusopmerking = requestData.get("opmerking");
 		casusopmerkingen.casusopmerkingdatum = Calendar.getInstance().getTime();
 		casusopmerkingen.save();
-    	// Get NOC/Indicator attached to diagnose
+
     	return ok();
     }
     
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusOpmerking(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Casusopmerkingen casusopmerking = Casusopmerkingen
 			.find
 			.where()
@@ -355,13 +355,88 @@ public class VerpleegkundigeApplication extends Controller  {
     
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusDiagnose(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+    	Casus_Diagnose casus_diagnose, alternateCasus_diagnose;
+    	try{
+    	casus_diagnose = Casus_Diagnose
+			.find
+			.where()
+		    .ilike("casus_diagnose_id", id.toString())
+		    .ilike("user_id", session("userid"))
+		    .findUnique();
+    	}
+    	catch(PersistenceException e){
+    		return ok();
+    	}
+    	
+    	// Check if alternate diagnose exists
+    	try{
+        	alternateCasus_diagnose = Casus_Diagnose
+				.find
+				.where()
+			    .not(com.avaje.ebean.Expr.like("casus_diagnose_id", id.toString()))
+			    .ilike("user_id", session("userid"))
+			    .findList()
+			    .get(0);
+        	
+        	// Update other values connected to this diagnose
+        	try{
+        		List<Casus_Nic> casus_nic = Casus_Nic
+        				.find
+        				.where()
+        				.ilike("casus_diagnose.casus_diagnose_id", id.toString())
+        				.findList();
+        		for (int i = 0; i < casus_nic.size(); i++) {
+        			casus_nic.get(i).casus_diagnose = alternateCasus_diagnose;
+        			casus_nic.get(i).save();
+        		}
+        	}
+        	catch(PersistenceException e){
+
+        	}
+        	
+        	try{
+        		List<Casus_Noc> casus_noc = Casus_Noc
+        				.find
+        				.where()
+        				.ilike("casus_diagnose.casus_diagnose_id", id.toString())
+        				.findList();
+        		for (int i = 0; i < casus_noc.size(); i++) {
+        			casus_noc.get(i).casus_diagnose = alternateCasus_diagnose;
+        			casus_noc.get(i).save();
+        		}
+        	}
+        	catch(PersistenceException e){
+        		
+        	}
+        	
+        	try{
+        		List<Casusopmerkingen> casusopmerkingen = Casusopmerkingen
+        				.find
+        				.where()
+        				.ilike("casus_diagnose.casus_diagnose_id", id.toString())
+        				.findList();
+        		for (int i = 0; i < casusopmerkingen.size(); i++) {
+        			casusopmerkingen.get(i).casus_diagnose = alternateCasus_diagnose;
+        			casusopmerkingen.get(i).save();
+        		}
+        	}
+        	catch(PersistenceException e){
+        		
+        	}
+        	casus_diagnose.delete();
+    	}
+    	
+    	// Update current one to null if no other diagnoses exist
+    	catch(IndexOutOfBoundsException e){
+    		casus_diagnose.diagnose = null;
+    		casus_diagnose.update();
+    	}
     	return ok();
     }
     
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusNic(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Casus_Nic casus_nic = Casus_Nic
 			.find
 			.where()
@@ -374,7 +449,7 @@ public class VerpleegkundigeApplication extends Controller  {
     
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusNoc(Long id) {
-    	// Get NOC/Indicator attached to diagnose
+
     	Casus_Noc casus_noc = Casus_Noc
 			.find
 			.where()

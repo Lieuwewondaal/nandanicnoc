@@ -29,7 +29,7 @@
 			$("#diagnoseOverzichtBody").html("");
 			$.each(data, function(key, casusdiagnose) {
 			  if(casusdiagnose.diagnose !== null){
-			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td><a class=link name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
+			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td><a class=link id=diagnose"+casusdiagnose.casus_diagnose_id+" name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
 			  }
 			});
 		}
@@ -172,8 +172,13 @@
 	<script>
 	
 	$("#diagnoseOverzicht").on("click", function(event){
-		if(event.target.name != undefined){
-			alert(event.target.name);
+		if(event.target.name != undefined && event.target.name != "removing"){
+			diagnoseName = event.target.name;
+			$("#diagnose"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusdiagnose/"+diagnoseName )
+			.done(function( data ) {
+				getCasusDiagnose();
+			});
 		}
 	});
 	

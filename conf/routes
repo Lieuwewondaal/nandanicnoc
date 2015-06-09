@@ -49,6 +49,7 @@ GET		/verpleegkundigecasusopmerkingenjson/:id	controllers.VerpleegkundigeApplica
 
 POST	/verpleegkundigedeletecasusopmerking/:id	controllers.VerpleegkundigeApplication.deleteCasusOpmerking(id:Long)
 POST	/verpleegkundigesavecasusopmerking/:id		controllers.VerpleegkundigeApplication.saveCasusOpmerking(id:Long)
+POST	/verpleegkundigedeletecasusdiagnose/:id		controllers.VerpleegkundigeApplication.deleteCasusDiagnose(id:Long)
 POST	/verpleegkundigedeletecasusnic/:id			controllers.VerpleegkundigeApplication.deleteCasusNic(id:Long)
 POST	/verpleegkundigedeletecasusnoc/:id			controllers.VerpleegkundigeApplication.deleteCasusNoc(id:Long)
 
