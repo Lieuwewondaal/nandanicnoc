@@ -46,7 +46,7 @@
 			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Interventie verwijderen</th></tr>");
 			$("#NICOverzichtBody").html("");
 			$.each(data, function(key, casusnic) {
-			  $("#NICOverzichtBody").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td><td><a class=link name=" + casusnic.casus_nic_id + ">Verwijderen</a></td></tr>");
+			  $("#NICOverzichtBody").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td><td><a class=link id=nic"+casusnic.casus_nic_id+" name=" + casusnic.casus_nic_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
@@ -62,7 +62,7 @@
 			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Zorgresultaat verwijderen</th></tr>");
 			$("#NOCOverzichtBody").html("");
 			$.each(data, function(key, casusnoc) {
-			  $("#NOCOverzichtBody").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td><td><a class=link name=" + casusnoc.casus_noc_id + ">Verwijderen</a></td></tr>");
+			  $("#NOCOverzichtBody").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td><td><a class=link id=noc"+casusnoc.casus_noc_id+" name=" + casusnoc.casus_noc_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
@@ -79,7 +79,7 @@
 			$("#OpmerkingenOverzichtBody").html("");
 			$.each(data, function(key, casusopmerkingen) {
 			  var date = new Date(casusopmerkingen.casusopmerkingdatum);
-			  $("#OpmerkingenOverzichtBody").append("<tr><td>" + casusopmerkingen.casusopmerking + "</td><td>" + date + "</td><td><a class=link name=" + casusopmerkingen.casusopmerkingen_id + ">Verwijderen</a></td></tr>");
+			  $("#OpmerkingenOverzichtBody").append("<tr><td>" + casusopmerkingen.casusopmerking + "</td><td>" + date + "</td><td><a class=link id=opmerking"+casusopmerkingen.casusopmerkingen_id+" name=" + casusopmerkingen.casusopmerkingen_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
@@ -183,8 +183,10 @@
 	});
 	
 	$("#NICOverzicht").on("click", function(event){
-		if(event.target.name != undefined){
-			$.post( "/verpleegkundigedeletecasusnic/"+event.target.name )
+		if(event.target.name != undefined && event.target.name != "removing"){
+			nicName = event.target.name;
+			$("#nic"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusnic/"+nicName )
 			.done(function( data ) {
 				getCasusNIC();
 			});
@@ -192,8 +194,10 @@
 	});
 	
 	$("#NOCOverzicht").on("click", function(event){
-		if(event.target.name != undefined){
-			$.post( "/verpleegkundigedeletecasusnoc/"+event.target.name )
+		if(event.target.name != undefined && event.target.name != "removing"){
+			nocName = event.target.name;
+			$("#noc"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusnoc/"+nocName )
 			.done(function( data ) {
 				getCasusNOC();
 			});
@@ -201,8 +205,10 @@
 	});
 	
 	$("#OpmerkingenOverzicht").on("click", function(event){
-		if(event.target.name != undefined){
-			$.post( "/verpleegkundigedeletecasusopmerking/"+event.target.name )
+		if(event.target.name != undefined && event.target.name != "removing"){
+			opmerkingenName = event.target.name;
+			$("#opmerking"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusopmerking/"+opmerkingenName )
 			.done(function( data ) {
 				getCasusOpmerkingen();
 			});
