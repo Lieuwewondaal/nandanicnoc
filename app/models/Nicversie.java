@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 import play.db.ebean.*;
 import play.data.format.Formats;
-import play.data.validation.*;
 
 
 

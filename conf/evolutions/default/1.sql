@@ -432,29 +432,32 @@ create table casus_samenhangendefactor (
 ;
 
 create table casus_nic (
+  casus_nic_id					  bigint not null auto_increment,
   casus_diagnose_id				  bigint not null,
   nic_id				          bigint not null,
   nicactiviteit_id				  bigint not null,
   
-  constraint pk_casus_nic primary key (casus_diagnose_id, nic_id, nicactiviteit_id)
+  constraint pk_casus_nic primary key (casus_nic_id, casus_diagnose_id)
   ) engine=innodb
 ;
 
 create table casus_noc (
+  casus_noc_id			  		  bigint not null auto_increment,
   casus_diagnose_id				  bigint not null,
   noc_id				          bigint not null,
   indicator_id				      bigint not null,
 
-  constraint pk_casus_noc primary key (casus_diagnose_id, noc_id, indicator_id)
+  constraint pk_casus_noc primary key (casus_noc_id, casus_diagnose_id)
   ) engine=innodb
 ;
 
 create table casusopmerkingen (
+  casusopmerkingen_id			  bigint not null auto_increment,
   casus_diagnose_id				  bigint not null,
   casusopmerking         		  text,
   casusopmerkingdatum			  datetime,
 
-  constraint pk_casus_samenhangendefactor primary key (casus_diagnose_id)
+  constraint pk_casus_samenhangendefactor primary key (casusopmerkingen_id, casus_diagnose_id)
   ) engine=innodb
 ;
 

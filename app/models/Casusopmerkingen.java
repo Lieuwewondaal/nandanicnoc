@@ -8,7 +8,6 @@ import com.avaje.ebean.Page;
 
 import play.db.ebean.*;
 import play.data.format.Formats;
-import play.data.validation.*;
 
 
 
@@ -20,6 +19,9 @@ public class Casusopmerkingen extends Model {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    public int casusopmerkingen_id;
+    
 	@ManyToOne
 	@JoinColumn(name="casus_diagnose_id")
 	public Casus_Diagnose casus_diagnose;

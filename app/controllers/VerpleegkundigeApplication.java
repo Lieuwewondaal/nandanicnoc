@@ -1,21 +1,21 @@
 package controllers;
 
-import static play.data.Form.form;
-
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
 
 import com.avaje.ebean.FetchConfig;
 import com.avaje.ebean.Page;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import models.Casus;
 import models.Casus_Diagnose;
+import models.Casus_Nic;
+import models.Casus_Noc;
+import models.Casusopmerkingen;
 import models.Diagnose;
-import models.Diagnoseoverzicht;
-import models.Samenhangendefactor_Diagnose;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -263,17 +263,104 @@ public class VerpleegkundigeApplication extends Controller  {
     @Security.Authenticated(Secured.class)
     public static Result getCasusDiagnose(Long id) {
     	// Get NOC/Indicator attached to diagnose
-    	List<Casus_Diagnose> casus_diagnose;
+    	List<Casus_Diagnose>casus_diagnose = Casus_Diagnose
+			.find
+			.fetch("diagnose.diagnoseoverzicht", "diagnoseoverzicht_omschrijving, diagnoseoverzicht_definitie")
+			.where()
+		    .ilike("casus_id", id.toString())
+		    .ilike("user_id", session("userid"))
+		    .isNotNull("diagnose.diagnoseoverzicht.diagnoseoverzicht_omschrijving")
+		    .findList();
+    	return ok(play.libs.Json.toJson(casus_diagnose));
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result getCasusNic(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Casus_Nic>casus_nic = Casus_Nic
+			.find
+			.fetch("nic.nicoverzicht", "nicoverzicht_omschrijving, nicoverzicht_definitie")
+			.fetch("nicactiviteit")
+			.where()
+		    .ilike("casus_diagnose.casus.casus_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findList();
+    	return ok(play.libs.Json.toJson(casus_nic));
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result getCasusNoc(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Casus_Noc>casus_noc = Casus_Noc
+			.find
+			.fetch("noc.nocoverzicht", "nocoverzicht_omschrijving, nocoverzicht_definitie")
+			.fetch("indicator")
+			.where()
+		    .ilike("casus_diagnose.casus.casus_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findList();
+    	return ok(play.libs.Json.toJson(casus_noc));
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result getCasusOpmerkingen(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	List<Casusopmerkingen>casusopmerkingen = Casusopmerkingen
+			.find
+			.where()
+		    .ilike("casus_diagnose.casus.casus_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findList();
+    	return ok(play.libs.Json.toJson(casusopmerkingen));
+    }
 
+    @Security.Authenticated(Secured.class)
+    public static Result saveCasusOpmerking(Long id) {
+    	DynamicForm requestData = Form.form().bindFromRequest();
+    	Casus_Diagnose casus_diagnose;
+    	try{
 	    	casus_diagnose = Casus_Diagnose
-				.find
-				.fetch("diagnose")
-				.fetch("diagnose.diagnoseoverzicht", "diagnoseoverzicht_omschrijving, diagnoseoverzicht_definitie")
-				.where()
-			    .ilike("casus_id", id.toString())
-			    .ilike("user_id", session("userid"))
-			    .findList();
-	    	return ok(play.libs.Json.toJson(casus_diagnose));
+	    			.find
+	    			.where()
+	    			.ilike("casus.casus_id", id.toString())
+	    			.ilike("user_id", session("userid"))
+	    			.findList()
+	    			.get(0);
+    	}
+    	catch(PersistenceException e){
+    		casus_diagnose = createEmptyCasusDiagnose(id);
+    	}
     	
+    	Casusopmerkingen casusopmerkingen = new Casusopmerkingen();
+    	casusopmerkingen.casus_diagnose = casus_diagnose;
+    	casusopmerkingen.casusopmerking = requestData.get("opmerking");
+		casusopmerkingen.casusopmerkingdatum = Calendar.getInstance().getTime();
+		casusopmerkingen.save();
+    	// Get NOC/Indicator attached to diagnose
+    	return ok();
+    }
+    
+    @Security.Authenticated(Secured.class)
+    public static Result deleteCasusOpmerking(Long id) {
+    	// Get NOC/Indicator attached to diagnose
+    	Casusopmerkingen casusopmerking = Casusopmerkingen
+			.find
+			.where()
+		    .ilike("casusopmerkingen_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findUnique();
+    	casusopmerking.delete();
+    	return ok();
+    }
+    
+    public static Casus_Diagnose createEmptyCasusDiagnose(Long id){
+		Casus_Diagnose casus_diagnose = new Casus_Diagnose();
+		Casus casus = Casus
+				.find
+				.byId(id);
+		casus_diagnose.casus = casus;
+		casus_diagnose.user_id = Integer.parseInt(session("userid"));
+		casus_diagnose.save();
+    	return casus_diagnose;
     }
 }

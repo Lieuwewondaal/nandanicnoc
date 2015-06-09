@@ -62,7 +62,6 @@ public class ImportExcel extends Controller {
     	  FilePart excelFile = body.getFile("picture");
     	  if (excelFile != null) {
     	    String fileName = excelFile.getFilename();
-    	    String contentType = excelFile.getContentType(); 
     	    File file = excelFile.getFile();
     	    System.out.println(fileName);
     	    // Read Excel file

@@ -7,8 +7,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import play.db.ebean.*;
-import play.data.format.Formats;
-import play.data.validation.*;
 
 
 

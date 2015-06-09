@@ -4,16 +4,12 @@ import java.util.*;
 
 import javax.persistence.*;
 
-import com.avaje.ebean.Ebean;
 import com.avaje.ebean.FetchConfig;
 import com.avaje.ebean.Page;
-import com.avaje.ebean.SqlQuery;
-import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import play.db.ebean.*;
 import play.data.format.Formats;
-import play.data.validation.*;
 
 
 

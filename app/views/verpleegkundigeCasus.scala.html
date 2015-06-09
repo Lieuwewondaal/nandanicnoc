@@ -6,8 +6,9 @@
 
 @main {
 <script>
-	$( document ).ready(function() {
-	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
+
+  function getCasus(){
+  	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
 		if(data.length > 0){
 			$("#casusOverzichtHead").html("<tr><th>Casus detail:</th><th>Casus waarde:</th></tr>");
 			$.each(data, function(key, casus) {
@@ -19,12 +20,16 @@
 		  $("#casusOverzicht").append("<tr><td>Geen casus gevonden");
 		}
 	  });
-	  
-	  $.get( "/vepleegkundigecasusdiagnosejson/" + @id, function(data) {
+  }
+  
+  function getCasusDiagnose(){
+  	  $.get( "/verpleegkundigecasusdiagnosejson/" + @id, function(data) {
 		if(data.length > 0){
 			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th></tr>");
 			$.each(data, function(key, casusdiagnose) {
-			  $("#diagnoseOverzicht").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td></tr>");
+			  if(casusdiagnose.diagnose !== null){
+			    $("#diagnoseOverzicht").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td></tr>");
+			  }
 			});
 		}
 		else{
@@ -32,7 +37,63 @@
 		  $("#diagnoseOverzicht").append("<tr><td>Geen diagnoses gevonden");
 		}
 	  });
+  }
+  
+  function getCasusNIC(){
+  	  $.get( "/verpleegkundigecasusnicjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th></tr>");
+			$.each(data, function(key, casusnic) {
+			  $("#NICOverzicht").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td></tr>");
+			});
+		}
+		else{
+		  $("#NICOverzichtHead").html("<tr><th>Interventies</th></tr>");
+		  $("#NICOverzicht").append("<tr><td>Geen interventies gevonden");
+		}
+	  });
+  }
+  
+  function getCasusNOC(){
+  	  $.get( "/verpleegkundigecasusnocjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th></tr>");
+			$.each(data, function(key, casusnoc) {
+			  $("#NOCOverzicht").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td></tr>");
+			});
+		}
+		else{
+		  $("#NOCOverzichtHead").html("<tr><th>Zorgresultaten</th></tr>");
+		  $("#NOCOverzicht").append("<tr><td>Geen zorgresultaten gevonden");
+		}
+	  });
+  }
+  
+  function getCasusOpmerkingen(){
+  	  $.get( "/verpleegkundigecasusopmerkingenjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#OpmerkingenOverzichtHead").html("<tr><th>Opmerking:</th><th>Datum:</th><th>Opmerking verwijderen</th></tr>");
+			$("#OpmerkingenOverzichtBody").html("");
+			$.each(data, function(key, casusopmerkingen) {
+			  var date = new Date(casusopmerkingen.casusopmerkingdatum);
+			  $("#OpmerkingenOverzichtBody").append("<tr><td>" + casusopmerkingen.casusopmerking + "</td><td>" + date + "</td><td><a class=link name=" + casusopmerkingen.casusopmerkingen_id + ">Verwijderen</a></td></tr>");
+			});
+		}
+		else{
+		  $("#OpmerkingenOverzichtHead").html("<tr><th>Opmerkingen</th></tr>");
+		  $("#OpmerkingenOverzichtBody").html("<tr><td>Geen opmerkingen gevonden");
+		}
+	  });
+  }
+
+	$( document ).ready(function() {
+		getCasus();
+		getCasusDiagnose();
+		getCasusNIC();
+		getCasusNOC();
+		getCasusOpmerkingen();
 	});
+	
 </script>
     <h1>Edit casus</h1>
         
@@ -85,9 +146,38 @@
 				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Opmerkingen laden...</th>
 			</tr>
 		</thead>
+		<tbody id="OpmerkingenOverzichtBody">
+		
+		</tbody>
 	</table>
+	<textarea name="opmerking" id="opmerking"></textarea><br />
+	<a name="saveOpmerking" id="saveOpmerking" class="link">Opmerking toevoegen</a>
+	
 	<div class="actions">
 		<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()" class="btn">Terug</a> 
 	</div>	
     
+	<script>
+	
+	$("#OpmerkingenOverzicht").on("click", function(event){
+		if(event.target.name != "undefined"){
+			$.post( "/verpleegkundigedeletecasusopmerking/"+event.target.name )
+			.done(function( data ) {
+				getCasusOpmerkingen();
+			});
+		}
+	});
+	
+	$("#saveOpmerking").on("click", function(event){
+	  if( $("#opmerking").val() ) {
+		$.post( "/verpleegkundigesavecasusopmerking/"+@id, { opmerking: $("#opmerking").val() } )
+		  .done(function( data ) {
+		    $("#opmerking").val("");
+			getCasusOpmerkingen();
+		});
+      }
+	});
+	
+	</script>
+	
 }

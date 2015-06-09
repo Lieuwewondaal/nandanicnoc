@@ -1,14 +1,10 @@
 package models;
 
-import java.util.*;
-
 import javax.persistence.*;
 
 import com.avaje.ebean.Page;
 
 import play.db.ebean.*;
-import play.data.format.Formats;
-import play.data.validation.*;
 
 
 
@@ -20,6 +16,10 @@ public class Casus_Noc extends Model {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    public int casus_noc_id;
+    
     @ManyToOne
     @JoinColumn(name="noc_id")
     public Noc noc;

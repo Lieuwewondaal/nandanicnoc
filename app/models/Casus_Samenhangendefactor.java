@@ -1,16 +1,10 @@
 package models;
 
-import java.util.*;
-
 import javax.persistence.*;
 
 import com.avaje.ebean.Page;
 
 import play.db.ebean.*;
-import play.data.format.Formats;
-import play.data.validation.*;
-
-
 
 /**
  * Company entity managed by Ebean

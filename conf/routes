@@ -3,62 +3,68 @@
 # ~~~~
 
 # Default path will just redirect to the computer list
-GET     /                           			controllers.Application.index()
+GET     /                           				controllers.Application.index()
 
-GET     /login                  				controllers.Application.login()
-GET     /logout                     			controllers.Application.logout()
-POST	/login									controllers.Application.authenticate()
+GET     /login                  					controllers.Application.login()
+GET     /logout                     				controllers.Application.logout()
+POST	/login										controllers.Application.authenticate()
 
 # Diagnoses list (look at the default values for pagination parameters)
-GET     /diagnoses                  			controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
+GET     /diagnoses                  				controllers.Application.list(p:Int ?= 0, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
 
 # Get diagnoseoverzicht information
-GET     /diagnoseoverzicht/:id	    			controllers.Application.getDiagnoseOverzicht(id:Long)
-GET     /nicdiagnose/:id		    			controllers.Application.getNicDiagnose(id:Long)
-GET     /nocdiagnose/:id		    			controllers.Application.getNocDiagnose(id:Long)
-GET     /bepalendkenmerk/:id					controllers.Application.getBepalendKenmerk(id:Long)
-GET     /risicofactor/:id		    			controllers.Application.getRisicoFactor(id:Long)
-GET     /samenhangendefactor/:id				controllers.Application.getSamenhangendeFactor(id:Long)
+GET     /diagnoseoverzicht/:id	    				controllers.Application.getDiagnoseOverzicht(id:Long)
+GET     /nicdiagnose/:id		    				controllers.Application.getNicDiagnose(id:Long)
+GET     /nocdiagnose/:id		    				controllers.Application.getNocDiagnose(id:Long)
+GET     /bepalendkenmerk/:id						controllers.Application.getBepalendKenmerk(id:Long)
+GET     /risicofactor/:id		    				controllers.Application.getRisicoFactor(id:Long)
+GET     /samenhangendefactor/:id					controllers.Application.getSamenhangendeFactor(id:Long)
 
 # Add diagnose
-GET     /diagnoses/new              			controllers.Application.create()
-GET     /diagnoses/now              			controllers.Application.save()
-POST    /diagnoses                  			controllers.ImportExcel.upload()
+GET     /diagnoses/new              				controllers.Application.create()
+GET     /diagnoses/now              				controllers.Application.save()
+POST    /diagnoses                  				controllers.ImportExcel.upload()
 
 # Casus list
-GET     /casus                  				controllers.CasusApplication.listCasus(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+GET     /casus                  					controllers.CasusApplication.listCasus(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
 
 # Add casus
-GET     /casus/new             					controllers.CasusApplication.createCasus()
-GET     /casus/now		           				controllers.CasusApplication.saveCasus()
+GET     /casus/new             						controllers.CasusApplication.createCasus()
+GET     /casus/now		           					controllers.CasusApplication.saveCasus()
 
 # Edit existing casus
-GET 	/casus/:id								controllers.CasusApplication.editCasus(id:Long)
-POST    /casus/:id              				controllers.CasusApplication.updateCasus(id:Long)
+GET 	/casus/:id									controllers.CasusApplication.editCasus(id:Long)
+POST    /casus/:id              					controllers.CasusApplication.updateCasus(id:Long)
 
 # Verpleegkundige views
-GET		/verpleegkundige						controllers.VerpleegkundigeApplication.listCasusVerpleegkundige(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
-GET		/verpleegkundigecasusjson				controllers.VerpleegkundigeApplication.getListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
-GET		/verpleegkundigecasus/:id				controllers.VerpleegkundigeApplication.editCasusVerpleegkundige(id:Long)
-GET		/verpleegkundigecasus2/:id				controllers.VerpleegkundigeApplication.editCasusVerpleegkundige2(id:Long)
-GET		/verpleegkundigecasusjson/:id			controllers.VerpleegkundigeApplication.getCasusOverzichtJSON(id:Long)
-GET		/vepleegkundigecasusdiagnosejson/:id	controllers.VerpleegkundigeApplication.getCasusDiagnose(id:Long)
+GET		/verpleegkundige							controllers.VerpleegkundigeApplication.listCasusVerpleegkundige(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+GET		/verpleegkundigecasusjson					controllers.VerpleegkundigeApplication.getListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
+GET		/verpleegkundigecasus/:id					controllers.VerpleegkundigeApplication.editCasusVerpleegkundige(id:Long)
+GET		/verpleegkundigecasus2/:id					controllers.VerpleegkundigeApplication.editCasusVerpleegkundige2(id:Long)
+GET		/verpleegkundigecasusjson/:id				controllers.VerpleegkundigeApplication.getCasusOverzichtJSON(id:Long)
+GET		/verpleegkundigecasusdiagnosejson/:id		controllers.VerpleegkundigeApplication.getCasusDiagnose(id:Long)
+GET		/verpleegkundigecasusnicjson/:id			controllers.VerpleegkundigeApplication.getCasusNic(id:Long)
+GET		/verpleegkundigecasusnocjson/:id			controllers.VerpleegkundigeApplication.getCasusNoc(id:Long)
+GET		/verpleegkundigecasusopmerkingenjson/:id	controllers.VerpleegkundigeApplication.getCasusOpmerkingen(id:Long)
+
+POST	/verpleegkundigedeletecasusopmerking/:id	controllers.VerpleegkundigeApplication.deleteCasusOpmerking(id:Long)
+POST	/verpleegkundigesavecasusopmerking/:id		controllers.VerpleegkundigeApplication.saveCasusOpmerking(id:Long)
 
 # Verpleegkundige JSON
-GET 	/verpleegkundigenandanicnoc 			controllers.VerpleegkundigeApplication.getNandaNicNoc(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")
-GET 	/verpleegkundigenanda					controllers.VerpleegkundigeApplication.getNanda(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")
+GET 	/verpleegkundigenandanicnoc 				controllers.VerpleegkundigeApplication.getNandaNicNoc(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")
+GET 	/verpleegkundigenanda						controllers.VerpleegkundigeApplication.getNanda(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")
 
 # Delete a diagnose
-POST    /diagnoses/:id/delete       			controllers.CasusApplication.deleteCasus(id:Long)
+POST    /diagnoses/:id/delete       				controllers.CasusApplication.deleteCasus(id:Long)
 
 # Edit existing diagnose
-GET     /diagnoses/:id              			controllers.Application.edit(id:Long)
-POST    /diagnoses/:id              			controllers.Application.update(id:Long)
+GET     /diagnoses/:id              				controllers.Application.edit(id:Long)
+POST    /diagnoses/:id              				controllers.Application.update(id:Long)
 
 # Delete a diagnose
-POST    /diagnoses/:id/delete       			controllers.Application.delete(id:Long)
+POST    /diagnoses/:id/delete       				controllers.Application.delete(id:Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               			controllers.Assets.at(path="/public", file)
+GET     /assets/*file               				controllers.Assets.at(path="/public", file)
 
 
