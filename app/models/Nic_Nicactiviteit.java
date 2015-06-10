@@ -20,7 +20,7 @@ public class Nic_Nicactiviteit extends Model {
     private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-	@JoinColumn(name="nic_id")
+	@JoinColumn(name="nic_id", referencedColumnName = "nic_id")
 	public Nic nic;
     
     @ManyToOne

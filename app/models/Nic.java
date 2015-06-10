@@ -27,8 +27,7 @@ public class Nic extends Model {
 	@JsonManagedReference
 	public List<Nic_Diagnose> nic_diagnose;
 	
-	@OneToMany(mappedBy="nic")
-	@JsonManagedReference
+	@OneToMany(mappedBy="nic", fetch=FetchType.EAGER)
 	public List<Nic_Nicactiviteit> nic_nicactiviteit;
 	
     /**

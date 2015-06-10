@@ -571,9 +571,7 @@ public class VerpleegkundigeApplication extends Controller  {
 
     	Page<Nic_Nicactiviteit> nic_nicactiviteit = Nic_Nicactiviteit
     			.find
-    			.fetch("nic")
-    			.fetch("nic.nicoverzicht", "nicoverzicht_definitie")
-    			.fetch("nicactiviteit")
+    			.fetch("nic.nicoverzicht")
     			.where()
     				.or(
                 			com.avaje.ebean.Expr.like("nic.nicoverzicht.nicoverzicht_definitie", "%" + filter + "%"), 
@@ -648,6 +646,7 @@ public class VerpleegkundigeApplication extends Controller  {
 			.find
 			.where()
 		    .ilike("user_id", session("userid"))
+		    .ilike("casus_id", casus_id.toString())
 		    .isNull("diagnose_id")
 		    .findList()
 		    .get(0);
@@ -679,6 +678,7 @@ public class VerpleegkundigeApplication extends Controller  {
 			.find
 			.where()
 		    .ilike("user_id", session("userid"))
+		    .ilike("casus_id", casus_id.toString())
 		    .findList()
 		    .get(0);
     	}
@@ -720,6 +720,7 @@ public class VerpleegkundigeApplication extends Controller  {
 			.find
 			.where()
 		    .ilike("user_id", session("userid"))
+		    .ilike("casus_id", casus_id.toString())
 		    .findList()
 		    .get(0);
     	}

@@ -21,7 +21,6 @@ public class Nicoverzicht extends Model {
 
 	@ManyToOne
 	@JoinColumn(name="nic_id")
-	@JsonBackReference
 	public Nic nic;
     
     @ManyToOne
