@@ -15,6 +15,14 @@ import models.Casus_Nic;
 import models.Casus_Noc;
 import models.Casusopmerkingen;
 import models.Diagnose;
+import models.Diagnoseoverzicht;
+import models.Indicator;
+import models.Nic;
+import models.Nic_Nicactiviteit;
+import models.Nicactiviteit;
+import models.Noc;
+import models.Noc_Indicator;
+import models.Nocoverzicht;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -260,6 +268,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok(result);
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result getCasusDiagnose(Long id) {
 
@@ -274,6 +287,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok(play.libs.Json.toJson(casus_diagnose));
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result getCasusNic(Long id) {
 
@@ -288,6 +306,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok(play.libs.Json.toJson(casus_nic));
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result getCasusNoc(Long id) {
     	
@@ -302,6 +325,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok(play.libs.Json.toJson(casus_noc));
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result getCasusOpmerkingen(Long id) {
 
@@ -314,6 +342,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok(play.libs.Json.toJson(casusopmerkingen));
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result saveCasusOpmerking(Long id) {
     	DynamicForm requestData = Form.form().bindFromRequest();
@@ -340,6 +373,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusOpmerking(Long id) {
 
@@ -353,6 +391,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusDiagnose(Long id) {
     	Casus_Diagnose casus_diagnose, alternateCasus_diagnose;
@@ -434,6 +477,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusNic(Long id) {
 
@@ -447,6 +495,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusNoc(Long id) {
 
@@ -460,6 +513,11 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     */
     public static Casus_Diagnose createEmptyCasusDiagnose(Long id){
 		Casus_Diagnose casus_diagnose = new Casus_Diagnose();
 		Casus casus = Casus
@@ -469,5 +527,223 @@ public class VerpleegkundigeApplication extends Controller  {
 		casus_diagnose.user_id = Integer.parseInt(session("userid"));
 		casus_diagnose.save();
     	return casus_diagnose;
+    }
+    
+    /**
+     * Get samenhangendefactor_diagnose from diagnose_id in JSON format
+     * @param id
+     * @return
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result getDiagnoseSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
+		Page<Diagnoseoverzicht> diagnose = Diagnoseoverzicht
+    			.find
+    			.fetch("diagnose")
+    			.where()
+            	.or(
+            			com.avaje.ebean.Expr.like("diagnoseoverzicht_definitie", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.like("diagnoseoverzicht_omschrijving", "%" + filter + "%")
+        			)
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .setFetchAhead(false)
+                .getPage(page);
+		
+		ObjectNode result = Json.newObject();
+    	result.put("diagnose", Json.toJson(diagnose.getList()));
+    	result.put("pages", diagnose.getTotalPageCount());
+    	result.put("rows", diagnose.getTotalRowCount());
+    	result.put("index", diagnose.getPageIndex());
+    	result.put("XtoYofZ", diagnose.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", diagnose.hasNext());
+    	result.put("hasPrev", diagnose.hasPrev());
+    	
+    	return ok(result);
+    }
+	
+    /**
+     * 
+     * @param id
+     * @return
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result getNicSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
+
+    	Page<Nic_Nicactiviteit> nic_nicactiviteit = Nic_Nicactiviteit
+    			.find
+    			.fetch("nic")
+    			.fetch("nic.nicoverzicht", "nicoverzicht_definitie")
+    			.fetch("nicactiviteit")
+    			.where()
+    				.or(
+                			com.avaje.ebean.Expr.like("nic.nicoverzicht.nicoverzicht_definitie", "%" + filter + "%"), 
+                			com.avaje.ebean.Expr.like("nic.nicoverzicht.nicoverzicht_omschrijving", "%" + filter + "%")	
+						)
+    			.orderBy(sortBy + " " + order)
+    			.findPagingList(pageSize)
+    			.setFetchAhead(false)
+    			.getPage(page);
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("nic", Json.toJson(nic_nicactiviteit.getList()));
+    	result.put("pages", nic_nicactiviteit.getTotalPageCount());
+    	result.put("rows", nic_nicactiviteit.getTotalRowCount());
+    	result.put("index", nic_nicactiviteit.getPageIndex());
+    	result.put("XtoYofZ", nic_nicactiviteit.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", nic_nicactiviteit.hasNext());
+    	result.put("hasPrev", nic_nicactiviteit.hasPrev());
+    	
+    	return ok(result);
+    }
+	
+    /**
+     * 
+     * @param id
+     * @return
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result getNocSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
+
+    	Page<Noc_Indicator> noc_indicator = Noc_Indicator
+    			.find
+    			.fetch("noc", new FetchConfig().query())
+    			.fetch("noc.nocoverzicht")
+    			.where()
+    				.or(
+                			com.avaje.ebean.Expr.like("noc.nocoverzicht.nocoverzicht_definitie", "%" + filter + "%"), 
+                			com.avaje.ebean.Expr.like("noc.nocoverzicht.nocoverzicht_omschrijving", "%" + filter + "%")	
+						)
+    			.orderBy(sortBy + " " + order)
+    			.findPagingList(pageSize)
+    			.setFetchAhead(false)
+    			.getPage(page);
+    	
+    	ObjectNode result = Json.newObject();
+    	result.put("noc", Json.toJson(noc_indicator.getList()));
+    	result.put("pages", noc_indicator.getTotalPageCount());
+    	result.put("rows", noc_indicator.getTotalRowCount());
+    	result.put("index", noc_indicator.getPageIndex());
+    	result.put("XtoYofZ", noc_indicator.getDisplayXtoYofZ(";", ";"));
+    	result.put("hasNext", noc_indicator.hasNext());
+    	result.put("hasPrev", noc_indicator.hasPrev());
+    	
+    	return ok(result);
+    }
+	
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result saveCasusDiagnose(Long casus_id, Long diagnose_id) {
+    	Diagnose diagnose = Diagnose
+    			.find
+    			.where()
+    			.eq("diagnose_id", diagnose_id)
+    			.findUnique();
+    	Casus_Diagnose casus_diagnose;
+    	try{
+    	casus_diagnose = Casus_Diagnose
+			.find
+			.where()
+		    .ilike("user_id", session("userid"))
+		    .isNull("diagnose_id")
+		    .findList()
+		    .get(0);
+    		
+    		casus_diagnose.diagnose = diagnose;
+    		casus_diagnose.update();
+    	}
+    	catch(IndexOutOfBoundsException e){
+    		casus_diagnose = createEmptyCasusDiagnose(casus_id);
+    		
+    		casus_diagnose.diagnose = diagnose;
+    		casus_diagnose.update();
+    	}
+    	
+    	return ok();
+    }
+	
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result saveCasusNic(Long casus_id, Long nic_id, Long activiteit_id) {
+
+    	Casus_Diagnose casus_diagnose;
+    	try{
+    	casus_diagnose = Casus_Diagnose
+			.find
+			.where()
+		    .ilike("user_id", session("userid"))
+		    .findList()
+		    .get(0);
+    	}
+    	catch(PersistenceException e){
+    		casus_diagnose = createEmptyCasusDiagnose(casus_id);
+    	}
+    	
+    	Nic noc = Nic
+    			.find
+    			.where()
+    			.ilike("nic_id", nic_id.toString())
+    			.findUnique();
+    	
+    	Nicactiviteit nicactiviteit = Nicactiviteit
+    			.find
+    			.where()
+    			.ilike("nicactiviteit_id", activiteit_id.toString())
+    			.findUnique();
+    	Casus_Nic casus_nic = new Casus_Nic();
+    	casus_nic.casus_diagnose = casus_diagnose;
+    	casus_nic.nic = noc;
+    	casus_nic.nicactiviteit = nicactiviteit;
+    	casus_nic.save();
+    	
+    	return ok();
+    }
+	
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result saveCasusNoc(Long casus_id, Long noc_id, Long indicator_id) {
+
+    	Casus_Diagnose casus_diagnose;
+    	try{
+    	casus_diagnose = Casus_Diagnose
+			.find
+			.where()
+		    .ilike("user_id", session("userid"))
+		    .findList()
+		    .get(0);
+    	}
+    	catch(PersistenceException e){
+    		casus_diagnose = createEmptyCasusDiagnose(casus_id);
+    	}
+    	
+    	Noc noc = Noc
+    			.find
+    			.where()
+    			.ilike("noc_id", noc_id.toString())
+    			.findUnique();
+    	
+    	Indicator indicator = Indicator
+    			.find
+    			.where()
+    			.ilike("indicator_id", indicator_id.toString())
+    			.findUnique();
+    	Casus_Noc casus_noc = new Casus_Noc();
+    	casus_noc.casus_diagnose = casus_diagnose;
+    	casus_noc.noc = noc;
+    	casus_noc.indicator = indicator;
+    	casus_noc.save();
+    	
+    	return ok();
     }
 }

@@ -27,6 +27,10 @@ public class Nic extends Model {
 	@JsonManagedReference
 	public List<Nic_Diagnose> nic_diagnose;
 	
+	@OneToMany(mappedBy="nic")
+	@JsonManagedReference
+	public List<Nic_Nicactiviteit> nic_nicactiviteit;
+	
     /**
      * Generic query helper for entity Diagnose with id Long
      */

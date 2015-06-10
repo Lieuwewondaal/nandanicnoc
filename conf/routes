@@ -46,12 +46,19 @@ GET		/verpleegkundigecasusdiagnosejson/:id		controllers.VerpleegkundigeApplicati
 GET		/verpleegkundigecasusnicjson/:id			controllers.VerpleegkundigeApplication.getCasusNic(id:Long)
 GET		/verpleegkundigecasusnocjson/:id			controllers.VerpleegkundigeApplication.getCasusNoc(id:Long)
 GET		/verpleegkundigecasusopmerkingenjson/:id	controllers.VerpleegkundigeApplication.getCasusOpmerkingen(id:Long)
+GET		/verpleegkundigecasussearchdiagnosejson		controllers.VerpleegkundigeApplication.getDiagnoseSearchListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "diagnoseoverzicht_omschrijving", o ?= "asc", f ?= "")
+GET		/verpleegkundigecasussearchnicjson			controllers.VerpleegkundigeApplication.getNicSearchListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "nic.nicoverzicht.nicoverzicht_omschrijving", o ?= "asc", f ?= "")
+GET		/verpleegkundigecasussearchnocjson			controllers.VerpleegkundigeApplication.getNocSearchListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "noc.nocoverzicht.nocoverzicht_omschrijving", o ?= "asc", f ?= "")
 
 POST	/verpleegkundigedeletecasusopmerking/:id	controllers.VerpleegkundigeApplication.deleteCasusOpmerking(id:Long)
 POST	/verpleegkundigesavecasusopmerking/:id		controllers.VerpleegkundigeApplication.saveCasusOpmerking(id:Long)
 POST	/verpleegkundigedeletecasusdiagnose/:id		controllers.VerpleegkundigeApplication.deleteCasusDiagnose(id:Long)
 POST	/verpleegkundigedeletecasusnic/:id			controllers.VerpleegkundigeApplication.deleteCasusNic(id:Long)
 POST	/verpleegkundigedeletecasusnoc/:id			controllers.VerpleegkundigeApplication.deleteCasusNoc(id:Long)
+
+POST	/verpleegkundigesavecasusdiagnose/:id/:diagnose   controllers.VerpleegkundigeApplication.saveCasusDiagnose(id:Long, diagnose:Long)
+POST	/verpleegkundigesavecasusnic/:id/:nic/:in   controllers.VerpleegkundigeApplication.saveCasusNic(id:Long, nic:Long, in:Long)
+POST	/verpleegkundigesavecasusnoc/:id/:noc/:ac   controllers.VerpleegkundigeApplication.saveCasusNoc(id:Long, noc:Long, ac:Long)
 
 # Verpleegkundige JSON
 GET 	/verpleegkundigenandanicnoc 				controllers.VerpleegkundigeApplication.getNandaNicNoc(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")

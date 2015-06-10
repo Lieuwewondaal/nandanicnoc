@@ -19,7 +19,6 @@ public class Diagnoseoverzicht extends Model {
 
 	@ManyToOne
 	@JoinColumn(name="diagnose_id")
-    @JsonBackReference
 	public Diagnose diagnose;
     
     @ManyToOne

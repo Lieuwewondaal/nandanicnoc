@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import play.db.ebean.*;
 import play.data.format.Formats;
 
@@ -30,8 +32,6 @@ public class Nic_Nicactiviteit extends Model {
     
     public String nic_nicactiviteit_releasestatus_omschrijving;
     
-    @OneToMany(mappedBy="nicactiviteit")
-	public List<Nic_Diagnose> nic_diagnose;
     /**
      * Generic query helper for entity Company with id Long
      */

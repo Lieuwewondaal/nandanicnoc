@@ -6,8 +6,178 @@
 
 @main {
 <script>
+	var lastData;
+	var xyz;
+	var index = 0;
+	var currentSort = "";
+	var currentSortDirection = "asc";
+	var filter = "";
+	var nic_save;
+	var noc_save;
+	var diagnose_save;
+	  
+	function searchDiagnose(){
+		var link = "/verpleegkundigecasussearchdiagnosejson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
 
-  function getCasus(){
+		$("#casusSearch").removeClass("hide");
+		$("#pagination").removeClass("hide");
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.diagnose.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#casusSearchBody").html("");
+				$("#casusSearchHead").html("<tr><th>Diagnose omschrijving</th><th>Diagnose definitie</th><th>Datum</tr>");
+				$.each(data.diagnose, function(key, diagnose) {
+					
+				  $("#casusSearchBody").append("<tr><td>" + diagnose.diagnoseoverzicht_omschrijving + "</td><td>" + diagnose.diagnoseoverzicht_definitie + "</td><td><a class=link id="+diagnose.diagnose.diagnose_id+">Toevoegen aan casus</a></td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusSearchHead").html("<tr><th>Diagnoses</th></tr>");
+			  $("#casusSearchBody").html("<tr><td>Geen diagnoses gevonden</td></tr>");
+			}
+		});
+	}  
+	
+	function searchNic(){
+		var link = "/verpleegkundigecasussearchnicjson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
+		$("#casusSearch").removeClass("hide");
+		$("#pagination").removeClass("hide");
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.nic.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#casusSearchBody").html("");
+				$("#casusSearchHead").html("<tr><th>Activiteit omschrijving</th><th>Toevoegen</th></tr>");
+				
+				$.each(data.nic, function(key, nic) {
+				  $("#casusSearchBody").append("<tr><td>" + nic.nicactiviteit.nicactiviteit_omschrijving + "</a></td><td><a class=link id="+nic.nic.nic_id+"_"+nic.nicactiviteit.nicactiviteit_id+">Toevoegen aan casus</a></td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusSearchHead").html("<tr><th>Activiteiten</th></tr>");
+			  $("#casusSearchBody").html("<tr><td>Geen activiteiten gevonden</td></tr>");
+			}
+		});
+	}  
+	
+	function searchNoc(){
+		var link = "/verpleegkundigecasussearchnocjson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
+		$("#casusSearch").removeClass("hide");
+		$("#pagination").removeClass("hide");
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.noc.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#casusSearchBody").html("");
+				$("#casusSearchHead").html("<tr><th>Indicator omschrijving</th><th>Toevoegen</th></tr>");
+				
+				$.each(data.noc, function(key, noc) {
+				  $("#casusSearchBody").append("<tr><td>" + noc.indicator.indicator_omschrijving + "</a></td><td><a class=link id="+noc.noc.noc_id+"_"+noc.indicator.indicator_id+">Toevoegen aan casus</a></td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusSearchHead").html("<tr><th>Indicatoren</th></tr>");
+			  $("#casusSearchBody").html("<tr><td>Geen indicatoren gevonden</td></tr>");
+			}
+		});
+	}  
+	
+	function getCasus(){
+		if($('input[name=searchType]:checked').val() == 1){
+			searchDiagnose();
+		}
+		else if($('input[name=searchType]:checked').val() == 2){
+			searchNic();
+		}
+		else if($('input[name=searchType]:checked').val() == 3){
+			searchNoc();
+		}
+	};
+	
+	function setSort(sortName){
+		if(currentSort == sortName){
+			if(currentSortDirection == "desc"){
+				currentSortDirection = "asc";
+			}
+			else{
+				currentSortDirection = "desc";
+			}
+		}
+		else{
+			currentSort = sortName;
+			currentSortDirection = "asc";
+		}
+		getCasus();
+	};
+	
+	function setFilter(searchFilter){
+		filter = searchFilter;
+		index = 0;
+		getCasus();
+	};
+	
+  function getCasusOverzicht(){
   	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
 		if(data.length > 0){
 			$("#casusOverzichtHead").html("<tr><th>Casus detail:</th><th>Casus waarde:</th></tr>");
@@ -90,7 +260,7 @@
   }
 
 	$( document ).ready(function() {
-		getCasus();
+		getCasusOverzicht();
 		getCasusDiagnose();
 		getCasusNIC();
 		getCasusNOC();
@@ -98,7 +268,7 @@
 	});
 	
 </script>
-    <h1>Edit casus</h1>
+    <h1>Casus</h1>
         
 	<table id="casusOverzicht" class="diagnoses zebra-striped">
 		<thead id="casusOverzichtHead">
@@ -108,6 +278,90 @@
 		</thead>
 	</table>
 	<hr />
+	<table style="width: 50px;">
+		<tr>
+			<td><label for="diagnoseRadio">Diagnose:</label></td>
+			<td><input type="radio" name="searchType" checked="checked" id="diagnoseRadio" value="1"></td>
+		</tr>
+		<tr>
+			<td><label for="nicRadio">NIC:</label></td>
+			<td><input type="radio" name="searchType" id="nicRadio" value="2"></td>
+		</tr>
+		<tr>
+			<td><label for="nocRadio">NOC:</label></td>
+			<td><input type="radio" name="searchType" id="nocRadio" value="3"></td>
+		</tr>
+	</table>
+
+    @if(flash.containsKey("success")) {
+        <div class="alert-message warning">
+            <strong>Done!</strong> @flash.get("success")
+        </div>
+    } 
+
+    <div id="actions">
+        
+		<input type="search" id="searchbox" name="f" placeholder="Casus">
+		<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
+        
+    </div>
+    <br />
+	<table id="casusSearch" class="diagnoses zebra-striped hide">
+		<thead id="casusSearchHead">
+
+		</thead>
+		<tbody id="casusSearchBody">
+		
+		</tbody>
+	</table>
+	
+	<div id="pagination" class="pagination hide">
+		<ul>
+			<li class="prev" id="prevli">
+				<a id="prev">&larr; Previous</a>
+			</li>
+			<li class="current">
+				<a id="XtoYofZ"></a>
+			</li>
+			<li class="next" id="nextli">
+				<a id="next">Next &rarr;</a>
+			</li>
+		</ul>
+	</div>
+		
+	<script>
+		$("#pagination").on("click", function(event){
+			if(event.target.id == "prev" && lastData.hasPrev){
+				index = lastData.index - 1;
+				getCasus();
+			}
+			else if(event.target.id == "next" && lastData.hasNext){
+				index = lastData.index + 1;
+				getCasus();
+			}
+		});
+		
+		$("#casusSearch").on("click", function(event){
+			if(event.target.name != "undefined"){
+				setSort(event.target.name);
+			}
+			else if(event.target.id != "undefined"){
+				setSort(event.target.id);
+			}
+		});
+		
+		$("#searchbox").on("keypress", function(event){
+			if(event.which == 13){
+				setFilter($("#searchbox").val());
+			}
+		});
+		
+		$("#searchsubmit").on("click", function(){
+			setFilter($("#searchbox").val());
+		});
+		
+		
+	</script>
 	
 	<h2>Diagnoses</h2>
 	<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
@@ -223,6 +477,47 @@
 			getCasusOpmerkingen();
 		});
       }
+	});
+	
+	$('input[name=searchType]').on("click", function(event){
+		index = 0;
+		currentSort = "";
+		currentSortDirection = "asc";
+		filter = "";
+		getCasus();
+	});
+
+	$("#casusSearch").on("click", function(event){
+	
+		if($('input[name=searchType]:checked').val() == 1){
+			if(event.target.id != undefined && event.target.name != "saving"){
+				diagnose_save = event.target.id;
+				$.post( "/verpleegkundigesavecasusdiagnose/"+@id+"/"+diagnose_save, { casus_id: @id, diagnose_id: diagnose_save } )
+				.done(function( data ) {
+					getCasusDiagnose();
+				});
+			}
+		}
+	
+		if($('input[name=searchType]:checked').val() == 2){
+			if(event.target.id != undefined && event.target.name != "saving"){
+				nic_save = event.target.id.split("_");
+				$.post( "/verpleegkundigesavecasusnic/"+@id+"/"+nic_save[0]+"/"+nic_save[1], { casus_id: @id, nic_id: nic_save[0], activiteit_id: nic_save[1] } )
+				.done(function( data ) {
+					getCasusNIC();
+				});
+			}
+		}
+		
+		if($('input[name=searchType]:checked').val() == 3){
+			if(event.target.id != undefined && event.target.name != "saving"){
+				noc_save = event.target.id.split("_");
+				$.post( "/verpleegkundigesavecasusnoc/"+@id+"/"+noc_save[0]+"/"+noc_save[1], { casus_id: @id, noc_id: noc_save[0], indicator_id: noc_save[1] } )
+				.done(function( data ) {
+					getCasusNOC();
+				});
+			}
+		}
 	});
 	
 	</script>

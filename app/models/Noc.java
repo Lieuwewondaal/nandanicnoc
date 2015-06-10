@@ -28,6 +28,10 @@ public class Noc extends Model {
 	
 	@OneToMany(mappedBy="noc")
 	@JsonManagedReference
+	public List<Noc_Indicator> noc_indicator;
+	
+	@OneToMany(mappedBy="noc")
+	@JsonManagedReference
 	public List<Noc_Indicator_Diagnose> noc_indicator_diagnose;
     /**
      * Generic query helper for entity Diagnose with id Long
