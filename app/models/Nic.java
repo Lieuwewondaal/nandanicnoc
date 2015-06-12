@@ -21,6 +21,7 @@ public class Nic extends Model {
     public Long nic_id;
 	
     @OneToMany(mappedBy="nic")
+    @JsonManagedReference
 	public List<Nicoverzicht> nicoverzicht;
     
 	@OneToMany(mappedBy="nic")

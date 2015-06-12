@@ -15,6 +15,7 @@
 	var nic_save;
 	var noc_save;
 	var diagnose_save;
+	var searched = false;
 	  
 	function searchDiagnose(){
 		var link = "/verpleegkundigecasussearchdiagnosejson?p="+index;
@@ -24,6 +25,7 @@
 
 		$("#casusSearch").removeClass("hide");
 		$("#pagination").removeClass("hide");
+		$("#searchResults").removeClass("hide");
 		
 		link = link + "&f="+filter;
 		$.get( link, function(data) {
@@ -144,14 +146,16 @@
 	}  
 	
 	function getCasus(){
-		if($('input[name=searchType]:checked').val() == 1){
-			searchDiagnose();
-		}
-		else if($('input[name=searchType]:checked').val() == 2){
-			searchNic();
-		}
-		else if($('input[name=searchType]:checked').val() == 3){
-			searchNoc();
+		if(searched){
+			if($('input[name=searchType]:checked').val() == 1){
+				searchDiagnose();
+			}
+			else if($('input[name=searchType]:checked').val() == 2){
+				searchNic();
+			}
+			else if($('input[name=searchType]:checked').val() == 3){
+				searchNoc();
+			}
 		}
 	};
 	
@@ -258,7 +262,9 @@
 		}
 	  });
   }
-
+	/**
+	* Get casus info when page loads
+	*/
 	$( document ).ready(function() {
 		getCasusOverzicht();
 		getCasusDiagnose();
@@ -306,6 +312,7 @@
         
     </div>
     <br />
+	<h2 id="searchResults" class="hide">Zoekresultaten:</h2>
 	<table id="casusSearch" class="diagnoses zebra-striped hide">
 		<thead id="casusSearchHead">
 
@@ -330,6 +337,9 @@
 	</div>
 		
 	<script>
+		/**
+		* Search sort/pagination code
+		*/
 		$("#pagination").on("click", function(event){
 			if(event.target.id == "prev" && lastData.hasPrev){
 				index = lastData.index - 1;
@@ -352,11 +362,13 @@
 		
 		$("#searchbox").on("keypress", function(event){
 			if(event.which == 13){
+				searched = true;
 				setFilter($("#searchbox").val());
 			}
 		});
 		
 		$("#searchsubmit").on("click", function(){
+			searched = true;
 			setFilter($("#searchbox").val());
 		});
 		
@@ -425,6 +437,11 @@
     
 	<script>
 	
+	/**
+	* Delete code
+	*/
+	
+	// Diagnose
 	$("#diagnoseOverzicht").on("click", function(event){
 		if(event.target.name != undefined && event.target.name != "removing"){
 			diagnoseName = event.target.name;
@@ -436,6 +453,7 @@
 		}
 	});
 	
+	// NIC
 	$("#NICOverzicht").on("click", function(event){
 		if(event.target.name != undefined && event.target.name != "removing"){
 			nicName = event.target.name;
@@ -447,6 +465,7 @@
 		}
 	});
 	
+	// NOC
 	$("#NOCOverzicht").on("click", function(event){
 		if(event.target.name != undefined && event.target.name != "removing"){
 			nocName = event.target.name;
@@ -458,6 +477,7 @@
 		}
 	});
 	
+	// Opmerkingen
 	$("#OpmerkingenOverzicht").on("click", function(event){
 		if(event.target.name != undefined && event.target.name != "removing"){
 			opmerkingenName = event.target.name;
@@ -469,26 +489,21 @@
 		}
 	});
 	
-	$("#saveOpmerking").on("click", function(event){
-	  if( $("#opmerking").val() ) {
-		$.post( "/verpleegkundigesavecasusopmerking/"+@id, { opmerking: $("#opmerking").val() } )
-		  .done(function( data ) {
-		    $("#opmerking").val("");
-			getCasusOpmerkingen();
-		});
-      }
-	});
-	
+	/**
+	* Search code
+	*/
 	$('input[name=searchType]').on("click", function(event){
 		index = 0;
 		currentSort = "";
 		currentSortDirection = "asc";
-		filter = "";
-		getCasus();
+		setFilter($("#searchbox").val());
 	});
 
+	/**
+	* Save code
+	*/
 	$("#casusSearch").on("click", function(event){
-	
+		// Diagnose
 		if($('input[name=searchType]:checked').val() == 1){
 			if(event.target.id != undefined && event.target.name != "saving"){
 				diagnose_save = event.target.id;
@@ -498,7 +513,7 @@
 				});
 			}
 		}
-	
+		// NIC
 		if($('input[name=searchType]:checked').val() == 2){
 			if(event.target.id != undefined && event.target.name != "saving"){
 				nic_save = event.target.id.split("_");
@@ -508,7 +523,7 @@
 				});
 			}
 		}
-		
+		// NOC
 		if($('input[name=searchType]:checked').val() == 3){
 			if(event.target.id != undefined && event.target.name != "saving"){
 				noc_save = event.target.id.split("_");
@@ -518,6 +533,17 @@
 				});
 			}
 		}
+	});
+	
+	// Opmerkingen
+	$("#saveOpmerking").on("click", function(event){
+	  if( $("#opmerking").val() ) {
+		$.post( "/verpleegkundigesavecasusopmerking/"+@id, { opmerking: $("#opmerking").val() } )
+		  .done(function( data ) {
+		    $("#opmerking").val("");
+			getCasusOpmerkingen();
+		});
+      }
 	});
 	
 	</script>
