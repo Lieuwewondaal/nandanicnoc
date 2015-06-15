@@ -360,7 +360,7 @@ public class VerpleegkundigeApplication extends Controller  {
 	    			.findList()
 	    			.get(0);
     	}
-    	catch(PersistenceException e){
+    	catch(IndexOutOfBoundsException e){
     		casus_diagnose = createEmptyCasusDiagnose(id);
     	}
     	

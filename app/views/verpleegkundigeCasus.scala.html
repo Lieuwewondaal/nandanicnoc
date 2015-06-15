@@ -186,7 +186,7 @@
 		if(data.length > 0){
 			$("#casusOverzichtHead").html("<tr><th>Casus detail:</th><th>Casus waarde:</th></tr>");
 			$.each(data, function(key, casus) {
-			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + casus.casus_definitie + "</td></tr>");
+			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + nl2br(casus.casus_definitie, true) + "</td></tr>");
 			});
 		}
 		else{
