@@ -550,7 +550,7 @@ public class VerpleegkundigeApplication extends Controller  {
 		/*
 		 * select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1,		t1.nicactiviteit_id c2,        t1.nicactiviteit_omschrijving c3,		t2.nic_id c4		from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ("verzorgen") OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ("verzorgen") * 
 		 */
-		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+filter+"') OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ('"+filter+"')";  
+		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4, t3.nicoverzicht_omschrijving c5,	t3.nicoverzicht_definitie c6 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id	left outer join	nicoverzicht t3 on t3.nic_id = t2.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+filter+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+filter+"')";  
 	  
 		RawSql rawSql =   
 		    RawSqlBuilder  
@@ -560,6 +560,8 @@ public class VerpleegkundigeApplication extends Controller  {
 		        .columnMapping("t1.nicactiviteit_id",  "nicactiviteit.nicactiviteit_id")  
 		        .columnMapping("t1.nicactiviteit_omschrijving",  "nicactiviteit.nicactiviteit_omschrijving")  
 		        .columnMapping("t2.nic_id", "nic.nic_id")
+		        .columnMapping("t3.nicoverzicht_definitie", "nic.nicoverzicht.nicoverzicht_definitie")
+		        .columnMapping("t3.nicoverzicht_omschrijving", "nic.nicoverzicht.nicoverzicht_omschrijving")
 		        .create();  
 		  
 		  
@@ -570,7 +572,7 @@ public class VerpleegkundigeApplication extends Controller  {
 		    .fetch("nic")  
 		    .fetch("nic.nicoverzicht")
 		    .fetch("nicactiviteit")
-			.orderBy("nicactiviteit.nicactiviteit_omschrijving" + " " + order)
+			.orderBy(sortBy + " " + order)
 			.setRawSql(rawSql)
 			.where()
 			.findPagingList(pageSize)
@@ -593,16 +595,16 @@ public class VerpleegkundigeApplication extends Controller  {
     			.findPagingList(pageSize)
     			.setFetchAhead(false)
     			.getPage(page);*/
-    	
-    	ObjectNode result = Json.newObject();
+		ObjectNode result = Json.newObject();
     	result.put("nic", Json.toJson(nic_nicactiviteit.getList()));
-    	result.put("pages", nic_nicactiviteit.getTotalPageCount());
-    	result.put("rows", nic_nicactiviteit.getTotalRowCount());
-    	result.put("index", nic_nicactiviteit.getPageIndex());
-    	result.put("XtoYofZ", nic_nicactiviteit.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", nic_nicactiviteit.hasNext());
-    	result.put("hasPrev", nic_nicactiviteit.hasPrev());
-    	
+    	if(nic_nicactiviteit.getList().size() > 0){
+	    	result.put("pages", nic_nicactiviteit.getTotalPageCount());
+	    	result.put("rows", nic_nicactiviteit.getTotalRowCount());
+	    	result.put("index", nic_nicactiviteit.getPageIndex());
+	    	result.put("XtoYofZ", nic_nicactiviteit.getDisplayXtoYofZ(";", ";"));
+	    	result.put("hasNext", nic_nicactiviteit.hasNext());
+	    	result.put("hasPrev", nic_nicactiviteit.hasPrev());
+		}
     	return ok(result);
     }
 	

@@ -32,7 +32,7 @@
 			if(data.diagnose.length > 0){
 			  lastData = data;
 			  xyz = data.XtoYofZ.split(";");
-				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
 				$("#casusSearchBody").html("");
 				$("#casusSearchHead").html("<tr><th>Diagnose omschrijving</th><th>Diagnose definitie</th><th>Datum</tr>");
 				$.each(data.diagnose, function(key, diagnose) {
@@ -74,7 +74,7 @@
 			if(data.nic.length > 0){
 			  lastData = data;
 			  xyz = data.XtoYofZ.split(";");
-				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
 				$("#casusSearchBody").html("");
 				$("#casusSearchHead").html("<tr><th>Activiteit omschrijving</th><th>Toevoegen</th></tr>");
 				
@@ -116,7 +116,7 @@
 			if(data.noc.length > 0){
 			  lastData = data;
 			  xyz = data.XtoYofZ.split(";");
-				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
 				$("#casusSearchBody").html("");
 				$("#casusSearchHead").html("<tr><th>Indicator omschrijving</th><th>Toevoegen</th></tr>");
 				
@@ -184,7 +184,7 @@
   function getCasusOverzicht(){
   	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#casusOverzichtHead").html("<tr><th>Casus detail:</th><th>Casus waarde:</th></tr>");
+			$("#casusOverzichtHead").html("");
 			$.each(data, function(key, casus) {
 			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + nl2br(casus.casus_definitie, true) + "</td></tr>");
 			});
