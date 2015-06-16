@@ -5,8 +5,12 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.FetchConfig;
 import com.avaje.ebean.Page;
+import com.avaje.ebean.Query;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import models.Casus;
@@ -341,37 +345,6 @@ public class VerpleegkundigeApplication extends Controller  {
 		    .findList();
     	return ok(play.libs.Json.toJson(casusopmerkingen));
     }
-
-    /**
-     * 
-     * @param id
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result saveCasusOpmerking(Long id) {
-    	DynamicForm requestData = Form.form().bindFromRequest();
-    	Casus_Diagnose casus_diagnose;
-    	try{
-	    	casus_diagnose = Casus_Diagnose
-	    			.find
-	    			.where()
-	    			.ilike("casus.casus_id", id.toString())
-	    			.ilike("user_id", session("userid"))
-	    			.findList()
-	    			.get(0);
-    	}
-    	catch(IndexOutOfBoundsException e){
-    		casus_diagnose = createEmptyCasusDiagnose(id);
-    	}
-    	
-    	Casusopmerkingen casusopmerkingen = new Casusopmerkingen();
-    	casusopmerkingen.casus_diagnose = casus_diagnose;
-    	casusopmerkingen.casusopmerking = requestData.get("opmerking");
-		casusopmerkingen.casusopmerkingdatum = Calendar.getInstance().getTime();
-		casusopmerkingen.save();
-
-    	return ok();
-    }
     
     /**
      * 
@@ -399,27 +372,32 @@ public class VerpleegkundigeApplication extends Controller  {
     @Security.Authenticated(Secured.class)
     public static Result deleteCasusDiagnose(Long id) {
     	Casus_Diagnose casus_diagnose, alternateCasus_diagnose;
-    	try{
-    	casus_diagnose = Casus_Diagnose
-			.find
-			.where()
-		    .ilike("casus_diagnose_id", id.toString())
-		    .ilike("user_id", session("userid"))
-		    .findUnique();
+    	List<Casus_Diagnose> cd = Casus_Diagnose
+    			.find
+    			.where()
+    			.ilike("casus_diagnose_id", id.toString())
+		    	.ilike("user_id", session("userid"))
+    		    .setMaxRows(1)
+    		    .findList();
+    	if(cd.size() > 0){
+    		casus_diagnose = cd.get(0);
     	}
-    	catch(PersistenceException e){
+    	else{
     		return ok();
     	}
     	
     	// Check if alternate diagnose exists
-    	try{
-        	alternateCasus_diagnose = Casus_Diagnose
-				.find
-				.where()
-			    .not(com.avaje.ebean.Expr.like("casus_diagnose_id", id.toString()))
-			    .ilike("user_id", session("userid"))
-			    .findList()
-			    .get(0);
+ 
+		List<Casus_Diagnose> acd = Casus_Diagnose
+    			.find
+    			.where()
+    			.not(com.avaje.ebean.Expr.like("casus_diagnose_id", id.toString()))
+		    	.ilike("user_id", session("userid"))
+    		    .setMaxRows(1)
+    		    .findList();
+		if(acd.size() > 0){
+			alternateCasus_diagnose = acd.get(0);
+    		
         	
         	// Update other values connected to this diagnose
         	try{
@@ -430,7 +408,7 @@ public class VerpleegkundigeApplication extends Controller  {
         				.findList();
         		for (int i = 0; i < casus_nic.size(); i++) {
         			casus_nic.get(i).casus_diagnose = alternateCasus_diagnose;
-        			casus_nic.get(i).save();
+        			casus_nic.get(i).update();
         		}
         	}
         	catch(PersistenceException e){
@@ -445,7 +423,7 @@ public class VerpleegkundigeApplication extends Controller  {
         				.findList();
         		for (int i = 0; i < casus_noc.size(); i++) {
         			casus_noc.get(i).casus_diagnose = alternateCasus_diagnose;
-        			casus_noc.get(i).save();
+        			casus_noc.get(i).update();
         		}
         	}
         	catch(PersistenceException e){
@@ -460,7 +438,7 @@ public class VerpleegkundigeApplication extends Controller  {
         				.findList();
         		for (int i = 0; i < casusopmerkingen.size(); i++) {
         			casusopmerkingen.get(i).casus_diagnose = alternateCasus_diagnose;
-        			casusopmerkingen.get(i).save();
+        			casusopmerkingen.get(i).update();
         		}
         	}
         	catch(PersistenceException e){
@@ -470,7 +448,7 @@ public class VerpleegkundigeApplication extends Controller  {
     	}
     	
     	// Update current one to null if no other diagnoses exist
-    	catch(IndexOutOfBoundsException e){
+		else{
     		casus_diagnose.diagnose = null;
     		casus_diagnose.update();
     	}
@@ -541,8 +519,8 @@ public class VerpleegkundigeApplication extends Controller  {
     			.fetch("diagnose")
     			.where()
             	.or(
-            			com.avaje.ebean.Expr.like("diagnoseoverzicht_definitie", "%" + filter + "%"), 
-            			com.avaje.ebean.Expr.like("diagnoseoverzicht_omschrijving", "%" + filter + "%")
+            			com.avaje.ebean.Expr.ilike("diagnoseoverzicht_definitie", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.ilike("diagnoseoverzicht_omschrijving", "%" + filter + "%")
         			)
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
@@ -569,18 +547,52 @@ public class VerpleegkundigeApplication extends Controller  {
 	@Security.Authenticated(Secured.class)
     public static Result getNicSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
 
-    	Page<Nic_Nicactiviteit> nic_nicactiviteit = Nic_Nicactiviteit
+		/*
+		 * select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1,		t1.nicactiviteit_id c2,        t1.nicactiviteit_omschrijving c3,		t2.nic_id c4		from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ("verzorgen") OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ("verzorgen") * 
+		 */
+		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+filter+"') OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ('"+filter+"')";  
+	  
+		RawSql rawSql =   
+		    RawSqlBuilder  
+		        .parse(sql)  
+		        .columnMapping("t0.nic_nicactiviteit_releasestatus_datum",  "nic_nicactiviteit_releasestatus_datum")  
+		        .columnMapping("t0.nic_nicactiviteit_releasestatus_omschrijving",  "nic_nicactiviteit_releasestatus_omschrijving")  
+		        .columnMapping("t1.nicactiviteit_id",  "nicactiviteit.nicactiviteit_id")  
+		        .columnMapping("t1.nicactiviteit_omschrijving",  "nicactiviteit.nicactiviteit_omschrijving")  
+		        .columnMapping("t2.nic_id", "nic.nic_id")
+		        .create();  
+		  
+		  
+		Page<Nic_Nicactiviteit> nic_nicactiviteit = Nic_Nicactiviteit
+			.find
+		    // get ebean to fetch parts of the order and customer   
+		    // after the raw SQL query is executed  
+		    .fetch("nic")  
+		    .fetch("nic.nicoverzicht")
+		    .fetch("nicactiviteit")
+			.orderBy("nicactiviteit.nicactiviteit_omschrijving" + " " + order)
+			.setRawSql(rawSql)
+			.where()
+			.findPagingList(pageSize)
+			.setFetchAhead(false)
+			.getPage(page);  
+		
+    	/*Page<Nic_Nicactiviteit> nic_nicactiviteit = Nic_Nicactiviteit
     			.find
     			.fetch("nic.nicoverzicht")
     			.where()
-    				.or(
-                			com.avaje.ebean.Expr.like("nic.nicoverzicht.nicoverzicht_definitie", "%" + filter + "%"), 
-                			com.avaje.ebean.Expr.like("nic.nicoverzicht.nicoverzicht_omschrijving", "%" + filter + "%")	
-						)
+				.or(
+            			com.avaje.ebean.Expr.ilike("nic.nicoverzicht.nicoverzicht_definitie", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.ilike("nic.nicoverzicht.nicoverzicht_omschrijving", "%" + filter + "%")	
+					)
+				.or(
+            			com.avaje.ebean.Expr.ilike("nicactiviteit.nicactiviteit_omschrijving", "%" + filter + "%"), 
+            			com.avaje.ebean.Expr.ilike("nicactiviteit.nicactiviteit_omschrijving", "%" + filter + "%")
+				)
     			.orderBy(sortBy + " " + order)
     			.findPagingList(pageSize)
     			.setFetchAhead(false)
-    			.getPage(page);
+    			.getPage(page);*/
     	
     	ObjectNode result = Json.newObject();
     	result.put("nic", Json.toJson(nic_nicactiviteit.getList()));
@@ -640,27 +652,28 @@ public class VerpleegkundigeApplication extends Controller  {
     			.where()
     			.eq("diagnose_id", diagnose_id)
     			.findUnique();
+    	
     	Casus_Diagnose casus_diagnose;
-    	try{
-    	casus_diagnose = Casus_Diagnose
-			.find
-			.where()
-		    .ilike("user_id", session("userid"))
-		    .ilike("casus_id", casus_id.toString())
-		    .isNull("diagnose_id")
-		    .findList()
-		    .get(0);
-    		
-    		casus_diagnose.diagnose = diagnose;
-    		casus_diagnose.update();
+    	
+    	List<Casus_Diagnose> cd = Casus_Diagnose
+    			.find
+    			.where()
+    		    .ilike("user_id", session("userid"))
+    		    .ilike("casus_id", casus_id.toString())
+    		    .isNull("diagnose_id")
+    		    .setMaxRows(1)
+    		    .findList();
+    	
+    	if(cd.size() > 0){
+    		casus_diagnose = cd.get(0);
     	}
-    	catch(IndexOutOfBoundsException e){
-    		casus_diagnose = createEmptyCasusDiagnose(casus_id);
-    		
-    		casus_diagnose.diagnose = diagnose;
-    		casus_diagnose.update();
+    	else{
+    		casus_diagnose = createEmptyCasusDiagnose(casus_id);	
     	}
     	
+		casus_diagnose.diagnose = diagnose;
+		casus_diagnose.update();   	
+   	
     	return ok();
     }
 	
@@ -673,16 +686,17 @@ public class VerpleegkundigeApplication extends Controller  {
     public static Result saveCasusNic(Long casus_id, Long nic_id, Long activiteit_id) {
 
     	Casus_Diagnose casus_diagnose;
-    	try{
-    	casus_diagnose = Casus_Diagnose
-			.find
-			.where()
-		    .ilike("user_id", session("userid"))
-		    .ilike("casus_id", casus_id.toString())
-		    .findList()
-		    .get(0);
+    	List<Casus_Diagnose> cd = Casus_Diagnose
+    			.find
+    			.where()
+    			.ilike("user_id", session("userid"))
+		    	.ilike("casus_id", casus_id.toString())
+    		    .setMaxRows(1)
+    		    .findList();
+    	if(cd.size() > 0){
+    		casus_diagnose = cd.get(0);
     	}
-    	catch(IndexOutOfBoundsException e){
+    	else{
     		casus_diagnose = createEmptyCasusDiagnose(casus_id);
     	}
     	
@@ -715,16 +729,17 @@ public class VerpleegkundigeApplication extends Controller  {
     public static Result saveCasusNoc(Long casus_id, Long noc_id, Long indicator_id) {
 
     	Casus_Diagnose casus_diagnose;
-    	try{
-    	casus_diagnose = Casus_Diagnose
-			.find
-			.where()
-		    .ilike("user_id", session("userid"))
-		    .ilike("casus_id", casus_id.toString())
-		    .findList()
-		    .get(0);
+    	List<Casus_Diagnose> cd = Casus_Diagnose
+    			.find
+    			.where()
+    			.ilike("user_id", session("userid"))
+		    	.ilike("casus_id", casus_id.toString())
+    		    .setMaxRows(1)
+    		    .findList();
+    	if(cd.size() > 0){
+    		casus_diagnose = cd.get(0);
     	}
-    	catch(IndexOutOfBoundsException e){
+    	else{
     		casus_diagnose = createEmptyCasusDiagnose(casus_id);
     	}
     	
@@ -745,6 +760,40 @@ public class VerpleegkundigeApplication extends Controller  {
     	casus_noc.indicator = indicator;
     	casus_noc.save();
     	
+    	return ok();
+    }
+    
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result saveCasusOpmerking(Long id) {
+    	DynamicForm requestData = Form.form().bindFromRequest();
+    	Casus_Diagnose casus_diagnose;
+
+    	List<Casus_Diagnose> cd = Casus_Diagnose
+    			.find
+    			.where()
+    			.ilike("casus.casus_id", id.toString())
+    			.ilike("user_id", session("userid"))
+    			.setMaxRows(1)
+    			.findList();
+    	
+    	if(cd.size() > 0){
+    		casus_diagnose = cd.get(0);
+    	}
+    	else{
+    		casus_diagnose = createEmptyCasusDiagnose(id);	
+    	}
+    	
+    	Casusopmerkingen casusopmerkingen = new Casusopmerkingen();
+    	casusopmerkingen.casus_diagnose = casus_diagnose;
+    	casusopmerkingen.casusopmerking = requestData.get("opmerking");
+		casusopmerkingen.casusopmerkingdatum = Calendar.getInstance().getTime();
+		casusopmerkingen.save();
+
     	return ok();
     }
 }
