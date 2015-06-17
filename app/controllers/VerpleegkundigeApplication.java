@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.persistence.PersistenceException;
 
@@ -549,9 +550,44 @@ public class VerpleegkundigeApplication extends Controller  {
 
 		/*
 		 * select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1,		t1.nicactiviteit_id c2,        t1.nicactiviteit_omschrijving c3,		t2.nic_id c4		from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ("verzorgen") OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ("verzorgen") * 
-		 */
-		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4, t3.nicoverzicht_omschrijving c5,	t3.nicoverzicht_definitie c6 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id	left outer join	nicoverzicht t3 on t3.nic_id = t2.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+filter+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+filter+"')";  
-	  
+		 */  
+		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4, t3.nicoverzicht_omschrijving c5,	t3.nicoverzicht_definitie c6 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id	left outer join	nicoverzicht t3 on t3.nic_id = t2.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id";  
+		StringTokenizer st = new StringTokenizer(filter);
+		boolean AndOr = false;
+		String element = "";
+		int i = 0;
+		while (st.hasMoreElements()) {
+			element = st.nextElement().toString();
+			if(i == 0){
+				if(!element.equals("AND") && !element.equals("OR"))
+				{
+					sql += " where ";
+					i++;
+				}
+			}
+			
+			if(element.equals("OR")){
+				if(AndOr){
+					sql += " OR ";
+					AndOr = false;
+				}
+			}
+			else if(element.equals("AND")){
+				if(AndOr){
+					sql += " AND ";
+					AndOr = false;
+				}
+			}
+			else{
+				if(AndOr){
+					sql += " AND ";
+					AndOr = false;
+				}
+				sql += "(MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
+				AndOr = true;
+			}
+		}
+		
 		RawSql rawSql =   
 		    RawSqlBuilder  
 		        .parse(sql)  
