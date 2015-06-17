@@ -524,6 +524,14 @@ alter table casus_noc add constraint fk_casus_noc_2 foreign key (noc_id) referen
 alter table casus_noc add constraint fk_casus_noc_3 foreign key (indicator_id) references indicator (indicator_id) on delete restrict on update restrict;
 alter table casusopmerkingen add constraint fk_casus_opmerkingen_1 foreign key (casus_diagnose_id) references casus_diagnose (casus_diagnose_id) on delete restrict on update restrict;
 
+alter table diagnoseoverzicht ADD FULLTEXT(diagnoseoverzicht_omschrijving,diagnoseoverzicht_definitie);
+alter table gezondheidspatroon ADD FULLTEXT(gezondheidspatroon_omschrijving);
+alter table nicoverzicht ADD FULLTEXT(nicoverzicht_definitie, nicoverzicht_omschrijving);
+alter table nicactiviteit ADD FULLTEXT(nicactiviteit_omschrijving);
+alter table nocoverzicht ADD FULLTEXT(nocoverzicht_definitie, nocoverzicht_omschrijving);
+alter table indicator ADD FULLTEXT(indicator_omschrijving);
+
+
 # --- !Downs
 
 SET FOREIGN_KEY_CHECKS = 0;

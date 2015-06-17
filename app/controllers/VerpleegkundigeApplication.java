@@ -515,14 +515,27 @@ public class VerpleegkundigeApplication extends Controller  {
      */
 	@Security.Authenticated(Secured.class)
     public static Result getDiagnoseSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
+		String sql = "select distinct t0.diagnose_code c0, t0.diagnoseoverzicht_omschrijving c1, t0.diagnoseoverzicht_definitie c2, t0.diagnoseversie_id c3, t0.gezondheidspatroon_id c4, t0.diagnoseklasse_id c5, t1.diagnose_id c6,	t2.gezondheidspatroon_omschrijving from diagnoseoverzicht t0 left outer join diagnose t1 on t1.diagnose_id = t0.diagnose_id left outer join gezondheidspatroon t2 on t2.gezondheidspatroon_id = t0.gezondheidspatroon_id";
+		sql += tokenizeQuery(filter, 0);
+		
+		RawSql rawSql =   
+			    RawSqlBuilder  
+			        .parse(sql)  
+			        .columnMapping("t0.diagnose_code",  "diagnose_code")  
+			        .columnMapping("t0.diagnoseoverzicht_omschrijving",  "diagnoseoverzicht_omschrijving")  
+			        .columnMapping("t0.diagnoseoverzicht_definitie",  "diagnoseoverzicht_definitie")  
+			        .columnMapping("t0.diagnoseversie_id",  "diagnoseversie.diagnoseversie_id")  
+			        .columnMapping("t0.gezondheidspatroon_id", "gezondheidspatroon.gezondheidspatroon_id")
+			        .columnMapping("t0.diagnoseklasse_id", "diagnoseklasse.diagnoseklasse_id")
+			        .columnMapping("t1.diagnose_id", "diagnose.diagnose_id")
+			        .columnMapping("t2.gezondheidspatroon_omschrijving", "gezondheidspatroon.gezondheidspatroon_omschrijving")
+			        .create();  
+		
 		Page<Diagnoseoverzicht> diagnose = Diagnoseoverzicht
     			.find
     			.fetch("diagnose")
+    			.setRawSql(rawSql)
     			.where()
-            	.or(
-            			com.avaje.ebean.Expr.ilike("diagnoseoverzicht_definitie", "%" + filter + "%"), 
-            			com.avaje.ebean.Expr.ilike("diagnoseoverzicht_omschrijving", "%" + filter + "%")
-        			)
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
@@ -530,12 +543,14 @@ public class VerpleegkundigeApplication extends Controller  {
 		
 		ObjectNode result = Json.newObject();
     	result.put("diagnose", Json.toJson(diagnose.getList()));
-    	result.put("pages", diagnose.getTotalPageCount());
-    	result.put("rows", diagnose.getTotalRowCount());
-    	result.put("index", diagnose.getPageIndex());
-    	result.put("XtoYofZ", diagnose.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", diagnose.hasNext());
-    	result.put("hasPrev", diagnose.hasPrev());
+    	if(diagnose.getList().size() > 0){
+	    	result.put("pages", diagnose.getTotalPageCount());
+	    	result.put("rows", diagnose.getTotalRowCount());
+	    	result.put("index", diagnose.getPageIndex());
+	    	result.put("XtoYofZ", diagnose.getDisplayXtoYofZ(";", ";"));
+	    	result.put("hasNext", diagnose.hasNext());
+	    	result.put("hasPrev", diagnose.hasPrev());
+    	}
     	
     	return ok(result);
     }
@@ -552,41 +567,7 @@ public class VerpleegkundigeApplication extends Controller  {
 		 * select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1,		t1.nicactiviteit_id c2,        t1.nicactiviteit_omschrijving c3,		t2.nic_id c4		from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ("verzorgen") OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ("verzorgen") * 
 		 */  
 		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4, t3.nicoverzicht_omschrijving c5,	t3.nicoverzicht_definitie c6 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id	left outer join	nicoverzicht t3 on t3.nic_id = t2.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id";  
-		StringTokenizer st = new StringTokenizer(filter);
-		boolean AndOr = false;
-		String element = "";
-		int i = 0;
-		while (st.hasMoreElements()) {
-			element = st.nextElement().toString();
-			if(i == 0){
-				if(!element.equals("AND") && !element.equals("OR"))
-				{
-					sql += " where ";
-					i++;
-				}
-			}
-			
-			if(element.equals("OR")){
-				if(AndOr){
-					sql += " OR ";
-					AndOr = false;
-				}
-			}
-			else if(element.equals("AND")){
-				if(AndOr){
-					sql += " AND ";
-					AndOr = false;
-				}
-			}
-			else{
-				if(AndOr){
-					sql += " AND ";
-					AndOr = false;
-				}
-				sql += "(MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
-				AndOr = true;
-			}
-		}
+		sql += tokenizeQuery(filter, 1);
 		
 		RawSql rawSql =   
 		    RawSqlBuilder  
@@ -615,22 +596,6 @@ public class VerpleegkundigeApplication extends Controller  {
 			.setFetchAhead(false)
 			.getPage(page);  
 		
-    	/*Page<Nic_Nicactiviteit> nic_nicactiviteit = Nic_Nicactiviteit
-    			.find
-    			.fetch("nic.nicoverzicht")
-    			.where()
-				.or(
-            			com.avaje.ebean.Expr.ilike("nic.nicoverzicht.nicoverzicht_definitie", "%" + filter + "%"), 
-            			com.avaje.ebean.Expr.ilike("nic.nicoverzicht.nicoverzicht_omschrijving", "%" + filter + "%")	
-					)
-				.or(
-            			com.avaje.ebean.Expr.ilike("nicactiviteit.nicactiviteit_omschrijving", "%" + filter + "%"), 
-            			com.avaje.ebean.Expr.ilike("nicactiviteit.nicactiviteit_omschrijving", "%" + filter + "%")
-				)
-    			.orderBy(sortBy + " " + order)
-    			.findPagingList(pageSize)
-    			.setFetchAhead(false)
-    			.getPage(page);*/
 		ObjectNode result = Json.newObject();
     	result.put("nic", Json.toJson(nic_nicactiviteit.getList()));
     	if(nic_nicactiviteit.getList().size() > 0){
@@ -833,5 +798,62 @@ public class VerpleegkundigeApplication extends Controller  {
 		casusopmerkingen.save();
 
     	return ok();
+    }
+    
+    public static String tokenizeQuery(String filter, int type){
+    	String sql = "";
+		StringTokenizer st = new StringTokenizer(filter);
+		// AndOr is used to 
+		boolean AndOr = false;
+		String element = "";
+		int i = 0;
+		while (st.hasMoreElements()) {
+			element = st.nextElement().toString();
+			if(i == 0){
+				if(!element.equals("AND") && !element.equals("OR"))
+				{
+					sql += " where ";
+					i++;
+				}
+			}
+			
+			switch(element){
+				case "OR":
+					if(AndOr){
+						sql += " OR ";
+						AndOr = false;
+					}
+					break;
+				case "AND":
+					if(AndOr){
+						sql += " AND ";
+						AndOr = false;
+					}
+					break;
+				default:
+					if(AndOr){
+						sql += " AND ";
+						AndOr = false;
+					}
+					
+					// Diagnose
+					if(type == 0){
+						sql += "(MATCH (t0.diagnoseoverzicht_omschrijving,t0.diagnoseoverzicht_definitie) AGAINST ('"+element+"') OR MATCH (t2.gezondheidspatroon_omschrijving) AGAINST ('"+element+"'))";
+					}
+					
+					// NIC
+					if(type == 1){
+						sql += "(MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
+					}
+					
+					// NOC
+					if(type == 2){
+						sql += "(MATCH (u3.indicator_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
+					}
+					AndOr = true;
+					break;
+			}
+		}
+    	return sql;
     }
 }
