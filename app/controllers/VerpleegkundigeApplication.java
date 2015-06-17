@@ -617,15 +617,27 @@ public class VerpleegkundigeApplication extends Controller  {
 	@Security.Authenticated(Secured.class)
     public static Result getNocSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
 
+		String sql = "select distinct t0.noc_indicator_releasestatus_datum c0, t0.noc_indicator_releasestatus_omschrijving c1, t1.indicator_id c2, t1.indicator_omschrijving c3, t2.noc_id c4, t3.nocoverzicht_omschrijving c5, t3.nocoverzicht_definitie c6 from noc_indicator t0 left outer join noc t2 on t2.noc_id = t0.noc_id join noc u1 on u1.noc_id = t0.noc_id left outer join nocoverzicht t3 on t3.noc_id = t2.noc_id left outer join indicator t1 on t1.indicator_id = t0.indicator_id join indicator u3 on u3.indicator_id = t0.indicator_id";
+		sql += tokenizeQuery(filter, 2);
+		
+		RawSql rawSql =   
+		    RawSqlBuilder  
+		        .parse(sql)  
+		        .columnMapping("t0.noc_indicator_releasestatus_datum",  "noc_indicator_releasestatus_datum")  
+		        .columnMapping("t0.noc_indicator_releasestatus_omschrijving",  "noc_indicator_releasestatus_omschrijving")  
+		        .columnMapping("t1.indicator_id",  "indicator.indicator_id")  
+		        .columnMapping("t1.indicator_omschrijving",  "indicator.indicator_omschrijving")  
+		        .columnMapping("t2.noc_id", "noc.noc_id")
+		        .columnMapping("t3.nocoverzicht_omschrijving", "noc.nocoverzicht.nocoverzicht_omschrijving")
+		        .columnMapping("t3.nocoverzicht_definitie", "noc.nocoverzicht.nocoverzicht_definitie")
+		        .create();  
+		
     	Page<Noc_Indicator> noc_indicator = Noc_Indicator
     			.find
     			.fetch("noc", new FetchConfig().query())
     			.fetch("noc.nocoverzicht")
+    			.setRawSql(rawSql)
     			.where()
-    				.or(
-                			com.avaje.ebean.Expr.like("noc.nocoverzicht.nocoverzicht_definitie", "%" + filter + "%"), 
-                			com.avaje.ebean.Expr.like("noc.nocoverzicht.nocoverzicht_omschrijving", "%" + filter + "%")	
-						)
     			.orderBy(sortBy + " " + order)
     			.findPagingList(pageSize)
     			.setFetchAhead(false)
@@ -633,12 +645,14 @@ public class VerpleegkundigeApplication extends Controller  {
     	
     	ObjectNode result = Json.newObject();
     	result.put("noc", Json.toJson(noc_indicator.getList()));
-    	result.put("pages", noc_indicator.getTotalPageCount());
-    	result.put("rows", noc_indicator.getTotalRowCount());
-    	result.put("index", noc_indicator.getPageIndex());
-    	result.put("XtoYofZ", noc_indicator.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", noc_indicator.hasNext());
-    	result.put("hasPrev", noc_indicator.hasPrev());
+    	if(noc_indicator.getList().size() > 0){
+	    	result.put("pages", noc_indicator.getTotalPageCount());
+	    	result.put("rows", noc_indicator.getTotalRowCount());
+	    	result.put("index", noc_indicator.getPageIndex());
+	    	result.put("XtoYofZ", noc_indicator.getDisplayXtoYofZ(";", ";"));
+	    	result.put("hasNext", noc_indicator.hasNext());
+	    	result.put("hasPrev", noc_indicator.hasPrev());
+    	}
     	
     	return ok(result);
     }
@@ -848,7 +862,7 @@ public class VerpleegkundigeApplication extends Controller  {
 					
 					// NOC
 					if(type == 2){
-						sql += "(MATCH (u3.indicator_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
+						sql += "(MATCH (u3.indicator_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nocoverzicht_definitie,t3.nocoverzicht_omschrijving) AGAINST ('"+element+"'))";
 					}
 					AndOr = true;
 					break;
