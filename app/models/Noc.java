@@ -21,10 +21,11 @@ public class Noc extends Model {
     public Long noc_id;
     
 	@OneToMany(mappedBy="noc")
-	public List<Noc_Waarde> noc_waarde;
+	@JsonManagedReference
+	public List<Nocoverzicht> nocoverzicht;
 	
 	@OneToMany(mappedBy="noc")
-	public List<Nocoverzicht> nocoverzicht;
+	public List<Noc_Waarde> noc_waarde;
 	
 	@OneToMany(mappedBy="noc")
 	@JsonManagedReference

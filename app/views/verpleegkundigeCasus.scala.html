@@ -34,10 +34,10 @@
 			  xyz = data.XtoYofZ.split(";");
 				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
 				$("#casusSearchBody").html("");
-				$("#casusSearchHead").html("<tr><th>Diagnose omschrijving</th><th>Diagnose definitie</th><th>Datum</tr>");
+				$("#casusSearchHead").html("<tr><th>Diagnose omschrijving</th><th>Diagnose definitie</th><th>Gezondheidspatroon</th><th>Toevoegen</tr>");
 				$.each(data.diagnose, function(key, diagnose) {
 					
-				  $("#casusSearchBody").append("<tr><td>" + diagnose.diagnoseoverzicht_omschrijving + "</td><td>" + diagnose.diagnoseoverzicht_definitie + "</td><td><a class=link id="+diagnose.diagnoseoverzicht_id+">Toevoegen aan casus</a></td></tr>");
+				  $("#casusSearchBody").append("<tr><td>" + diagnose.diagnoseoverzicht_omschrijving + "</td><td>" + diagnose.diagnoseoverzicht_definitie + "</td><td>"+diagnose.gezondheidspatroon.gezondheidspatroon_omschrijving+"</td><td><a class=link id="+diagnose.diagnoseoverzicht_id+">Toevoegen aan casus</a></td></tr>");
 				});
 				
 				if(!data.hasNext){
@@ -76,10 +76,10 @@
 			  xyz = data.XtoYofZ.split(";");
 				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
 				$("#casusSearchBody").html("");
-				$("#casusSearchHead").html("<tr><th>Activiteit omschrijving</th><th>Toevoegen</th></tr>");
+				$("#casusSearchHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Toevoegen</th></tr>");
 				
 				$.each(data.nic, function(key, nic) {
-				  $("#casusSearchBody").append("<tr><td>" + nic.nicactiviteit.nicactiviteit_omschrijving + "</a></td><td><a class=link id="+nic.nic.nic_id+"_"+nic.nicactiviteit.nicactiviteit_id+">Toevoegen aan casus</a></td></tr>");
+				  $("#casusSearchBody").append("<tr><td>"+nic.nic.nicoverzicht[0].nicoverzicht_omschrijving+"</td><td>"+nic.nic.nicoverzicht[0].nicoverzicht_definitie+"</td><td>" + nic.nicactiviteit.nicactiviteit_omschrijving + "</a></td><td><a class=link id="+nic.nic.nic_id+"_"+nic.nicactiviteit.nicactiviteit_id+">Toevoegen aan casus</a></td></tr>");
 				});
 				
 				if(!data.hasNext){
@@ -118,10 +118,10 @@
 			  xyz = data.XtoYofZ.split(";");
 				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
 				$("#casusSearchBody").html("");
-				$("#casusSearchHead").html("<tr><th>Indicator omschrijving</th><th>Toevoegen</th></tr>");
+				$("#casusSearchHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Toevoegen</th></tr>");
 				
 				$.each(data.noc, function(key, noc) {
-				  $("#casusSearchBody").append("<tr><td>" + noc.indicator.indicator_omschrijving + "</a></td><td><a class=link id="+noc.noc.noc_id+"_"+noc.indicator.indicator_id+">Toevoegen aan casus</a></td></tr>");
+				  $("#casusSearchBody").append("<tr><td>" + noc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + noc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>" + noc.indicator.indicator_omschrijving + "</td><td><a class=link id="+noc.noc.noc_id+"_"+noc.indicator.indicator_id+">Toevoegen aan casus</a></td></tr>");
 				});
 				
 				if(!data.hasNext){
@@ -199,11 +199,11 @@
   function getCasusDiagnose(){
   	  $.get( "/verpleegkundigecasusdiagnosejson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th><th>Diagnose verwijderen</th></tr>");
+			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th><th>Gezondheidspatroon</th><th>Diagnose verwijderen</th></tr>");
 			$("#diagnoseOverzichtBody").html("");
 			$.each(data, function(key, casusdiagnose) {
 			  if(casusdiagnose.diagnose !== null){
-			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td><a class=link id=diagnose"+casusdiagnose.casus_diagnose_id+" name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
+			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td>"+casusdiagnose.diagnose.diagnoseoverzicht[0].gezondheidspatroon.gezondheidspatroon_omschrijving+"</td><td><a class=link id=diagnose"+casusdiagnose.casus_diagnose_id+" name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
 			  }
 			});
 		}
