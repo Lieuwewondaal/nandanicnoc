@@ -26,6 +26,7 @@ create table specialisme (
 ;
 
 create table diagnoseoverzicht (
+  diagnoseoverzicht_id				bigint not null auto_increment,
   diagnose_id               		bigint not null,
   diagnoseversie_id					bigint not null, 
   diagnose_code                     bigint,
@@ -34,7 +35,7 @@ create table diagnoseoverzicht (
   diagnoseoverzicht_omschrijving 	text,
   diagnoseoverzicht_definitie 		text,
   
-  constraint pk_diagnoseoverzicht_diagnose_fk primary key (diagnose_id, diagnoseversie_id)
+  constraint pk_diagnoseoverzicht_diagnose_fk primary key (diagnoseoverzicht_id)
   ) engine=innodb
 ;
 

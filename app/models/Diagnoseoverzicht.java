@@ -17,8 +17,13 @@ public class Diagnoseoverzicht extends Model {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    public int diagnoseoverzicht_id;
+    
 	@ManyToOne
 	@JoinColumn(name="diagnose_id")
+	@JsonBackReference
 	public Diagnose diagnose;
     
     @ManyToOne

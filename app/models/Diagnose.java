@@ -23,15 +23,15 @@ public class Diagnose extends Model {
 	
 	@OneToMany(mappedBy="diagnose")
 	@JsonManagedReference
+	public List<Diagnoseoverzicht> diagnoseoverzicht;
+	
+	@OneToMany(mappedBy="diagnose")
+	@JsonManagedReference
 	public List<Noc_Indicator_Diagnose> noc_indicator_diagnose;
 	
 	@OneToMany(mappedBy="diagnose")
 	@JsonManagedReference
 	public List<Nic_Diagnose> nic_diagnose;
-	
-	@OneToMany(mappedBy="diagnose")
-	@JsonManagedReference
-	public List<Diagnoseoverzicht> diagnoseoverzicht;
     
     /**
      * Generic query helper for entity Diagnose with id Long

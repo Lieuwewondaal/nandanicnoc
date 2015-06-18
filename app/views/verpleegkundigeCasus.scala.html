@@ -37,7 +37,7 @@
 				$("#casusSearchHead").html("<tr><th>Diagnose omschrijving</th><th>Diagnose definitie</th><th>Datum</tr>");
 				$.each(data.diagnose, function(key, diagnose) {
 					
-				  $("#casusSearchBody").append("<tr><td>" + diagnose.diagnoseoverzicht_omschrijving + "</td><td>" + diagnose.diagnoseoverzicht_definitie + "</td><td><a class=link id="+diagnose.diagnose.diagnose_id+">Toevoegen aan casus</a></td></tr>");
+				  $("#casusSearchBody").append("<tr><td>" + diagnose.diagnoseoverzicht_omschrijving + "</td><td>" + diagnose.diagnoseoverzicht_definitie + "</td><td><a class=link id="+diagnose.diagnoseoverzicht_id+">Toevoegen aan casus</a></td></tr>");
 				});
 				
 				if(!data.hasNext){
@@ -351,15 +351,6 @@
 			}
 		});
 		
-		$("#casusSearch").on("click", function(event){
-			if(event.target.name != "undefined"){
-				setSort(event.target.name);
-			}
-			else if(event.target.id != "undefined"){
-				setSort(event.target.id);
-			}
-		});
-		
 		$("#searchbox").on("keypress", function(event){
 			if(event.which == 13){
 				searched = true;
@@ -505,7 +496,7 @@
 	$("#casusSearch").on("click", function(event){
 		// Diagnose
 		if($('input[name=searchType]:checked').val() == 1){
-			if(event.target.id != undefined && event.target.name != "saving"){
+			if(event.target.id != undefined && event.target.name != "saving" && event.target.id != ""){
 				diagnose_save = event.target.id;
 				$.post( "/verpleegkundigesavecasusdiagnose/"+@id+"/"+diagnose_save, { casus_id: @id, diagnose_id: diagnose_save } )
 				.done(function( data ) {
@@ -515,7 +506,7 @@
 		}
 		// NIC
 		if($('input[name=searchType]:checked').val() == 2){
-			if(event.target.id != undefined && event.target.name != "saving"){
+			if(event.target.id != undefined && event.target.name != "saving" && event.target.id != ""){
 				nic_save = event.target.id.split("_");
 				$.post( "/verpleegkundigesavecasusnic/"+@id+"/"+nic_save[0]+"/"+nic_save[1], { casus_id: @id, nic_id: nic_save[0], activiteit_id: nic_save[1] } )
 				.done(function( data ) {
@@ -525,7 +516,7 @@
 		}
 		// NOC
 		if($('input[name=searchType]:checked').val() == 3){
-			if(event.target.id != undefined && event.target.name != "saving"){
+			if(event.target.id != undefined && event.target.name != "saving" && event.target.id != ""){
 				noc_save = event.target.id.split("_");
 				$.post( "/verpleegkundigesavecasusnoc/"+@id+"/"+noc_save[0]+"/"+noc_save[1], { casus_id: @id, noc_id: noc_save[0], indicator_id: noc_save[1] } )
 				.done(function( data ) {

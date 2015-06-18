@@ -45,6 +45,10 @@ public class VerpleegkundigeApplication extends Controller  {
      * @param filter
      * @return
      */
+	public enum nurseType {
+		NANDA, NIC, NOC
+	}
+	
 	@Security.Authenticated(Secured.class)
     public static Result listCasusVerpleegkundige(int page, String sortBy, String order, String filter) {
         return ok(
@@ -515,12 +519,14 @@ public class VerpleegkundigeApplication extends Controller  {
      */
 	@Security.Authenticated(Secured.class)
     public static Result getDiagnoseSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
-		String sql = "select distinct t0.diagnose_code c0, t0.diagnoseoverzicht_omschrijving c1, t0.diagnoseoverzicht_definitie c2, t0.diagnoseversie_id c3, t0.gezondheidspatroon_id c4, t0.diagnoseklasse_id c5, t1.diagnose_id c6,	t2.gezondheidspatroon_omschrijving from diagnoseoverzicht t0 left outer join diagnose t1 on t1.diagnose_id = t0.diagnose_id left outer join gezondheidspatroon t2 on t2.gezondheidspatroon_id = t0.gezondheidspatroon_id";
-		sql += tokenizeQuery(filter, 0);
+		String sql = "select distinct t0.diagnoseoverzicht_id, t0.diagnose_code c0, t0.diagnoseoverzicht_omschrijving c1, t0.diagnoseoverzicht_definitie c2, t0.diagnoseversie_id c3, t0.gezondheidspatroon_id c4, t0.diagnoseklasse_id c5, t1.diagnose_id c6,	t2.gezondheidspatroon_omschrijving from diagnoseoverzicht t0 left outer join diagnose t1 on t1.diagnose_id = t0.diagnose_id left outer join gezondheidspatroon t2 on t2.gezondheidspatroon_id = t0.gezondheidspatroon_id";
+		
+		sql += tokenizeQuery(filter, nurseType.NANDA);
 		
 		RawSql rawSql =   
 			    RawSqlBuilder  
 			        .parse(sql)  
+			        .columnMapping("t0.diagnoseoverzicht_id",  "diagnoseoverzicht_id")  
 			        .columnMapping("t0.diagnose_code",  "diagnose_code")  
 			        .columnMapping("t0.diagnoseoverzicht_omschrijving",  "diagnoseoverzicht_omschrijving")  
 			        .columnMapping("t0.diagnoseoverzicht_definitie",  "diagnoseoverzicht_definitie")  
@@ -533,9 +539,7 @@ public class VerpleegkundigeApplication extends Controller  {
 		
 		Page<Diagnoseoverzicht> diagnose = Diagnoseoverzicht
     			.find
-    			.fetch("diagnose")
     			.setRawSql(rawSql)
-    			.where()
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
@@ -567,7 +571,7 @@ public class VerpleegkundigeApplication extends Controller  {
 		 * select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1,		t1.nicactiviteit_id c2,        t1.nicactiviteit_omschrijving c3,		t2.nic_id c4		from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id join nicoverzicht u2 on u2.nic_id = u1.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id where MATCH (u3.nicactiviteit_omschrijving) AGAINST ("verzorgen") OR MATCH (u2.nicoverzicht_definitie,u2.nicoverzicht_omschrijving) AGAINST ("verzorgen") * 
 		 */  
 		String sql = "select distinct t0.nic_nicactiviteit_releasestatus_datum c0, t0.nic_nicactiviteit_releasestatus_omschrijving c1, t1.nicactiviteit_id c2, t1.nicactiviteit_omschrijving c3, t2.nic_id c4, t3.nicoverzicht_omschrijving c5,	t3.nicoverzicht_definitie c6 from nic_nicactiviteit t0 left outer join nic t2 on t2.nic_id = t0.nic_id join nic u1 on u1.nic_id = t0.nic_id	left outer join	nicoverzicht t3 on t3.nic_id = t2.nic_id left outer join nicactiviteit t1 on t1.nicactiviteit_id = t0.nicactiviteit_id join nicactiviteit u3 on u3.nicactiviteit_id = t0.nicactiviteit_id";  
-		sql += tokenizeQuery(filter, 1);
+		sql += tokenizeQuery(filter, nurseType.NIC);
 		
 		RawSql rawSql =   
 		    RawSqlBuilder  
@@ -618,7 +622,7 @@ public class VerpleegkundigeApplication extends Controller  {
     public static Result getNocSearchListCasusVerpleegkundigeJSON(int page, int pageSize, String sortBy, String order, String filter){
 
 		String sql = "select distinct t0.noc_indicator_releasestatus_datum c0, t0.noc_indicator_releasestatus_omschrijving c1, t1.indicator_id c2, t1.indicator_omschrijving c3, t2.noc_id c4, t3.nocoverzicht_omschrijving c5, t3.nocoverzicht_definitie c6 from noc_indicator t0 left outer join noc t2 on t2.noc_id = t0.noc_id join noc u1 on u1.noc_id = t0.noc_id left outer join nocoverzicht t3 on t3.noc_id = t2.noc_id left outer join indicator t1 on t1.indicator_id = t0.indicator_id join indicator u3 on u3.indicator_id = t0.indicator_id";
-		sql += tokenizeQuery(filter, 2);
+		sql += tokenizeQuery(filter, nurseType.NOC);
 		
 		RawSql rawSql =   
 		    RawSqlBuilder  
@@ -664,10 +668,10 @@ public class VerpleegkundigeApplication extends Controller  {
      */
     @Security.Authenticated(Secured.class)
     public static Result saveCasusDiagnose(Long casus_id, Long diagnose_id) {
-    	Diagnose diagnose = Diagnose
+    	Diagnoseoverzicht diagnose = Diagnoseoverzicht
     			.find
     			.where()
-    			.eq("diagnose_id", diagnose_id)
+    			.eq("diagnoseoverzicht_id", diagnose_id)
     			.findUnique();
     	
     	Casus_Diagnose casus_diagnose;
@@ -688,7 +692,7 @@ public class VerpleegkundigeApplication extends Controller  {
     		casus_diagnose = createEmptyCasusDiagnose(casus_id);	
     	}
     	
-		casus_diagnose.diagnose = diagnose;
+		casus_diagnose.diagnose = diagnose.diagnose;
 		casus_diagnose.update();   	
    	
     	return ok();
@@ -814,7 +818,7 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
-    public static String tokenizeQuery(String filter, int type){
+    public static String tokenizeQuery(String filter, nurseType type){
     	String sql = "";
 		StringTokenizer st = new StringTokenizer(filter);
 		// AndOr is used to 
@@ -850,19 +854,19 @@ public class VerpleegkundigeApplication extends Controller  {
 						AndOr = false;
 					}
 					
-					// Diagnose
-					if(type == 0){
-						sql += "(MATCH (t0.diagnoseoverzicht_omschrijving,t0.diagnoseoverzicht_definitie) AGAINST ('"+element+"') OR MATCH (t2.gezondheidspatroon_omschrijving) AGAINST ('"+element+"'))";
-					}
-					
-					// NIC
-					if(type == 1){
-						sql += "(MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
-					}
-					
-					// NOC
-					if(type == 2){
-						sql += "(MATCH (u3.indicator_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nocoverzicht_definitie,t3.nocoverzicht_omschrijving) AGAINST ('"+element+"'))";
+					switch(type){
+						case NANDA:
+							sql += "(MATCH (t0.diagnoseoverzicht_omschrijving,t0.diagnoseoverzicht_definitie) AGAINST ('"+element+"') OR MATCH (t2.gezondheidspatroon_omschrijving) AGAINST ('"+element+"'))";
+						break;
+						case NIC:
+							sql += "(MATCH (u3.nicactiviteit_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nicoverzicht_definitie,t3.nicoverzicht_omschrijving) AGAINST ('"+element+"'))";
+						break;
+						case NOC:
+							sql += "(MATCH (u3.indicator_omschrijving) AGAINST ('"+element+"') OR MATCH (t3.nocoverzicht_definitie,t3.nocoverzicht_omschrijving) AGAINST ('"+element+"'))";
+						break;
+						default:
+							
+						break;	
 					}
 					AndOr = true;
 					break;
