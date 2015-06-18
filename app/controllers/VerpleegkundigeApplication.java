@@ -37,6 +37,11 @@ import play.mvc.Security;
 import views.html.*;
 
 public class VerpleegkundigeApplication extends Controller  {
+
+	public enum nurseType {
+		NANDA, NIC, NOC
+	}
+	
     /**
      * Display the paginated list of cases
      * @param page
@@ -45,10 +50,6 @@ public class VerpleegkundigeApplication extends Controller  {
      * @param filter
      * @return
      */
-	public enum nurseType {
-		NANDA, NIC, NOC
-	}
-	
 	@Security.Authenticated(Secured.class)
     public static Result listCasusVerpleegkundige(int page, String sortBy, String order, String filter) {
         return ok(
@@ -59,8 +60,18 @@ public class VerpleegkundigeApplication extends Controller  {
         );
     }
     
+	/**
+     * Display the casus.
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result editCasusVerpleegkundige(Long id) {
+        return ok(
+    		verpleegkundigeCasus.render(id)
+        );
+    }
+	
     /**
-     * Get samenhangendefactor_diagnose from diagnose_id in JSON format
+     * Get casus list
      * @param id
      * @return
      */
@@ -88,28 +99,8 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok(result);
     }
     
-	/**
-     * Display the casus.
-     */
-	@Security.Authenticated(Secured.class)
-    public static Result editCasusVerpleegkundige(Long id) {
-        return ok(
-    		verpleegkundigeCasus.render(id)
-        );
-    }
-
-	/**
-     * Display the casus 2.
-     */
-	@Security.Authenticated(Secured.class)
-    public static Result editCasusVerpleegkundige2(Long id) {
-        return ok(
-    		verpleegkundigeCasus2.render(id)
-        );
-    }
-    
     /**
-     * 
+     * Get casus information in JSON
      * @param id
      * @return
      */
@@ -123,162 +114,9 @@ public class VerpleegkundigeApplication extends Controller  {
 			    .findList();
         return ok(play.libs.Json.toJson(casus));
     }
-	
-	/**
-	 * 
-	 * @param page
-	 * @param pageSize
-	 * @param sortBy
-	 * @param order
-	 * @param filter
-	 * @return
-	 */
-    @Security.Authenticated(Secured.class)
-    public static Result getNandaNicNoc(int page, int pageSize, String sortBy, String order, String filter) {
-
-    	Page<Diagnose> nanda = Diagnose
-    			.find
-    			.fetch("nic_diagnose", new FetchConfig().query())
-    			.fetch("noc_indicator_diagnose", new FetchConfig().query())
-    			.fetch("diagnoseoverzicht", new FetchConfig().query())
-    			.where()
-    			/*.or(
-    					com.avaje.ebean.Expr.or(
-    		        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + "pijn" + "%"), 
-    		        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + "pijn" + "%")
-						),
-						com.avaje.ebean.Expr.or(
-		            			com.avaje.ebean.Expr.like("nic_diagnose.nic.nicoverzicht.nicoverzicht_omschrijving", "%" + "pijn" + "%"),
-		            			com.avaje.ebean.Expr.like("nic_diagnose.nic.nicoverzicht.nicoverzicht_definitie", "%" + "pijn" + "%")	
-						)
-    			)*/
-            	.like("diagnose_id", "%" + filter + "%")
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .setFetchAhead(true)
-                .getPage(page);
-    	
-    	ObjectNode result = Json.newObject();
-    	result.put("nanda", Json.toJson(nanda.getList()));
-    	//result.put("pages", nanda.getTotalPageCount());
-    	result.put("rows", nanda.getTotalRowCount());
-    	result.put("index", nanda.getPageIndex());
-    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", nanda.hasNext());
-    	result.put("hasPrev", nanda.hasPrev());
-    	return ok(result);
-    }
-    
-	/**
-	 * 
-	 * @param page
-	 * @param pageSize
-	 * @param sortBy
-	 * @param order
-	 * @param filter
-	 * @return
-	 */
-    @Security.Authenticated(Secured.class)
-    public static Result getNanda(int page, int pageSize, String sortBy, String order, String filter) {
-
-    	Page<Diagnose> nanda = Diagnose
-    			.find
-    			.fetch("diagnoseoverzicht")
-    			.where()
-    			.or(
-        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + filter + "%"), 
-        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + filter + "%")
-    			)
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .setFetchAhead(true)
-                .getPage(page);
-    	
-    	ObjectNode result = Json.newObject();
-    	result.put("nanda", Json.toJson(nanda.getList()));
-    	//result.put("pages", nanda.getTotalPageCount());
-    	result.put("rows", nanda.getTotalRowCount());
-    	result.put("index", nanda.getPageIndex());
-    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", nanda.hasNext());
-    	result.put("hasPrev", nanda.hasPrev());
-    	return ok(result);
-    }
-    
-	/**
-	 * 
-	 * @param page
-	 * @param pageSize
-	 * @param sortBy
-	 * @param order
-	 * @param filter
-	 * @return
-	 */
-    @Security.Authenticated(Secured.class)
-    public static Result getNic(int page, int pageSize, String sortBy, String order, String filter) {
-
-    	Page<Diagnose> nanda = Diagnose
-    			.find
-    			.fetch("diagnoseoverzicht")
-    			.where()
-    			.or(
-        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + filter + "%"), 
-        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + filter + "%")
-    			)
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .setFetchAhead(true)
-                .getPage(page);
-    	
-    	ObjectNode result = Json.newObject();
-    	result.put("nanda", Json.toJson(nanda.getList()));
-    	//result.put("pages", nanda.getTotalPageCount());
-    	result.put("rows", nanda.getTotalRowCount());
-    	result.put("index", nanda.getPageIndex());
-    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", nanda.hasNext());
-    	result.put("hasPrev", nanda.hasPrev());
-    	return ok(result);
-    }
-    
-	/**
-	 * 
-	 * @param page
-	 * @param pageSize
-	 * @param sortBy
-	 * @param order
-	 * @param filter
-	 * @return
-	 */
-    @Security.Authenticated(Secured.class)
-    public static Result getNoc(int page, int pageSize, String sortBy, String order, String filter) {
-
-    	Page<Diagnose> nanda = Diagnose
-    			.find
-    			.fetch("diagnoseoverzicht")
-    			.where()
-    			.or(
-        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_omschrijving", "%" + filter + "%"), 
-        			com.avaje.ebean.Expr.like("diagnoseoverzicht.diagnoseoverzicht_definitie", "%" + filter + "%")
-    			)
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .setFetchAhead(true)
-                .getPage(page);
-    	
-    	ObjectNode result = Json.newObject();
-    	result.put("nanda", Json.toJson(nanda.getList()));
-    	//result.put("pages", nanda.getTotalPageCount());
-    	result.put("rows", nanda.getTotalRowCount());
-    	result.put("index", nanda.getPageIndex());
-    	result.put("XtoYofZ", nanda.getDisplayXtoYofZ(";", ";"));
-    	result.put("hasNext", nanda.hasNext());
-    	result.put("hasPrev", nanda.hasPrev());
-    	return ok(result);
-    }
     
     /**
-     * 
+     * Get diagnoses added to casus by a specific user in JSON
      * @param id
      * @return
      */
@@ -297,7 +135,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Get NIC added to casus by a specific user in JSON
      * @param id
      * @return
      */
@@ -316,7 +154,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Get NOC added to casus by a specific user in JSON
      * @param id
      * @return
      */
@@ -335,7 +173,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Get opmerkingen added to casus by a specific user in JSON
      * @param id
      * @return
      */
@@ -352,25 +190,8 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
-     * @param id
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result deleteCasusOpmerking(Long id) {
-
-    	Casusopmerkingen casusopmerking = Casusopmerkingen
-			.find
-			.where()
-		    .ilike("casusopmerkingen_id", id.toString())
-		    .ilike("casus_diagnose.user_id", session("userid"))
-		    .findUnique();
-    	casusopmerking.delete();
-    	return ok();
-    }
-    
-    /**
-     * 
+     * Delete a diagnose attached to a casus and move other assets
+     * (NIC/NOC/Opmerkingen) to another diagnose
      * @param id
      * @return
      */
@@ -461,7 +282,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Delete NIC attached to casus
      * @param id
      * @return
      */
@@ -479,7 +300,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Delete NOC attached to casus
      * @param id
      * @return
      */
@@ -497,23 +318,25 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Delete opmerking attached to casus
      * @param id
      * @return
      */
-    public static Casus_Diagnose createEmptyCasusDiagnose(Long id){
-		Casus_Diagnose casus_diagnose = new Casus_Diagnose();
-		Casus casus = Casus
-				.find
-				.byId(id);
-		casus_diagnose.casus = casus;
-		casus_diagnose.user_id = Integer.parseInt(session("userid"));
-		casus_diagnose.save();
-    	return casus_diagnose;
+    @Security.Authenticated(Secured.class)
+    public static Result deleteCasusOpmerking(Long id) {
+
+    	Casusopmerkingen casusopmerking = Casusopmerkingen
+			.find
+			.where()
+		    .ilike("casusopmerkingen_id", id.toString())
+		    .ilike("casus_diagnose.user_id", session("userid"))
+		    .findUnique();
+    	casusopmerking.delete();
+    	return ok();
     }
     
     /**
-     * Get samenhangendefactor_diagnose from diagnose_id in JSON format
+     * Search for Diagnose
      * @param id
      * @return
      */
@@ -560,7 +383,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
 	
     /**
-     * 
+     * Search for NIC
      * @param id
      * @return
      */
@@ -614,7 +437,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
 	
     /**
-     * 
+     * Search for NOC
      * @param id
      * @return
      */
@@ -662,7 +485,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
 	
     /**
-     * 
+     * Save diagnose in casus by a specific user
      * @param id
      * @return
      */
@@ -699,7 +522,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
 	
     /**
-     * 
+     * Save NIC in casus by a specific user
      * @param id
      * @return
      */
@@ -742,7 +565,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
 	
     /**
-     * 
+     * Save NOC in casus by a specific user
      * @param id
      * @return
      */
@@ -785,7 +608,7 @@ public class VerpleegkundigeApplication extends Controller  {
     }
     
     /**
-     * 
+     * Save opmerking in casus by a specific user
      * @param id
      * @return
      */
@@ -818,6 +641,16 @@ public class VerpleegkundigeApplication extends Controller  {
     	return ok();
     }
     
+    /**
+     * Split up search string to create query
+     * Follows pupmed search rules and allows user to add
+     * AND/OR to search to be more specific when searching
+     * Defaults to AND between search words
+     * @param filter
+     * @param type
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
     public static String tokenizeQuery(String filter, nurseType type){
     	String sql = "";
 		StringTokenizer st = new StringTokenizer(filter);
@@ -873,5 +706,22 @@ public class VerpleegkundigeApplication extends Controller  {
 			}
 		}
     	return sql;
+    }
+    
+    /**
+     * Create an empty diagnose to use when adding other assets
+     * (NIC/NOC/Opmerkingen)
+     * @param id
+     * @return
+     */
+    public static Casus_Diagnose createEmptyCasusDiagnose(Long id){
+		Casus_Diagnose casus_diagnose = new Casus_Diagnose();
+		Casus casus = Casus
+				.find
+				.byId(id);
+		casus_diagnose.casus = casus;
+		casus_diagnose.user_id = Integer.parseInt(session("userid"));
+		casus_diagnose.save();
+    	return casus_diagnose;
     }
 }

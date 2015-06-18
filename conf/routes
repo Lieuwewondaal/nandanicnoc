@@ -40,7 +40,6 @@ POST    /casus/:id              					controllers.CasusApplication.updateCasus(id
 GET		/verpleegkundige							controllers.VerpleegkundigeApplication.listCasusVerpleegkundige(p:Int ?= 0, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
 GET		/verpleegkundigecasusjson					controllers.VerpleegkundigeApplication.getListCasusVerpleegkundigeJSON(p:Int ?= 0, ps:Int ?= 10, s ?= "casus_omschrijving", o ?= "asc", f ?= "")
 GET		/verpleegkundigecasus/:id					controllers.VerpleegkundigeApplication.editCasusVerpleegkundige(id:Long)
-GET		/verpleegkundigecasus2/:id					controllers.VerpleegkundigeApplication.editCasusVerpleegkundige2(id:Long)
 GET		/verpleegkundigecasusjson/:id				controllers.VerpleegkundigeApplication.getCasusOverzichtJSON(id:Long)
 GET		/verpleegkundigecasusdiagnosejson/:id		controllers.VerpleegkundigeApplication.getCasusDiagnose(id:Long)
 GET		/verpleegkundigecasusnicjson/:id			controllers.VerpleegkundigeApplication.getCasusNic(id:Long)
@@ -59,10 +58,6 @@ POST	/verpleegkundigedeletecasusnoc/:id			controllers.VerpleegkundigeApplication
 POST	/verpleegkundigesavecasusdiagnose/:id/:diagnose   controllers.VerpleegkundigeApplication.saveCasusDiagnose(id:Long, diagnose:Long)
 POST	/verpleegkundigesavecasusnic/:id/:nic/:in   controllers.VerpleegkundigeApplication.saveCasusNic(id:Long, nic:Long, in:Long)
 POST	/verpleegkundigesavecasusnoc/:id/:noc/:ac   controllers.VerpleegkundigeApplication.saveCasusNoc(id:Long, noc:Long, ac:Long)
-
-# Verpleegkundige JSON
-GET 	/verpleegkundigenandanicnoc 				controllers.VerpleegkundigeApplication.getNandaNicNoc(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")
-GET 	/verpleegkundigenanda						controllers.VerpleegkundigeApplication.getNanda(p:Int ?= 0, ps:Int ?= 0, s ?= "diagnose_id", o ?= "asc", f ?= "")
 
 # Delete a diagnose
 POST    /diagnoses/:id/delete       				controllers.CasusApplication.deleteCasus(id:Long)
