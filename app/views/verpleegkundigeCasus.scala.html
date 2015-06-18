@@ -16,6 +16,17 @@
 	var noc_save;
 	var diagnose_save;
 	var searched = false;
+	var selectedText = "";
+	  
+	function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+	}
 	  
 	function searchDiagnose(){
 		var link = "/verpleegkundigecasussearchdiagnosejson?p="+index;
@@ -186,7 +197,7 @@
 		if(data.length > 0){
 			$("#casusOverzichtHead").html("");
 			$.each(data, function(key, casus) {
-			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + nl2br(casus.casus_definitie, true) + "</td></tr>");
+			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + nl2br(casus.casus_definitie, true) + "<br /><br /><button id=searchHighlighted class=btn>Zoek geselecteerde tekst</button></td></tr>");
 			});
 		}
 		else{
@@ -284,6 +295,7 @@
 		</thead>
 	</table>
 	<hr />
+	<h2>Zoeken</h2>
 	<table style="width: 50px;">
 		<tr>
 			<td><label for="diagnoseRadio">Diagnose:</label></td>
@@ -535,6 +547,28 @@
 			getCasusOpmerkingen();
 		});
       }
+	});
+	
+	/**
+	* Search selected text code
+	*/
+	$("#casusOverzicht").on("mouseup", function(event){
+		if(event.target.id == "searchHighlighted"){
+			$("#searchbox").val(selectedText);
+			searched = true;
+			setFilter(selectedText);
+		}
+		else{
+			selectedText = getSelectionText();
+			/*if(selectedText == ""){
+				$("#searchHighlighted").addClass("hide");
+				$("#searchHighlighted").removeClass("btn");
+			}
+			else{
+				$("#searchHighlighted").removeClass("hide");
+				$("#searchHighlighted").addClass("btn");
+			}*/
+		}
 	});
 	
 	</script>
