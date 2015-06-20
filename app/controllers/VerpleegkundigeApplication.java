@@ -70,6 +70,16 @@ public class VerpleegkundigeApplication extends Controller  {
         );
     }
 	
+	/**
+     * Display the casus.
+     */
+	@Security.Authenticated(Secured.class)
+    public static Result editCasusVerpleegkundige2(Long id) {
+        return ok(
+    		verpleegkundigeCasus2.render(id)
+        );
+    }
+	
     /**
      * Get casus list
      * @param id
@@ -643,7 +653,7 @@ public class VerpleegkundigeApplication extends Controller  {
     
     /**
      * Split up search string to create query
-     * Follows pupmed search rules and allows user to add
+     * Follows pubmed search rules and allows user to add
      * AND/OR to search to be more specific when searching
      * Defaults to AND between search words
      * @param filter

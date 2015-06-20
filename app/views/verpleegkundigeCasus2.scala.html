@@ -6,12 +6,198 @@
 
 @main {
 <script>
-	$( document ).ready(function() {
-	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
+	var lastData;
+	var xyz;
+	var index = 0;
+	var currentSort = "";
+	var currentSortDirection = "asc";
+	var filter = "";
+	var nic_save;
+	var noc_save;
+	var diagnose_save;
+	var searched = false;
+	var selectedText = "";
+	  
+	function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+	}
+	  
+	function searchDiagnose(){
+		var link = "/verpleegkundigecasussearchdiagnosejson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
+
+		$("#casusSearch").removeClass("hide");
+		$("#pagination").removeClass("hide");
+		$("#searchResults").removeClass("hide");
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.diagnose.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
+				$("#casusSearchBody").html("");
+				$("#casusSearchHead").html("<tr><th>Diagnose omschrijving</th><th>Diagnose definitie</th><th>Gezondheidspatroon</th><th>Toevoegen</tr>");
+				$.each(data.diagnose, function(key, diagnose) {
+					
+				  $("#casusSearchBody").append("<tr><td>" + diagnose.diagnoseoverzicht_omschrijving + "</td><td>" + diagnose.diagnoseoverzicht_definitie + "</td><td>"+diagnose.gezondheidspatroon.gezondheidspatroon_omschrijving+"</td><td><a class=link id="+diagnose.diagnoseoverzicht_id+">Toevoegen aan casus</a></td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusSearchHead").html("<tr><th>Diagnoses</th></tr>");
+			  $("#casusSearchBody").html("<tr><td>Geen diagnoses gevonden</td></tr>");
+			}
+		});
+	}  
+	
+	function searchNic(){
+		var link = "/verpleegkundigecasussearchnicjson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
+		$("#casusSearch").removeClass("hide");
+		$("#pagination").removeClass("hide");
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.nic.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
+				$("#casusSearchBody").html("");
+				$("#casusSearchHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Toevoegen</th></tr>");
+				
+				$.each(data.nic, function(key, nic) {
+				  $("#casusSearchBody").append("<tr><td>"+nic.nic.nicoverzicht[0].nicoverzicht_omschrijving+"</td><td>"+nic.nic.nicoverzicht[0].nicoverzicht_definitie+"</td><td>" + nic.nicactiviteit.nicactiviteit_omschrijving + "</a></td><td><a class=link id="+nic.nic.nic_id+"_"+nic.nicactiviteit.nicactiviteit_id+">Toevoegen aan casus</a></td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusSearchHead").html("<tr><th>Activiteiten</th></tr>");
+			  $("#casusSearchBody").html("<tr><td>Geen activiteiten gevonden</td></tr>");
+			}
+		});
+	}  
+	
+	function searchNoc(){
+		var link = "/verpleegkundigecasussearchnocjson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
+		$("#casusSearch").removeClass("hide");
+		$("#pagination").removeClass("hide");
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.noc.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1]);
+				$("#casusSearchBody").html("");
+				$("#casusSearchHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Toevoegen</th></tr>");
+				
+				$.each(data.noc, function(key, noc) {
+				  $("#casusSearchBody").append("<tr><td>" + noc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + noc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>" + noc.indicator.indicator_omschrijving + "</td><td><a class=link id="+noc.noc.noc_id+"_"+noc.indicator.indicator_id+">Toevoegen aan casus</a></td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusSearchHead").html("<tr><th>Indicatoren</th></tr>");
+			  $("#casusSearchBody").html("<tr><td>Geen indicatoren gevonden</td></tr>");
+			}
+		});
+	}  
+	
+	function getCasus(){
+		if(searched){
+			if($('input[name=searchType]:checked').val() == 1){
+				searchDiagnose();
+			}
+			else if($('input[name=searchType]:checked').val() == 2){
+				searchNic();
+			}
+			else if($('input[name=searchType]:checked').val() == 3){
+				searchNoc();
+			}
+		}
+	};
+	
+	function setSort(sortName){
+		if(currentSort == sortName){
+			if(currentSortDirection == "desc"){
+				currentSortDirection = "asc";
+			}
+			else{
+				currentSortDirection = "desc";
+			}
+		}
+		else{
+			currentSort = sortName;
+			currentSortDirection = "asc";
+		}
+		getCasus();
+	};
+	
+	function setFilter(searchFilter){
+		filter = searchFilter;
+		index = 0;
+		getCasus();
+	};
+	
+  function getCasusOverzicht(){
+  	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#casusOverzichtHead").html("<tr><th>Casus detail:</th><th>Casus waarde:</th></tr>");
+			$("#casusOverzichtHead").html("");
 			$.each(data, function(key, casus) {
-			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + casus.casus_definitie + "</td></tr>");
+			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + nl2br(casus.casus_definitie, true) + "<br /><br /><button id=searchHighlighted class=btn>Zoek geselecteerde tekst</button></td></tr>");
 			});
 		}
 		else{
@@ -19,9 +205,87 @@
 		  $("#casusOverzicht").append("<tr><td>Geen casus gevonden");
 		}
 	  });
+  }
+  
+  function getCasusDiagnose(){
+  	  $.get( "/verpleegkundigecasusdiagnosejson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th><th>Gezondheidspatroon</th><th>Diagnose verwijderen</th></tr>");
+			$("#diagnoseOverzichtBody").html("");
+			$.each(data, function(key, casusdiagnose) {
+			  if(casusdiagnose.diagnose !== null){
+			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td>"+casusdiagnose.diagnose.diagnoseoverzicht[0].gezondheidspatroon.gezondheidspatroon_omschrijving+"</td><td><a class=link id=diagnose"+casusdiagnose.casus_diagnose_id+" name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
+			  }
+			});
+		}
+		else{
+		  $("#diagnoseOverzichtHead").html("<tr><th>Diagnoses</th></tr>");
+		  $("#diagnoseOverzichtBody").html("<tr><td>Geen diagnoses gevonden");
+		}
+	  });
+  }
+  
+  function getCasusNIC(){
+  	  $.get( "/verpleegkundigecasusnicjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Interventie verwijderen</th></tr>");
+			$("#NICOverzichtBody").html("");
+			$.each(data, function(key, casusnic) {
+			  $("#NICOverzichtBody").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td><td><a class=link id=nic"+casusnic.casus_nic_id+" name=" + casusnic.casus_nic_id + ">Verwijderen</a></td></tr>");
+			});
+		}
+		else{
+		  $("#NICOverzichtHead").html("<tr><th>Interventies</th></tr>");
+		  $("#NICOverzichtBody").html("<tr><td>Geen interventies gevonden");
+		}
+	  });
+  }
+  
+  function getCasusNOC(){
+  	  $.get( "/verpleegkundigecasusnocjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Zorgresultaat verwijderen</th></tr>");
+			$("#NOCOverzichtBody").html("");
+			$.each(data, function(key, casusnoc) {
+			  $("#NOCOverzichtBody").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td><td><a class=link id=noc"+casusnoc.casus_noc_id+" name=" + casusnoc.casus_noc_id + ">Verwijderen</a></td></tr>");
+			});
+		}
+		else{
+		  $("#NOCOverzichtHead").html("<tr><th>Zorgresultaten</th></tr>");
+		  $("#NOCOverzichtBody").html("<tr><td>Geen zorgresultaten gevonden");
+		}
+	  });
+  }
+  
+  function getCasusOpmerkingen(){
+  	  $.get( "/verpleegkundigecasusopmerkingenjson/" + @id, function(data) {
+		if(data.length > 0){
+			$("#OpmerkingenOverzichtHead").html("<tr><th>Opmerking:</th><th>Datum:</th><th>Opmerking verwijderen</th></tr>");
+			$("#OpmerkingenOverzichtBody").html("");
+			$.each(data, function(key, casusopmerkingen) {
+			  var date = new Date(casusopmerkingen.casusopmerkingdatum);
+			  $("#OpmerkingenOverzichtBody").append("<tr><td>" + casusopmerkingen.casusopmerking + "</td><td>" + date + "</td><td><a class=link id=opmerking"+casusopmerkingen.casusopmerkingen_id+" name=" + casusopmerkingen.casusopmerkingen_id + ">Verwijderen</a></td></tr>");
+			});
+		}
+		else{
+		  $("#OpmerkingenOverzichtHead").html("<tr><th>Opmerkingen</th></tr>");
+		  $("#OpmerkingenOverzichtBody").html("<tr><td>Geen opmerkingen gevonden");
+		}
+	  });
+  }
+	/**
+	* Get casus info when page loads
+	*/
+	$( document ).ready(function() {
+		getCasusOverzicht();
+		getCasusDiagnose();
+		getCasusNIC();
+		getCasusNOC();
+		getCasusOpmerkingen();
 	});
+	
 </script>
-    <h1>Edit casus</h1>
+    <h1>Casus</h1>
         
 	<table id="casusOverzicht" class="diagnoses zebra-striped">
 		<thead id="casusOverzichtHead">
@@ -32,31 +296,151 @@
 	</table>
 	<hr />
 	
-	<h2>NANDA/NIC/NOC</h2>
-	<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
-		<thead id="diagnoseOverzichtHead">
-			<tr>
-				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnoses laden...</th>
-			</tr>
-		</thead>
-	</table>
-	<hr />
-	
-	<h2>Informatie toevoegen</h2>
-        
-		<input type="search" id="searchbox" name="f" placeholder="Diagnose/Interventie/Zorgresultaat">
-		<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
-        
+	<div>
+
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#zoeken" aria-controls="zoeken" role="tab" data-toggle="tab">Zoeken</a></li>
+		<li role="presentation"><a href="#diagnoses" aria-controls="diagnoses" role="tab" data-toggle="tab">Diagnoses</a></li>
+		<li role="presentation"><a href="#nic" aria-controls="nic" role="tab" data-toggle="tab">NIC</a></li>
+		<li role="presentation"><a href="#noc" aria-controls="noc" role="tab" data-toggle="tab">NOC</a></li>
+	  </ul>
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="zoeken">
 		<br />
-	<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
-		<thead id="diagnoseOverzichtHead">
+			<h2>Zoeken</h2>
+			<table style="width: 50px;">
+				<tr>
+					<td><label for="diagnoseRadio">Diagnose:</label></td>
+					<td><input type="radio" name="searchType" checked="checked" id="diagnoseRadio" value="1"></td>
+				</tr>
+				<tr>
+					<td><label for="nicRadio">NIC:</label></td>
+					<td><input type="radio" name="searchType" id="nicRadio" value="2"></td>
+				</tr>
+				<tr>
+					<td><label for="nocRadio">NOC:</label></td>
+					<td><input type="radio" name="searchType" id="nocRadio" value="3"></td>
+				</tr>
+			</table>
+
+			@if(flash.containsKey("success")) {
+				<div class="alert-message warning">
+					<strong>Done!</strong> @flash.get("success")
+				</div>
+			} 
+
+			<div id="actions">
+				
+				<input type="search" id="searchbox" name="f" placeholder="Casus">
+				<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
+				
+			</div>
+			<br />
+			<h2 id="searchResults" class="hide">Zoekresultaten:</h2>
+			<table id="casusSearch" class="diagnoses zebra-striped hide">
+				<thead id="casusSearchHead">
+
+				</thead>
+				<tbody id="casusSearchBody">
+				
+				</tbody>
+			</table>
+			
+			<div id="pagination" class="pagination hide">
+				<ul>
+					<li class="prev" id="prevli">
+						<a id="prev">&larr; Previous</a>
+					</li>
+					<li class="current">
+						<a id="XtoYofZ"></a>
+					</li>
+					<li class="next" id="nextli">
+						<a id="next">Next &rarr;</a>
+					</li>
+				</ul>
+			</div>
+		</div>
 		
-		</thead>
-		<tbody id="casusOverzichtBody">
-		
-		</tbody>
-	</table>
+		<div role="tabpanel" class="tab-pane" id="diagnoses">
+		<br />
+			<h2>Diagnoses</h2>
+			<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
+				<thead id="diagnoseOverzichtHead">
+					<tr>
+						<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnoses laden...</th>
+					</tr>
+				</thead>
+				<tbody id="diagnoseOverzichtBody">
+				
+				</tbody>
+			</table>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="nic">
+		<br />
+			<h2>NIC</h2>
+			<table id="NICOverzicht" class="diagnoses zebra-striped">
+				<thead id="NICOverzichtHead">
+					<tr>
+						<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Interventies laden...</th>
+					</tr>
+				</thead>
+				<tbody id="NICOverzichtBody">
+				
+				</tbody>
+			</table>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="noc">
+		<br />
+			<h2>NOC</h2>
+			<table id="NOCOverzicht" class="diagnoses zebra-striped">
+				<thead id="NOCOverzichtHead">
+					<tr>
+						<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Zorgresultaten laden...</th>
+					</tr>
+				</thead>
+				<tbody id="NOCOverzichtBody">
+				
+				</tbody>
+			</table>
+		</div>
+	  </div>
+
+	</div>
 	<hr />
+		
+	<script>
+		/**
+		* Search sort/pagination code
+		*/
+		$("#pagination").on("click", function(event){
+			if(event.target.id == "prev" && lastData.hasPrev){
+				index = lastData.index - 1;
+				getCasus();
+			}
+			else if(event.target.id == "next" && lastData.hasNext){
+				index = lastData.index + 1;
+				getCasus();
+			}
+		});
+		
+		$("#searchbox").on("keypress", function(event){
+			if(event.which == 13){
+				searched = true;
+				setFilter($("#searchbox").val());
+			}
+		});
+		
+		$("#searchsubmit").on("click", function(){
+			searched = true;
+			setFilter($("#searchbox").val());
+		});
+		
+		
+	</script>
+	
+
 	
 	<h2>Opmerkingen</h2>
 		<table id="OpmerkingenOverzicht" class="diagnoses zebra-striped">
@@ -65,9 +449,150 @@
 				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Opmerkingen laden...</th>
 			</tr>
 		</thead>
+		<tbody id="OpmerkingenOverzichtBody">
+		
+		</tbody>
 	</table>
+	<textarea name="opmerking" id="opmerking"></textarea><br />
+	<a name="saveOpmerking" id="saveOpmerking" class="link">Opmerking toevoegen</a>
+	
 	<div class="actions">
 		<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()" class="btn">Terug</a> 
 	</div>	
     
+	<script>
+	
+	/**
+	* Delete code
+	*/
+	
+	// Diagnose
+	$("#diagnoseOverzicht").on("click", function(event){
+		if(event.target.name != undefined && event.target.name != "removing"){
+			diagnoseName = event.target.name;
+			$("#diagnose"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusdiagnose/"+diagnoseName )
+			.done(function( data ) {
+				getCasusDiagnose();
+			});
+		}
+	});
+	
+	// NIC
+	$("#NICOverzicht").on("click", function(event){
+		if(event.target.name != undefined && event.target.name != "removing"){
+			nicName = event.target.name;
+			$("#nic"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusnic/"+nicName )
+			.done(function( data ) {
+				getCasusNIC();
+			});
+		}
+	});
+	
+	// NOC
+	$("#NOCOverzicht").on("click", function(event){
+		if(event.target.name != undefined && event.target.name != "removing"){
+			nocName = event.target.name;
+			$("#noc"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusnoc/"+nocName )
+			.done(function( data ) {
+				getCasusNOC();
+			});
+		}
+	});
+	
+	// Opmerkingen
+	$("#OpmerkingenOverzicht").on("click", function(event){
+		if(event.target.name != undefined && event.target.name != "removing"){
+			opmerkingenName = event.target.name;
+			$("#opmerking"+event.target.name).attr("name", "removing");
+			$.post( "/verpleegkundigedeletecasusopmerking/"+opmerkingenName )
+			.done(function( data ) {
+				getCasusOpmerkingen();
+			});
+		}
+	});
+	
+	/**
+	* Search code
+	*/
+	$('input[name=searchType]').on("click", function(event){
+		index = 0;
+		currentSort = "";
+		currentSortDirection = "asc";
+		setFilter($("#searchbox").val());
+	});
+
+	/**
+	* Save code
+	*/
+	$("#casusSearch").on("click", function(event){
+		// Diagnose
+		if($('input[name=searchType]:checked').val() == 1){
+			if(event.target.id != undefined && event.target.name != "saving" && event.target.id != ""){
+				diagnose_save = event.target.id;
+				$.post( "/verpleegkundigesavecasusdiagnose/"+@id+"/"+diagnose_save, { casus_id: @id, diagnose_id: diagnose_save } )
+				.done(function( data ) {
+					getCasusDiagnose();
+				});
+			}
+		}
+		// NIC
+		if($('input[name=searchType]:checked').val() == 2){
+			if(event.target.id != undefined && event.target.name != "saving" && event.target.id != ""){
+				nic_save = event.target.id.split("_");
+				$.post( "/verpleegkundigesavecasusnic/"+@id+"/"+nic_save[0]+"/"+nic_save[1], { casus_id: @id, nic_id: nic_save[0], activiteit_id: nic_save[1] } )
+				.done(function( data ) {
+					getCasusNIC();
+				});
+			}
+		}
+		// NOC
+		if($('input[name=searchType]:checked').val() == 3){
+			if(event.target.id != undefined && event.target.name != "saving" && event.target.id != ""){
+				noc_save = event.target.id.split("_");
+				$.post( "/verpleegkundigesavecasusnoc/"+@id+"/"+noc_save[0]+"/"+noc_save[1], { casus_id: @id, noc_id: noc_save[0], indicator_id: noc_save[1] } )
+				.done(function( data ) {
+					getCasusNOC();
+				});
+			}
+		}
+	});
+	
+	// Opmerkingen
+	$("#saveOpmerking").on("click", function(event){
+	  if( $("#opmerking").val() ) {
+		$.post( "/verpleegkundigesavecasusopmerking/"+@id, { opmerking: $("#opmerking").val() } )
+		  .done(function( data ) {
+		    $("#opmerking").val("");
+			getCasusOpmerkingen();
+		});
+      }
+	});
+	
+	/**
+	* Search selected text code
+	*/
+	$("#casusOverzicht").on("mouseup", function(event){
+		if(event.target.id == "searchHighlighted"){
+			$("#searchbox").val(selectedText);
+			searched = true;
+			setFilter(selectedText);
+		}
+		else{
+			selectedText = getSelectionText();
+			/*if(selectedText == ""){
+				$("#searchHighlighted").addClass("hide");
+				$("#searchHighlighted").removeClass("btn");
+			}
+			else{
+				$("#searchHighlighted").removeClass("hide");
+				$("#searchHighlighted").addClass("btn");
+			}*/
+		}
+	});
+	
+	</script>
+	
 }
