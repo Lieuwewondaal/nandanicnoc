@@ -22,21 +22,100 @@
     }
     
     // Generate the link
-    routes.CasusApplication.listCasus(newPage, sortBy, order, currentFilter)
+    routes.VerpleegkundigeApplication.listCasusVerpleegkundige(newPage, sortBy, order, currentFilter)
     
 }
 
 @**********************************
 * Helper generating table headers *
 ***********************************@
-@header(key:String, title:String) = {
-    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
-        <a href="@link(0, key)">@title</a>
-    </th>
-}
+@header(key:String, title:String) = { <th class=@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"} id=@key name=@key><a href=# name=@key>@title</a></th> }
 
 @main {
-    
+	<script>
+	var lastData;
+	var xyz;
+	var index = 0;
+	var currentSort = "";
+	var currentSortDirection = "asc";
+	var filter = "";
+	var casus_definitie = "";
+	
+	  $( document ).ready(function() {
+		getCasus();
+	  });
+	  
+	function getCasus(){
+		var link = "/verpleegkundigecasusjson?p="+index;
+		if(currentSort != ""){
+			link = link + "&s="+currentSort+"&o="+currentSortDirection;
+		}
+		
+		link = link + "&f="+filter;
+		$.get( link, function(data) {
+			if(data.casus.length > 0){
+			  lastData = data;
+			  xyz = data.XtoYofZ.split(";");
+				$("#XtoYofZ").html("Displaying " + xyz[0] + " to " + xyz[1] + " of " + xyz[2])
+				$("#casusOverzichtBody").html("");
+				$("#casusOverzichtHead").html("<tr>@header("casus_omschrijving", "Casus omschrijving")@header("casus_definitie", "Casus definitie")@header("casus_begindatum", "Datum")</tr>");
+				$.each(data.casus, function(key, casus) {
+					var date = new Date(casus.casus_begindatum);
+					casus_definitie = "";
+					if(casus.casus_definitie.length > 400){
+						casus_definitie = casus.casus_definitie.substring(0,400)+"...";
+						casus_definitie = casus_definitie.substr(0, Math.min(casus_definitie.length, casus_definitie.lastIndexOf(" "))) + "...";
+					} 
+					else{
+						casus_definitie = casus.casus_definitie;
+					}
+				  $("#casusOverzichtBody").append("<tr><td><a href=casus/"+ casus.casus_id +">" + casus.casus_omschrijving + "</a></td><td>" + nl2br(casus_definitie, true) + "</td><td>" + date + "</td></tr>");
+				});
+				
+				if(!data.hasNext){
+					$("#nextli").addClass("disabled");
+				}
+				else{
+					$("#nextli").removeClass("disabled");
+				}
+				
+				if(!data.hasPrev){
+					$("#prevli").addClass("disabled");
+				}
+				else{
+					$("#prevli").removeClass("disabled");
+				}
+			}
+			else{
+			  $("#casusOverzichtHead").html("<tr><th>Casussen</th></tr>");
+			  $("#casusOverzichtBody").html("<tr><td>Geen casussen gevonden</td></tr>");
+			}
+		});
+	};
+	
+	function setSort(sortName){
+		if(currentSort == sortName){
+			if(currentSortDirection == "desc"){
+				currentSortDirection = "asc";
+			}
+			else{
+				currentSortDirection = "desc";
+			}
+		}
+		else{
+			currentSort = sortName;
+			currentSortDirection = "asc";
+		}
+		getCasus();
+	};
+	
+	function setFilter(searchFilter){
+		filter = searchFilter;
+		index = 0;
+		getCasus();
+	};
+    </script>
+	
     <h1 id="homeTitle">@Messages("diagnose.casuslist.title", currentPage.getTotalRowCount)</h1>
 
     @if(flash.containsKey("success")) {
@@ -47,85 +126,70 @@
 
     <div id="actions">
         
-        <form action="@link(0, "name")" method="GET">
-            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Casus">
-            <input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
-        </form>
+		<input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Casus">
+		<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
         
-        <a class="btn success" id="add" href="@routes.CasusApplication.createCasus()">Nieuwe Casus</a>
-        
+		<a class="btn success" id="add" href="@routes.CasusApplication.createCasus()">Nieuwe Casus</a>
     </div>
-    
-    @if(currentPage.getTotalRowCount == 0) {
-        
-        <div class="well">
-            <em>Nothing to display</em>
-        </div>
-        
-    } else {
-        
-        <table class="casussen zebra-striped">
-            <thead>
-                <tr>
-                    @header("casus_omschrijving", "Casus omschrijving")
-                    @header("casus_definitie", "Casus definitie")
-                    @header("casus_begindatum", "Datum")
-                </tr>
-            </thead>
-            <tbody>
-
-                @for(casus <- currentPage.getList) {
-                    <tr>
-                        <td><a href="@routes.CasusApplication.editCasus(casus.casus_id )">@casus.casus_omschrijving</a></td>
-                        <td>
-                            @if(casus.casus_definitie == null) {
-                                <em>-</em>
-                            } else{
-								@casus.casus_definitie
-							}
-							
-                        </td>
-                        <td>
-                            @if(casus.casus_begindatum == null) {
-                                <em>-</em>
-                            } else {
-                                @casus.casus_begindatum
-                            }
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-
-        <div id="pagination" class="pagination">
-            <ul>
-                @if(currentPage.hasPrev) {
-                    <li class="prev">
-                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
-                    </li>
-                } else {
-                    <li class="prev disabled">
-                        <a>&larr; Previous</a>
-                    </li>
-                }
-                <li class="current">
-                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
-                </li>
-                @if(currentPage.hasNext) {
-                    <li class="next">
-                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
-                    </li>
-                } else {
-                    <li class="next disabled">
-                        <a>Next &rarr;</a>
-                    </li>
-                }
-            </ul>
-        </div>
-        
-    }
-        
+    <br />
+	<table id="casusOverzicht" class="diagnoses zebra-striped">
+		<thead id="casusOverzichtHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Casussen laden...</th>
+			</tr>
+		</thead>
+		<tbody id="casusOverzichtBody">
+		
+		</tbody>
+	</table>
+	
+	<div id="pagination" class="pagination">
+		<ul>
+			<li class="prev" id="prevli">
+				<a id="prev">&larr; Previous</a>
+			</li>
+			<li class="current">
+				<a id="XtoYofZ"></a>
+			</li>
+			<li class="next" id="nextli">
+				<a id="next">Next &rarr;</a>
+			</li>
+		</ul>
+	</div>
+		
+	<script>
+		$("#pagination").on("click", function(event){
+			if(event.target.id == "prev" && lastData.hasPrev){
+				index = lastData.index - 1;
+				getCasus();
+			}
+			else if(event.target.id == "next" && lastData.hasNext){
+				index = lastData.index + 1;
+				getCasus();
+			}
+		});
+		
+		$("#casusOverzicht").on("click", function(event){
+			if(event.target.name != "undefined"){
+				setSort(event.target.name);
+			}
+			else if(event.target.id != "undefined"){
+				setSort(event.target.id);
+			}
+		});
+		
+		$("#searchbox").on("keypress", function(event){
+			if(event.which == 13){
+				setFilter($("#searchbox").val());
+			}
+		});
+		
+		$("#searchsubmit").on("click", function(){
+			setFilter($("#searchbox").val());
+		});
+		
+		
+	</script>
 }
 
             

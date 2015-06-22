@@ -32,21 +32,6 @@
                 <a href="@routes.Application.index()">
                     NANDA/NIC/NOC
                 </a>
-				 | 
-				<a href="@routes.Application.list()">
-					Diagnose lijst
-				</a>
-				 | 
-				<a href="@routes.CasusApplication.listCasus()">
-                    Casus lijst
-                </a>
-				 |
-				<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()">
-                    Verpleegkundige
-                </a>
-				 | 
-                <a href="@routes.Application.logout()">Logout</a>
-				 |				 
 				<img src="@routes.Assets.at("images/erasmus_logo.png")" style="height: 36px;"/>
 				<img src="@routes.Assets.at("images/hanze_logo.png")" style="height: 36px;"/>
 				<img src="@routes.Assets.at("images/lectoraat-verpleegkundige-logo.png")" style="height: 36px;"/>				
@@ -57,5 +42,22 @@
         <section id="main">
 			@content
 		</section>
+			<div class="footer" id="footer">
+				<a href="@routes.Application.list()">
+					Diagnose lijst
+				</a>
+				 | 
+				<a href="@routes.CasusApplication.listCasus()">
+					Casus lijst
+				</a>
+				 |
+				<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()">
+					Verpleegkundige
+				</a>
+				 | 
+				<a href="@routes.Application.logout()">
+					Logout
+				</a>
+		    </div>
     </body>
 </html>

@@ -39,6 +39,7 @@
 	var currentSort = "";
 	var currentSortDirection = "asc";
 	var filter = "";
+	var casus_definitie;
 	
 	  $( document ).ready(function() {
 		getCasus();
@@ -60,7 +61,15 @@
 				$("#casusOverzichtHead").html("<tr>@header("casus_omschrijving", "Casus omschrijving")@header("casus_definitie", "Casus definitie")@header("casus_begindatum", "Datum")</tr>");
 				$.each(data.casus, function(key, casus) {
 					var date = new Date(casus.casus_begindatum);
-				  $("#casusOverzichtBody").append("<tr><td><a href=verpleegkundigecasus/"+ casus.casus_id +">" + casus.casus_omschrijving + "</a></td><td>" + nl2br(casus.casus_definitie, true) + "</td><td>" + date + "</td></tr>");
+					casus_definitie = "";
+					if(casus.casus_definitie.length > 400){
+						casus_definitie = casus.casus_definitie.substring(0,400)+"...";
+						casus_definitie = casus_definitie.substr(0, Math.min(casus_definitie.length, casus_definitie.lastIndexOf(" "))) + "...";
+					} 
+					else{
+						casus_definitie = casus.casus_definitie;
+					}
+				  $("#casusOverzichtBody").append("<tr><td><a href=verpleegkundigecasus2/"+ casus.casus_id +">" + casus.casus_omschrijving + "</a></td><td>" + nl2br(casus_definitie, true) + "</td><td>" + date + "</td></tr>");
 				});
 				
 				if(!data.hasNext){

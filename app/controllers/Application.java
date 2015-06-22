@@ -17,7 +17,7 @@ public class Application extends Controller {
      *sThis result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
-        routes.CasusApplication.listCasus(0, "casus_omschrijving", "asc", "")
+        routes.VerpleegkundigeApplication.listCasusVerpleegkundige(0, "casus_omschrijving", "asc", "")
     );
     
     /**
