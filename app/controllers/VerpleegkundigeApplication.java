@@ -228,6 +228,7 @@ public class VerpleegkundigeApplication extends Controller  {
     			.find
     			.where()
     			.not(com.avaje.ebean.Expr.like("casus_diagnose_id", id.toString()))
+    			.ilike("casus.casus_id", casus_diagnose.casus.casus_id.toString())
 		    	.ilike("user_id", session("userid"))
     		    .setMaxRows(1)
     		    .findList();
@@ -526,6 +527,7 @@ public class VerpleegkundigeApplication extends Controller  {
     	}
     	
 		casus_diagnose.diagnose = diagnose.diagnose;
+		casus_diagnose.casus_diagnose_datum = Calendar.getInstance().getTime();
 		casus_diagnose.update();   	
    	
     	return ok();
@@ -569,6 +571,7 @@ public class VerpleegkundigeApplication extends Controller  {
     	casus_nic.casus_diagnose = casus_diagnose;
     	casus_nic.nic = noc;
     	casus_nic.nicactiviteit = nicactiviteit;
+    	casus_nic.casus_nic_datum = Calendar.getInstance().getTime();
     	casus_nic.save();
     	
     	return ok();
@@ -612,6 +615,7 @@ public class VerpleegkundigeApplication extends Controller  {
     	casus_noc.casus_diagnose = casus_diagnose;
     	casus_noc.noc = noc;
     	casus_noc.indicator = indicator;
+    	casus_noc.casus_noc_datum = Calendar.getInstance().getTime();
     	casus_noc.save();
     	
     	return ok();

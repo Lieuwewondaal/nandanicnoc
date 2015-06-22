@@ -195,9 +195,13 @@
   function getCasusOverzicht(){
   	  $.get( "/verpleegkundigecasusjson/" + @id, function(data) {
 		if(data.length > 0){
+			var date;
 			$("#casusOverzichtHead").html("");
+			$("#CasusdefinitieOverzichtHead").html("<tr><th>Casus definitie</th></tr>");
 			$.each(data, function(key, casus) {
-			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus definitie</td><td>" + nl2br(casus.casus_definitie, true) + "<br /><br /><button id=searchHighlighted class=btn>Zoek geselecteerde tekst</button></td></tr>");
+			  date = $.format.date(new Date(casus.casus_begindatum), 'HH:mm:ss, dd-MMMM-yyyy');
+			  $("#casusOverzicht").append("<tr><td>Casus omschrijving</td><td>" + casus.casus_omschrijving + "</td></tr><tr><td>Casus datum</td><td>"+date+"</td></tr>");
+			  $("#CasusdefinitieOverzichtBody").append("<tr><td>" + nl2br(casus.casus_definitie, true) + "<br /><br /><button id=searchHighlighted class=btn>Zoek geselecteerde tekst</button></td></tr>");
 			});
 		}
 		else{
@@ -210,11 +214,13 @@
   function getCasusDiagnose(){
   	  $.get( "/verpleegkundigecasusdiagnosejson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th><th>Gezondheidspatroon</th><th>Diagnose verwijderen</th></tr>");
+			var date;
+			$("#diagnoseOverzichtHead").html("<tr><th>Diagnose omschrijving:</th><th>Diagnose definitie:</th><th>Gezondheidspatroon</th><th>Diagnose toegevoegd</th><th>Diagnose verwijderen</th></tr>");
 			$("#diagnoseOverzichtBody").html("");
 			$.each(data, function(key, casusdiagnose) {
 			  if(casusdiagnose.diagnose !== null){
-			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td>"+casusdiagnose.diagnose.diagnoseoverzicht[0].gezondheidspatroon.gezondheidspatroon_omschrijving+"</td><td><a class=link id=diagnose"+casusdiagnose.casus_diagnose_id+" name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
+			    date = $.format.date(new Date(casusdiagnose.casus_diagnose_datum), 'HH:mm:ss \ndd-MMMM-yyyy');
+			    $("#diagnoseOverzichtBody").append("<tr><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_omschrijving + "</td><td>" + casusdiagnose.diagnose.diagnoseoverzicht[0].diagnoseoverzicht_definitie + "</td><td>"+casusdiagnose.diagnose.diagnoseoverzicht[0].gezondheidspatroon.gezondheidspatroon_omschrijving+"</td><td>"+nl2br(date, true)+"</td><td><a class=link id=diagnose"+casusdiagnose.casus_diagnose_id+" name=" + casusdiagnose.casus_diagnose_id + ">Verwijderen</a></td></tr>");
 			  }
 			});
 		}
@@ -228,10 +234,12 @@
   function getCasusNIC(){
   	  $.get( "/verpleegkundigecasusnicjson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Interventie verwijderen</th></tr>");
+			var date;
+			$("#NICOverzichtHead").html("<tr><th>Interventie omschrijving:</th><th>Interventie definitie:</th><th>Interventie actie:</th><th>Interventie toegevoegd</th><th>Interventie verwijderen</th></tr>");
 			$("#NICOverzichtBody").html("");
 			$.each(data, function(key, casusnic) {
-			  $("#NICOverzichtBody").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td><td><a class=link id=nic"+casusnic.casus_nic_id+" name=" + casusnic.casus_nic_id + ">Verwijderen</a></td></tr>");
+			  date = $.format.date(new Date(casusnic.casus_nic_datum), 'HH:mm:ss\ndd-MMMM-yyyy');
+			  $("#NICOverzichtBody").append("<tr><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_omschrijving + "</td><td>" + casusnic.nic.nicoverzicht[0].nicoverzicht_definitie + "</td><td>"+ casusnic.nicactiviteit.nicactiviteit_omschrijving +"</td><td>"+nl2br(date, true)+"</td><td><a class=link id=nic"+casusnic.casus_nic_id+" name=" + casusnic.casus_nic_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
@@ -244,10 +252,12 @@
   function getCasusNOC(){
   	  $.get( "/verpleegkundigecasusnocjson/" + @id, function(data) {
 		if(data.length > 0){
-			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Zorgresultaat verwijderen</th></tr>");
+			var date;
+			$("#NOCOverzichtHead").html("<tr><th>Zorgresultaat omschrijving:</th><th>Zorgresultaat definitie:</th><th>Zorgresultaat indicator:</th><th>Zorgresultaat toegevoegd</th><th>Zorgresultaat verwijderen</th></tr>");
 			$("#NOCOverzichtBody").html("");
 			$.each(data, function(key, casusnoc) {
-			  $("#NOCOverzichtBody").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td><td><a class=link id=noc"+casusnoc.casus_noc_id+" name=" + casusnoc.casus_noc_id + ">Verwijderen</a></td></tr>");
+			  date = $.format.date(new Date(casusnoc.casus_noc_datum), 'HH:mm:ss\ndd-MMMM-yyyy');
+			  $("#NOCOverzichtBody").append("<tr><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_omschrijving + "</td><td>" + casusnoc.noc.nocoverzicht[0].nocoverzicht_definitie + "</td><td>"+ casusnoc.indicator.indicator_omschrijving +"</td><td>"+nl2br(date, true)+"</td><td><a class=link id=noc"+casusnoc.casus_noc_id+" name=" + casusnoc.casus_noc_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
@@ -260,11 +270,12 @@
   function getCasusOpmerkingen(){
   	  $.get( "/verpleegkundigecasusopmerkingenjson/" + @id, function(data) {
 		if(data.length > 0){
+			var date;
 			$("#OpmerkingenOverzichtHead").html("<tr><th>Opmerking:</th><th>Datum:</th><th>Opmerking verwijderen</th></tr>");
 			$("#OpmerkingenOverzichtBody").html("");
 			$.each(data, function(key, casusopmerkingen) {
-			  var date = new Date(casusopmerkingen.casusopmerkingdatum);
-			  $("#OpmerkingenOverzichtBody").append("<tr><td>" + casusopmerkingen.casusopmerking + "</td><td>" + date + "</td><td><a class=link id=opmerking"+casusopmerkingen.casusopmerkingen_id+" name=" + casusopmerkingen.casusopmerkingen_id + ">Verwijderen</a></td></tr>");
+			  date = $.format.date(new Date(casusopmerkingen.casusopmerkingdatum), 'HH:mm:ss\ndd-MMMM-yyyy');
+			  $("#OpmerkingenOverzichtBody").append("<tr><td>" + casusopmerkingen.casusopmerking + "</td><td>" + nl2br(date, true) + "</td><td><a class=link id=opmerking"+casusopmerkingen.casusopmerkingen_id+" name=" + casusopmerkingen.casusopmerkingen_id + ">Verwijderen</a></td></tr>");
 			});
 		}
 		else{
@@ -294,20 +305,36 @@
 			</tr>
 		</thead>
 	</table>
-	<hr />
 	
 	<div>
 
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active"><a href="#zoeken" aria-controls="zoeken" role="tab" data-toggle="tab">Zoeken</a></li>
+		<li role="presentation" class="active"><a href="#casusdefinitie" aria-controls="casusdefinitie" role="tab" data-toggle="tab">Casus</a></li>
+		<li role="presentation"><a href="#zoeken" aria-controls="zoeken" role="tab" data-toggle="tab">Zoeken</a></li>
 		<li role="presentation"><a href="#diagnoses" aria-controls="diagnoses" role="tab" data-toggle="tab">Diagnoses</a></li>
 		<li role="presentation"><a href="#nic" aria-controls="nic" role="tab" data-toggle="tab">NIC</a></li>
 		<li role="presentation"><a href="#noc" aria-controls="noc" role="tab" data-toggle="tab">NOC</a></li>
+		<li role="presentation"><a href="#opmerkingen" aria-controls="opmerkingen" role="tab" data-toggle="tab">Opmerkingen</a></li>
 	  </ul>
 	  <!-- Tab panes -->
 	  <div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="zoeken">
+		<div role="tabpanel" class="tab-pane active" id="casusdefinitie">
+		<br />
+			<h2>Casus</h2>
+				<table id="CasusdefinitieOverzicht" class="diagnoses zebra-striped">
+				<thead id="CasusdefinitieOverzichtHead">
+					<tr>
+						<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Casus gegevens laden...</th>
+					</tr>
+				</thead>
+				<tbody id="CasusdefinitieOverzichtBody">
+				
+				</tbody>
+			</table>
+		</div>
+		
+		<div role="tabpanel" class="tab-pane" id="zoeken">
 		<br />
 			<h2>Zoeken</h2>
 			<table style="width: 50px;">
@@ -377,6 +404,7 @@
 				</tbody>
 			</table>
 		</div>
+		
 		<div role="tabpanel" class="tab-pane" id="nic">
 		<br />
 			<h2>NIC</h2>
@@ -391,6 +419,7 @@
 				</tbody>
 			</table>
 		</div>
+		
 		<div role="tabpanel" class="tab-pane" id="noc">
 		<br />
 			<h2>NOC</h2>
@@ -405,10 +434,26 @@
 				</tbody>
 			</table>
 		</div>
+		
+		<div role="tabpanel" class="tab-pane" id="opmerkingen">
+		<br />
+			<h2>Opmerkingen</h2>
+				<table id="OpmerkingenOverzicht" class="diagnoses zebra-striped">
+				<thead id="OpmerkingenOverzichtHead">
+					<tr>
+						<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Opmerkingen laden...</th>
+					</tr>
+				</thead>
+				<tbody id="OpmerkingenOverzichtBody">
+				
+				</tbody>
+			</table>
+			<textarea name="opmerking" id="opmerking"></textarea><br />
+			<a name="saveOpmerking" id="saveOpmerking" class="link">Opmerking toevoegen</a>
+		</div>
 	  </div>
 
 	</div>
-	<hr />
 		
 	<script>
 		/**
@@ -439,22 +484,6 @@
 		
 		
 	</script>
-	
-
-	
-	<h2>Opmerkingen</h2>
-		<table id="OpmerkingenOverzicht" class="diagnoses zebra-striped">
-		<thead id="OpmerkingenOverzichtHead">
-			<tr>
-				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Opmerkingen laden...</th>
-			</tr>
-		</thead>
-		<tbody id="OpmerkingenOverzichtBody">
-		
-		</tbody>
-	</table>
-	<textarea name="opmerking" id="opmerking"></textarea><br />
-	<a name="saveOpmerking" id="saveOpmerking" class="link">Opmerking toevoegen</a>
 	
 	<div class="actions">
 		<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()" class="btn">Terug</a> 

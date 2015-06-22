@@ -1,9 +1,12 @@
 package models;
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 import com.avaje.ebean.Page;
 
+import play.data.format.Formats;
 import play.db.ebean.*;
 
 
@@ -28,6 +31,9 @@ public class Casus_Diagnose extends Model {
     @ManyToOne
     @JoinColumn(name="casus_id")
     public Casus casus;
+    
+    @Formats.DateTime(pattern="yyyy-MM-dd")
+    public Date casus_diagnose_datum;
     
     /**
      * Generic query helper for entity Company with id Long

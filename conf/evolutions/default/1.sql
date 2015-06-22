@@ -403,6 +403,7 @@ create table casus_diagnose (
   casus_id                        bigint not null,
   diagnose_id                     bigint,
   user_id						  bigint,
+  casus_diagnose_datum			  datetime,
 
   constraint pk_casus_diagnose primary key (casus_diagnose_id)
   ) engine=innodb
@@ -437,7 +438,7 @@ create table casus_nic (
   casus_diagnose_id				  bigint not null,
   nic_id				          bigint not null,
   nicactiviteit_id				  bigint not null,
-  
+  casus_nic_datum				  datetime,
   constraint pk_casus_nic primary key (casus_nic_id, casus_diagnose_id)
   ) engine=innodb
 ;
@@ -447,7 +448,7 @@ create table casus_noc (
   casus_diagnose_id				  bigint not null,
   noc_id				          bigint not null,
   indicator_id				      bigint not null,
-
+  casus_noc_datum				  datetime,
   constraint pk_casus_noc primary key (casus_noc_id, casus_diagnose_id)
   ) engine=innodb
 ;
