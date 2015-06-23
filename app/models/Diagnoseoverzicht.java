@@ -5,8 +5,12 @@ import java.util.*;
 import javax.persistence.*;
 
 import com.avaje.ebean.Page;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import controllers.VerpleegkundigeApplication;
+import controllers.VerpleegkundigeApplication.nurseType;
 import play.db.ebean.*;
 
 /**
@@ -68,15 +72,28 @@ public class Diagnoseoverzicht extends Model {
      * @param filter Filter applied on the name column
      */
     public static Page<Diagnoseoverzicht> page(int page, int pageSize, String sortBy, String order, String filter) {
-        return 
-            find.where()
-            	.or(
-            			com.avaje.ebean.Expr.like("gezondheidspatroon.gezondheidspatroon_omschrijving", "%" + filter + "%"), 
-            			com.avaje.ebean.Expr.like("diagnoseoverzicht_omschrijving", "%" + filter + "%")
-        			)
+		String sql = "select distinct t0.diagnoseoverzicht_id, t0.diagnose_code c0, t0.diagnoseoverzicht_omschrijving c1, t0.diagnoseoverzicht_definitie c2, t0.diagnoseversie_id c3, t0.gezondheidspatroon_id c4, t0.diagnoseklasse_id c5, t1.diagnose_id c6,	t2.gezondheidspatroon_omschrijving from diagnoseoverzicht t0 left outer join diagnose t1 on t1.diagnose_id = t0.diagnose_id left outer join gezondheidspatroon t2 on t2.gezondheidspatroon_id = t0.gezondheidspatroon_id";
+		
+		sql += VerpleegkundigeApplication.tokenizeQuery(filter, nurseType.NANDA);
+		
+		RawSql rawSql =   
+			    RawSqlBuilder  
+			        .parse(sql)  
+			        .columnMapping("t0.diagnoseoverzicht_id",  "diagnoseoverzicht_id")  
+			        .columnMapping("t0.diagnose_code",  "diagnose_code")  
+			        .columnMapping("t0.diagnoseoverzicht_omschrijving",  "diagnoseoverzicht_omschrijving")  
+			        .columnMapping("t0.diagnoseoverzicht_definitie",  "diagnoseoverzicht_definitie")  
+			        .columnMapping("t0.diagnoseversie_id",  "diagnoseversie.diagnoseversie_id")  
+			        .columnMapping("t0.gezondheidspatroon_id", "gezondheidspatroon.gezondheidspatroon_id")
+			        .columnMapping("t0.diagnoseklasse_id", "diagnoseklasse.diagnoseklasse_id")
+			        .columnMapping("t1.diagnose_id", "diagnose.diagnose_id")
+			        .columnMapping("t2.gezondheidspatroon_omschrijving", "gezondheidspatroon.gezondheidspatroon_omschrijving")
+			        .create();  
+    	
+    	return 
+    			find
+    			.setRawSql(rawSql)
                 .orderBy(sortBy + " " + order)
-                .fetch("diagnose")
-                .fetch("gezondheidspatroon")
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);
