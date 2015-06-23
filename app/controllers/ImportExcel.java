@@ -72,11 +72,11 @@ public class ImportExcel extends Controller {
     	    text = readExcelFile(file, fileName);
     	    //System.out.println(text);
     	    flash("success", "File has been uploaded");
-    	    return Application.GO_HOME;
+    	    return Application.list(0, "diagnoseoverzicht_omschrijving", "asc", "");
     	  } else {
     	    flash("error", "Missing file");
             flash("success", "File missing");
-            return Application.GO_HOME;
+            return Application.list(0, "diagnoseoverzicht_omschrijving", "asc", "");
     	  }
 	}
 	
