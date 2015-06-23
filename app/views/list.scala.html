@@ -70,7 +70,6 @@
                     @header("diagnoseoverzicht_omschrijving", "Diagnose name")
                     @header("diagnose_code", "Code")
                     @header("gezondheidspatroon.gezondheidspatroon_omschrijving", "Patroon")
-                    @header("diagnose.diagnose_id", "DiagnoseID")
                 </tr>
             </thead>
             <tbody>
@@ -92,9 +91,6 @@
                             } else {
                                 @diagnoseoverzicht.gezondheidspatroon.gezondheidspatroon_omschrijving
                             }
-                        </td>
-                        <td>
-                                @diagnoseoverzicht.diagnose.diagnose_id
                         </td>
                     </tr>
                 }

@@ -30,12 +30,12 @@
         <header class="topbar">
             <h1 class="fill">
                 <a href="@routes.Application.index()">
-                    NANDA/NIC/NOC
-                </a>
+                    <img src="@routes.Assets.at("images/nanda-nic-noc-logo.png")" style="height: 56px;"/>
+				</a>
 				<img src="@routes.Assets.at("images/erasmus_logo.png")" style="height: 56px;"/>
 				<img src="@routes.Assets.at("images/hanze_logo.png")" style="height: 56px;"/>
 				<img src="@routes.Assets.at("images/lectoraat-verpleegkundige-logo.png")" style="height: 56px;"/>				
-				<img src="@routes.Assets.at("images/ict-logo.png")" style="height: 56px;"/>				
+				<img src="@routes.Assets.at("images/ict-logo.png")" style="height: 56px;"/>							
             </h1>
         </header>
 
@@ -43,21 +43,14 @@
 			@content
 		</section>
 			<div class="footer" id="footer">
-				<a href="@routes.Application.list()">
-					Diagnose lijst
-				</a>
-				 | 
-				<a href="@routes.CasusApplication.listCasus()">
-					Casus lijst
-				</a>
-				 |
-				<a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()">
-					Verpleegkundige
-				</a>
-				 | 
-				<a href="@routes.Application.logout()">
-					Logout
-				</a>
+				<nav class="navbar navbar-default navbar-fixed-bottom">
+				  <ul class="nav navbar-nav">
+					<li style="border-left: 1px solid #BBB;"><a href="@routes.Application.list()">Diagnose lijst</a></li>
+					<li><a href="@routes.CasusApplication.listCasus()">Casus lijst</a></li>
+					<li><a href="@routes.VerpleegkundigeApplication.listCasusVerpleegkundige()">Verpleegkundige</a></li>
+					<li><a href="@routes.Application.logout()">Logout</a></li>
+				  </ul>
+				</nav>
 		    </div>
     </body>
 </html>

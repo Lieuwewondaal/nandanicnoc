@@ -17,7 +17,8 @@
 	var diagnose_save;
 	var searched = false;
 	var selectedText = "";
-	  
+	var casusTab = "#diagnoses";
+	
 	function getSelectionText() {
     var text = "";
     if (window.getSelection) {
@@ -37,7 +38,6 @@
 		$("#casusSearch").removeClass("hide");
 		$("#pagination").removeClass("hide");
 		$("#searchResults").removeClass("hide");
-		
 		link = link + "&f="+filter;
 		$.get( link, function(data) {
 			if(data.diagnose.length > 0){
@@ -158,7 +158,22 @@
 	
 	function getCasus(){
 		if(searched){
-			if($('input[name=searchType]:checked').val() == 1){
+			if(casusTab == "#diagnoses"){
+				casusTab = "#zoeken";
+				$("#diagnoseRadio").prop("checked", true)
+				searchDiagnose();
+			}
+			else if(casusTab == "#nic"){
+				casusTab = "#zoeken";
+				$("#nicRadio").prop("checked", true)
+				searchNic();
+			}
+			else if(casusTab == "#noc"){
+				casusTab = "#zoeken";
+				$("#nocRadio").prop("checked", true)
+				searchNoc();
+			}
+			else if($('input[name=searchType]:checked').val() == 1){
 				searchDiagnose();
 			}
 			else if($('input[name=searchType]:checked').val() == 2){
@@ -167,6 +182,7 @@
 			else if($('input[name=searchType]:checked').val() == 3){
 				searchNoc();
 			}
+			activeTab('zoeken');
 		}
 	};
 	
@@ -284,6 +300,11 @@
 		}
 	  });
   }
+  
+  function activeTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+  };
+
 	/**
 	* Get casus info when page loads
 	*/
@@ -305,11 +326,18 @@
 			</tr>
 		</thead>
 	</table>
-	
+
+	<div id="actions">
+			
+		<input type="search" id="searchbox" name="f" placeholder="Casus">
+		<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
+			
+	</div>
+	<br />
 	<div>
 
 	  <!-- Nav tabs -->
-	  <ul class="nav nav-tabs" role="tablist">
+	  <ul class="nav nav-tabs" role="tablist" id="casusTabs">
 		<li role="presentation" class="active"><a href="#casusdefinitie" aria-controls="casusdefinitie" role="tab" data-toggle="tab">Casus</a></li>
 		<li role="presentation"><a href="#zoeken" aria-controls="zoeken" role="tab" data-toggle="tab">Zoeken</a></li>
 		<li role="presentation"><a href="#diagnoses" aria-controls="diagnoses" role="tab" data-toggle="tab">Diagnoses</a></li>
@@ -318,6 +346,7 @@
 		<li role="presentation"><a href="#opmerkingen" aria-controls="opmerkingen" role="tab" data-toggle="tab">Opmerkingen</a></li>
 	  </ul>
 	  <!-- Tab panes -->
+
 	  <div class="tab-content">
 		<div role="tabpanel" class="tab-pane active" id="casusdefinitie">
 		<br />
@@ -358,12 +387,6 @@
 				</div>
 			} 
 
-			<div id="actions">
-				
-				<input type="search" id="searchbox" name="f" placeholder="Casus">
-				<input type="submit" id="searchsubmit" value="Zoeken" class="btn primary">
-				
-			</div>
 			<br />
 			<h2 id="searchResults" class="hide">Zoekresultaten:</h2>
 			<table id="casusSearch" class="diagnoses zebra-striped hide">
@@ -621,7 +644,10 @@
 			}*/
 		}
 	});
-	
+
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	  casusTab = $(e.target).attr("href");
+	});
 	</script>
 	
 }
