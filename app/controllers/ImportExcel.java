@@ -49,7 +49,11 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
-
+/**
+ * Functionality related to importing Excel files into DB
+ * @author Vincent van Deemter
+ *
+ */
 public class ImportExcel extends Controller {
 	
     /**

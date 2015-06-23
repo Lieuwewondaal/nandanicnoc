@@ -11,6 +11,11 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.*;
 
+/**
+ * Functionality attached to casus
+ * @author Vincent van Deemter
+ *
+ */
 public class CasusApplication extends Controller  {
     
     /**

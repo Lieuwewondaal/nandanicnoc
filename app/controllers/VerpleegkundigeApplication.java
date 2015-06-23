@@ -36,6 +36,11 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.*;
 
+/**
+ * Functionality related to Verpleegkundigen
+ * @author Vincent van Deemter
+ *
+ */
 public class VerpleegkundigeApplication extends Controller  {
 
 	public enum nurseType {

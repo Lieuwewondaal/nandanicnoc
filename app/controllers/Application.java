@@ -9,12 +9,13 @@ import views.html.*;
 import models.*;
 
 /**
- * Manage a database of diagnoses
+ * Functionality for diagnoses, login and general
+ * @author Vincent van Deemter
  */
 public class Application extends Controller {
     
     /**
-     *sThis result directly redirect to application home.
+     *This result directly redirect to application home.
      */
     public static Result GO_HOME = redirect(
         routes.VerpleegkundigeApplication.listCasusVerpleegkundige(0, "casus_omschrijving", "asc", "")
@@ -28,20 +29,32 @@ public class Application extends Controller {
         return GO_HOME;
     }
     
+    /**
+     * Render login form
+     * @return
+     */
     public static Result login() {
         return ok(
             login.render(form(Login.class))
         );
     }
     
+    /**
+     * remove login session and redirect
+     * @return
+     */
     public static Result logout() {
         session().clear();
-        flash("success", "You've been logged out");
+        flash("success", "U bent uitgelogd.");
         return redirect(
             routes.Application.login()
         );
     }
     
+    /**
+     * Validate login information
+     * @return
+     */
     public static Result authenticate() {
         Form<Login> loginForm = form(Login.class).bindFromRequest();
         if (loginForm.hasErrors()) {
@@ -192,7 +205,7 @@ public class Application extends Controller {
     } 
     
     /**
-     * Handle the 'edit form' submission 
+     * Handle the 'edit form' submission (unused)
      *
      * @param id Id of the diagnose to edit
      */
@@ -208,7 +221,7 @@ public class Application extends Controller {
     }
     
     /**
-     * Display the 'new diagnose form'.
+     * Display the 'import excel form'.
      */
     @Security.Authenticated(Secured.class)
     public static Result create() {
@@ -219,7 +232,8 @@ public class Application extends Controller {
     }
     
     /**
-     * Handle the 'new diagnose form' submission 
+     * Handle the 'new diagnose form' submission (unused)
+     * See ImportExcel
      */
     @Security.Authenticated(Secured.class)
     public static Result save() {
@@ -260,7 +274,7 @@ public class Application extends Controller {
         
         public String validate() {
             if (Gebruiker.authenticate(username, password) == null) {
-              return "Invalid user or password";
+              return "Ongeldige gebruikersnaam of wachtwoord.";
             }
             return null;
         }

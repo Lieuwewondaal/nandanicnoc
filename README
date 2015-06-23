@@ -11,6 +11,9 @@ Wordt toegevoegd bij SQL evolutions in conf/evolutions/default/2.sql
 
 Verpleegkunde applicatie
 
+Excel gegevens worden alleen in een lege database geïmporteerd. Als de gegevens al in de tabellen staan
+worden deze niet geïmporteerd of aangepast.
+
 Importvolgorde (Bestanden MOETEN deze namen hebben om geïmporteerd te kunnen worden):
 
 ref_patroon.xls
