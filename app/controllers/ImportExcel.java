@@ -1,5 +1,7 @@
 package controllers;
 
+import static play.data.Form.form;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Calendar;
@@ -45,16 +47,30 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import views.html.createForm;
 /**
  * Functionality related to importing Excel files into DB
  * @author Vincent van Deemter
  *
  */
 public class ImportExcel extends Controller {
+	
+    /**
+     * Display the 'import excel form'.
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result create() {
+        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class);
+        return ok(
+            createForm.render(diagnoseForm)
+        );
+    }
 	
     /**
      * Upload Excel file to server

@@ -9,7 +9,7 @@ import static org.fest.assertions.Assertions.*;
 
 public class FunctionalTest {
 
-    @Test
+    /*@Test
     public void redirectHomePage() {
         running(fakeApplication(), new Runnable() {
            public void run() {
@@ -85,6 +85,6 @@ public class FunctionalTest {
                 
             }
         });
-    }
+    }*/
     
 }

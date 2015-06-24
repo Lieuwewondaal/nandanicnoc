@@ -1,7 +1,7 @@
-@(form: Form[Application.Login])
+@(form: Form[LoginApplication.Login])
 
 @mainLoggedOut {
-	@helper.form(routes.Application.authenticate) {
+	@helper.form(routes.LoginApplication.authenticate) {
 		<h1>Login</h1>
 
 		@if(form.hasGlobalErrors) {

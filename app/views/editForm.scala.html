@@ -97,70 +97,60 @@
 	
 	
     <h1>Diagnose</h1>
-    
-    @form(routes.Application.update(id)) {
         
-        <fieldset class="form">
+	<fieldset class="form">
+
+	<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
+		<thead id="diagnoseOverzichtHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnose gegevens laden...</th>
+			</tr>
+		</thead>
+	</table>
+
+	<table id="bepalendKenmerk" class="diagnoses zebra-striped">
+		<thead id="bepalendKenmerkHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Bepalende kenmerken laden...</th>
+			</tr>
+		</thead>
+	</table>
 	
-		<table id="diagnoseOverzicht" class="diagnoses zebra-striped">
-			<thead id="diagnoseOverzichtHead">
-				<tr>
-					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Diagnose gegevens laden...</th>
-				</tr>
-			</thead>
-		</table>
+	<table id="risicoFactor" class="diagnoses zebra-striped">
+		<thead id="risicoFactorHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Risicofactoren laden...</th>
+			</tr>
+		</thead>
+	</table>
 	
-		<table id="bepalendKenmerk" class="diagnoses zebra-striped">
-			<thead id="bepalendKenmerkHead">
-				<tr>
-					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Bepalende kenmerken laden...</th>
-				</tr>
-			</thead>
-		</table>
-		
-		<table id="risicoFactor" class="diagnoses zebra-striped">
-			<thead id="risicoFactorHead">
-				<tr>
-					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Risicofactoren laden...</th>
-				</tr>
-			</thead>
-		</table>
-		
-		<table id="samenhangendeFactor" class="diagnoses zebra-striped">
-			<thead id="samenhangendeFactorHead">
-				<tr>
-					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Samenhangende factoren laden...</th>
-				</tr>
-			</thead>
-		</table>
-		
-		<table id="nicDiagnose" class="diagnoses zebra-striped">
-			<thead id="nicDiagnoseHead">
-				<tr>
-					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Interventies laden...</th>
-				</tr>
-			</thead>
-		</table>
-		
-		<table id="nocDiagnose" class="diagnoses zebra-striped">
-			<thead id="nocDiagnoseHead">
-				<tr>
-					<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> zorgresultaten laden...</th>
-				</tr>
-			</thead>
-		</table>
-		
-        </fieldset>
-        
-        <div class="actions">
-            <!--<input type="submit" value="Save this diagnose" class="btn primary"> or -->
-            <a href="@routes.Application.list()" class="btn">Terug</a> 
-        </div>
-        
-    }
-    
-    @form(routes.Application.delete(id), 'class -> "topRight") {
-        <!--<input type="submit" value="Delete this diagnose" class="btn danger">-->
-    }
-    
+	<table id="samenhangendeFactor" class="diagnoses zebra-striped">
+		<thead id="samenhangendeFactorHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Samenhangende factoren laden...</th>
+			</tr>
+		</thead>
+	</table>
+	
+	<table id="nicDiagnose" class="diagnoses zebra-striped">
+		<thead id="nicDiagnoseHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> Interventies laden...</th>
+			</tr>
+		</thead>
+	</table>
+	
+	<table id="nocDiagnose" class="diagnoses zebra-striped">
+		<thead id="nocDiagnoseHead">
+			<tr>
+				<th><img src="@routes.Assets.at("images/ajax-loader.gif")" /> zorgresultaten laden...</th>
+			</tr>
+		</thead>
+	</table>
+	
+	</fieldset>
+	
+	<div class="actions">
+		<a href="@routes.Application.list()" class="btn">Terug</a> 
+	</div>
 }

@@ -15,7 +15,7 @@ import models.nic.Nic_Diagnose;
 import models.noc.Noc_Indicator_Diagnose;
 
 /**
- * Functionality for diagnoses, login and general
+ * Functionality for diagnoses and general
  * @author Vincent van Deemter
  */
 public class Application extends Controller {
@@ -33,53 +33,6 @@ public class Application extends Controller {
     @Security.Authenticated(Secured.class)
     public static Result index() {
         return GO_HOME;
-    }
-    
-    /**
-     * Render login form
-     * @return
-     */
-    public static Result login() {
-        return ok(
-            login.render(form(Login.class))
-        );
-    }
-    
-    /**
-     * remove login session and redirect
-     * @return
-     */
-    public static Result logout() {
-        session().clear();
-        flash("success", "U bent uitgelogd.");
-        return redirect(
-            routes.Application.login()
-        );
-    }
-    
-    /**
-     * Validate login information
-     * @return
-     */
-    public static Result authenticate() {
-        Form<Login> loginForm = form(Login.class).bindFromRequest();
-        if (loginForm.hasErrors()) {
-            return badRequest(login.render(loginForm));
-        } else {
-            session().clear();
-            session("username", loginForm.get().username);
-            
-        	Gebruiker userid = Gebruiker
-        			.find
-        			.where()
-        			.like("gebruiker_naam", loginForm.get().username)
-                    .findUnique();
-        	session("userid", userid.gebruiker_id.toString());
-            
-            return redirect(
-                routes.Application.index()
-            );
-        }
     }
     
     /**
@@ -197,94 +150,9 @@ public class Application extends Controller {
      */
     @Security.Authenticated(Secured.class)
     public static Result edit(Long id) {
-    	// Get Diagnoseoverzicht values
-        /*Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).fill(
-        		Diagnoseoverzicht.find.where()
-			    .ilike("diagnose_id", id.toString())
-			    .findList()
-			    .get(0)
-        );*/
-    	
         return ok(
             editForm.render(id)
         );
     } 
-    
-    /**
-     * Handle the 'edit form' submission (unused)
-     *
-     * @param id Id of the diagnose to edit
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result update(Long diagnose_id) {
-        //Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
-        /*if(diagnoseForm.hasErrors()) {	
-            return badRequest(editForm.render(diagnose_id, diagnoseForm));
-        }*/
-        //diagnoseForm.get().update(diagnose_id);
-        //flash("success", "Diagnose " + diagnoseForm.get().name + " has been updated");
-        return GO_HOME;
-    }
-    
-    /**
-     * Display the 'import excel form'.
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result create() {
-        Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class);
-        return ok(
-            createForm.render(diagnoseForm)
-        );
-    }
-    
-    /**
-     * Handle the 'new diagnose form' submission (unused)
-     * See ImportExcel
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result save() {
-        /*Form<Diagnoseoverzicht> diagnoseForm = form(Diagnoseoverzicht.class).bindFromRequest();
-        DynamicForm domein = Form.form().bindFromRequest();
-        
-        if(diagnoseForm.hasErrors()) {
-            return badRequest(createForm.render(diagnoseForm));
-        }
-        
-        Diagnose diagnose = new Diagnose();
-        diagnose.save();
-        Diagnosedomein diagnosedomein = new Diagnosedomein();
-        diagnosedomein.diagnosedomein_code = Long.parseLong(domein.get("diagnosedomein.diagnosedomein_domein"));
-        Diagnoseversie diagnoseversie = createDiagnoseVersie(diagnoseForm.get().diagnoseoverzicht_omschrijving);
-        diagnoseForm.get().diagnoseklasse = getDiagnoseKlasse(diagnoseForm.get().diagnoseklasse, diagnosedomein);
-        diagnoseForm.get().diagnose = diagnose;
-        diagnoseForm.get().diagnoseversie = diagnoseversie;
-        diagnoseForm.get().save();
-        flash("success", "Diagnose " + diagnoseForm.get().diagnose + " has been created");*/
-        return GO_HOME;
-    }
-    
-    /**
-     * Handle diagnose deletion
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result delete(Long id) {
-        /*Diagnose.find.ref(id).delete();
-        flash("success", "Diagnose has been deleted");*/
-        return GO_HOME;
-    }
-    
-    public static class Login {
-
-        public String username;
-        public String password;
-        
-        public String validate() {
-            if (Gebruiker.authenticate(username, password) == null) {
-              return "Ongeldige gebruikersnaam of wachtwoord.";
-            }
-            return null;
-        }
-
-    }
 }
             
