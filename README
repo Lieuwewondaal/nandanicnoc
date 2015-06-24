@@ -41,5 +41,6 @@ Diagnoses toevoegen/verwijderen met behulp van een formulier
 Versiebeheer is gedeeltelijk beschikbaar in de database, maar is niet geïmplementeerd in de applicatie
 Zoeken naar NANDA/NIC/NOC in één zoekopdracht (kan mogelijk ook gebruikt worden bij het zoeken naar diagnoses in de diagnose lijst)
 totalrows werkend met FULLTEXT indexering (total rows/total pages bij pagination klopt niet)
-
+Extra velden toevoegen bij het zoeken naar diagnoses, zoals samenhangende factoren, risicofactoren en bepalende kenmerken
+Implementatie van waarde/score values tabel (Viel niet te importeren uit de oude Access database)
 
