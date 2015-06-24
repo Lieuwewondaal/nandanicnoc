@@ -36,3 +36,10 @@ SQL Data import:
 
 Conf/nanda.sql bevat alle gegevens tot voor het user/casus systeem
 
+Niet gedaan:
+Diagnoses toevoegen/verwijderen met behulp van een formulier
+Versiebeheer is gedeeltelijk beschikbaar in de database, maar is niet geïmplementeerd in de applicatie
+Zoeken naar NANDA/NIC/NOC in één zoekopdracht (kan mogelijk ook gebruikt worden bij het zoeken naar diagnoses in de diagnose lijst)
+totalrows werkend met FULLTEXT indexering (total rows/total pages bij pagination klopt niet)
+
+
