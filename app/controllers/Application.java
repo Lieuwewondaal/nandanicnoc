@@ -7,6 +7,12 @@ import play.data.*;
 import static play.data.Form.*;
 import views.html.*;
 import models.*;
+import models.nanda.Bepalendkenmerk_Diagnose;
+import models.nanda.Diagnoseoverzicht;
+import models.nanda.Risicofactor_Diagnose;
+import models.nanda.Samenhangendefactor_Diagnose;
+import models.nic.Nic_Diagnose;
+import models.noc.Noc_Indicator_Diagnose;
 
 /**
  * Functionality for diagnoses, login and general

@@ -3,8 +3,10 @@ package controllers;
 import static play.data.Form.form;
 
 import java.util.Calendar;
+
 import javax.persistence.PersistenceException;
-import models.Casus;
+
+import models.casus.Casus;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
