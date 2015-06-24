@@ -14,6 +14,9 @@ Verpleegkunde applicatie
 Excel gegevens worden alleen in een lege database geïmporteerd. Als de gegevens al in de tabellen staan
 worden deze niet geïmporteerd of aangepast.
 
+Zoeken naar diagnoses/nic/noc gebruikt pupmed specificatie. Het is mogelijk om AND of OR tussen zoekopdrachten
+te zette om specifieker te zoeken. Momenteel moet dit in hoofdletters getypt worden.
+
 Importvolgorde (Bestanden MOETEN deze namen hebben om geïmporteerd te kunnen worden):
 
 ref_patroon.xls
@@ -35,6 +38,8 @@ koppel_diagnose_zorgresultaat_indicator.xls
 SQL Data import:
 
 Conf/nanda.sql bevat alle gegevens tot voor het user/casus systeem
+Conf/application.conf bevat database gegevens. Standaard database is een mysql database genaamd "nanda", root zonder password
+
 
 Niet gedaan:
 Diagnoses toevoegen/verwijderen met behulp van een formulier

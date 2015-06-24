@@ -89,14 +89,29 @@ public class Diagnoseoverzicht extends Model {
 			        .columnMapping("t1.diagnose_id", "diagnose.diagnose_id")
 			        .columnMapping("t2.gezondheidspatroon_omschrijving", "gezondheidspatroon.gezondheidspatroon_omschrijving")
 			        .create();  
-    	
-    	return 
-    			find
+				
+		Page<Diagnoseoverzicht> d = find
     			.setRawSql(rawSql)
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
                 .setFetchAhead(false)
                 .getPage(page);
+		// Check if paged list is empty
+		if(d.getList().size() > 0){
+			return d;
+		}
+		else{
+			//Fix to prevent persistence exception
+	        return 
+	                find.where()
+	                	.eq("diagnoseoverzicht_omschrijving", "%" + filter + "%")
+	                    .orderBy(sortBy + " " + order)
+	                    .fetch("diagnose")
+	                    .fetch("gezondheidspatroon")
+	                    .findPagingList(pageSize)
+	                    .setFetchAhead(false)
+	                    .getPage(page);
+		}
     }
 
 }
