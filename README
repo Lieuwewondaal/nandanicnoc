@@ -40,6 +40,7 @@ SQL Data import:
 Conf/nanda.sql bevat alle gegevens tot voor het user/casus systeem
 Conf/application.conf bevat database gegevens. Standaard database is een mysql database genaamd "nanda", root zonder password
 
+Vanwege de FULLTEXT feature is mysql met MyISAM module vereist of een mysql versie >=5.6
 
 Niet gedaan:
 Diagnoses toevoegen/verwijderen met behulp van een formulier
@@ -48,4 +49,5 @@ Zoeken naar NANDA/NIC/NOC in één zoekopdracht (kan mogelijk ook gebruikt worde
 totalrows werkend met FULLTEXT indexering (total rows/total pages bij pagination klopt niet)
 Extra velden toevoegen bij het zoeken naar diagnoses, zoals samenhangende factoren, risicofactoren en bepalende kenmerken
 Implementatie van waarde/score values tabel (Viel niet te importeren uit de oude Access database)
+
 
